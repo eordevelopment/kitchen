@@ -1,0 +1,238 @@
+<div class="panel panel-default" *ngIf="!recipe">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-sm-12 text-center">
+        <i *ngIf="!failure" class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+        <span *ngIf="failure" class="text-danger">{{failure}}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<form [formGroup]="recipeForm" (ngSubmit)="save()" *ngIf="recipe">
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-xs-9">
+              <div class="form-group" [class.has-error]="recipe.formErrors.name">
+                <div class="input-group">
+                  <input [(ngModel)]="recipe.name" type="text" class="form-control" formControlName="name" required placeholder="Name"
+                    autocomplete="off">
+                </div>
+                <div *ngIf="recipe.formErrors.name">
+                  <span class="text-danger field-validation-error">{{ recipe.formErrors.name }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-3 text-center pad-0">
+              <button class="btn btn-xs btn-primary disabled" disabled><i class="fa fa-plus"></i> Planner</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-9">
+              <div class="form-group" [class.has-error]="recipe.formErrors.type">
+                <div class="input-group">
+                  <select [(ngModel)]="recipe.type" class="form-control" formControlName="type">
+                      <option *ngFor="let type of types" [value]="type.key">{{type.value}}</option>
+                  </select>
+                </div>
+                <div *ngIf="recipe.formErrors.type">
+                  <span class="text-danger field-validation-error">{{ recipe.formErrors.type }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br/>
+
+          <div class="panel panel-primary">
+            <div class="panel-heading pointer" data-toggle="collapse" data-target="#collapseIngredients" aria-expanded="true" aria-controls="collapseIngredients">Ingredients</div>
+            <div class="panel-body list-ingredients collapse in" id="collapseIngredients">
+              <ul class="list-group" *ngIf="recipe.hasItems()">
+                <li *ngFor="let item of recipe.recipeItems" class="list-group-item item-name" data-toggle="modal" data-target="#itemFormModal" (click)="selectItem(item)">
+                  <div class="row">
+                    <div class="col-xs-9">
+                      {{item.item.name}}
+                      <span class="text-muted" *ngIf="item.instructions">
+                        <em>({{item.instructions}})</em>
+                      </span>
+                    </div>
+                    <div class="col-xs-3 text-right">
+                      <span class="text-primary"><strong>{{item.ammount}} {{item.unitType}}</strong></span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+              <div class="row">
+                <div class="col-sm-12 text-center">
+                  <button type="button" class="btn btn-success"data-toggle="modal" data-target="#itemFormModal" (click)="selectItem()"><i class="fa fa-plus"></i> Ingredient</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br/>
+
+          <div class="well" *ngFor="let step of recipe.recipeSteps">
+            <div class="row">
+              <div class="col-xs-2">
+                <h4 class="text-primary">{{step.stepNumber}}</h4>
+              </div>
+              <div class="col-xs-10">{{step.description}}</div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12 text-right">
+                <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#stepFormModal" (click)="selectStep(step)"><i class="fa fa-edit"></i> Edit</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-12 text-center">
+              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#stepFormModal" (click)="selectStep()"><i class="fa fa-plus"></i> Cooking Step</button>
+            </div>
+          </div>
+
+          <br/>
+          <div class="row" *ngIf="failure">
+            <div class="col-sm-12">
+              <div>
+                <span class="text-danger field-validation-error">{{failure}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <div class="row">
+            <div class="col-sm-12 text-right">
+              <button type="button" class="btn btn-sm btn-primary pull-left" (click)="goBack()">Back</button>
+              <div class="btn-group btn-group-sm" role="group">
+                <button *ngIf="recipe && recipe.id && recipe.id > 0" type="button" class="btn btn-danger" (click)="delete()">Remove</button>
+                <button type="submit" class="btn btn-success" [disabled]="!recipeForm.valid">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<!-- Modal for recipe step -->
+<div class="modal" id="stepFormModal" tabindex="-1" role="dialog" *ngIf="selectedStep">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 *ngIf="selectedStep && selectedStep.id > 0" class="modal-title">Edit Step</h4>
+        <h4 *ngIf="!selectedStep || !selectedStep.id || selectedStep.id <= 0" class="modal-title">Add Step</h4>
+      </div>
+
+      <form [formGroup]="stepForm">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group" [class.has-error]="selectedStep.formErrors.description">
+                <div class="input-group">
+                  <textarea [(ngModel)]="selectedStep.description" class="form-control" rows="5" formControlName="description"
+                    required placeholder="Enter cooking steps..."></textarea>
+                </div>
+                <div *ngIf="selectedStep.formErrors.description">
+                  <span class="text-danger field-validation-error">{{ selectedStep.formErrors.description }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm btn-default pull-left" data-dismiss="modal">Close</button>
+          <div class="btn-group btn-group-sm" role="group">
+            <button *ngIf="selectedStep && selectedStep.id > 0" type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteStep()">Remove</button>
+            <button type="button" class="btn btn-success" [disabled]="!stepForm.valid" data-dismiss="modal" (click)="saveStep()">Save</button>
+          </div>
+
+        </div>
+      </form>
+
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal for recipe item -->
+<div class="modal" id="itemFormModal" tabindex="-1" role="dialog" *ngIf="selectedItem">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 *ngIf="selectedItem && selectedItem.id > 0" class="modal-title">Edit Ingredient</h4>
+        <h4 *ngIf="!selectedItem || !selectedItem.id || selectedItem.id <= 0" class="modal-title">Add Ingredient</h4>
+      </div>
+
+      <form [formGroup]="itemForm">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group" [class.has-error]="selectedItem.formErrors.name">
+                <div class="input-group">
+                  <input [(ngModel)]="selectedItem.item.name" type="text" class="form-control" formControlName="name" required placeholder="Name"
+                    autocomplete="off" (keyup)="search()">
+                </div>
+                <div *ngIf="selectedItem.formErrors.name">
+                  <span class="text-danger field-validation-error">{{ selectedItem.formErrors.name }}</span>
+                </div>
+                <div class="typeahead">
+                  <ul class="list-group">
+                    <li class="list-group-item" *ngFor="let searchResult of itemsSearchResult | async" (click)="selectSearchItem(searchResult)">
+                      {{searchResult.name}}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-6">
+              <div class="form-group" [class.has-error]="selectedItem.formErrors.ammount">
+                <div class="input-group">
+                  <input [(ngModel)]="selectedItem.ammount" type="number" class="form-control" formControlName="ammount" required placeholder="Ammount"
+                    autocomplete="off">
+                </div>
+                <div *ngIf="selectedItem.formErrors.ammount">
+                  <span class="text-danger field-validation-error">{{ selectedItem.formErrors.ammount }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                 <div class="input-group">
+                   <input [(ngModel)]="selectedItem.unitType" type="text" placeholder="Unit. (e.g. tsp)" class="form-control" formControlName="unitType" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <br/><br/>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <div class="input-group">
+                  <input [(ngModel)]="selectedItem.instructions" type="text" class="form-control" formControlName="instructions" placeholder="Notes. (e.g. diced)" autocomplete="off">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm btn-default pull-left" data-dismiss="modal">Cancel</button>
+          <div class="btn-group btn-group-sm" role="group">
+            <button *ngIf="selectedItem && selectedItem.id > 0" type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteItem()">Remove</button>
+            <button type="button" class="btn btn-success" [disabled]="!itemForm.valid" data-dismiss="modal" (click)="saveItem()">Save</button>
+          </div>
+
+        </div>
+      </form>
+
+
+    </div>
+  </div>
+</div>

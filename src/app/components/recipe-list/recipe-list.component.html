@@ -1,0 +1,42 @@
+<div class="panel panel-default" *ngIf="!allRecipes">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-sm-12 text-center">
+        <i *ngIf="!failure" class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+        <span *ngIf="failure" class="text-danger">{{failure}}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel panel-default" *ngIf="allRecipes && allRecipes.length <= 0">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-sm-12 text-center">
+        <span class="text-muted">You have not created any recipes.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="recipeContainer" *ngIf="allRecipes && allRecipes.length > 0">
+
+  <div class="panel panel-primary" *ngFor="let type of types  | hasRecipeWithType:allRecipes; let index = index">
+    <div class="panel-heading pointer" data-toggle="collapse" [attr.data-target]="type.asId('#collapse')" data-parent="#recipeContainer">{{type.value | titlecase}}</div>
+    <ul class="list-group collapse" [class.in]="index == 0" id="collapse{{type.value}}">
+      <li class="list-group-item pointer" *ngFor="let recipe of allRecipes | recipeTypeFilter:type.key" (click)="onSelect(recipe)">
+        {{recipe.name}}
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-sm-12 text-center">
+        <a routerLink="/recipedetail/0" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> Add Recipe</a>
+      </div>
+    </div>
+  </div>
+</div>

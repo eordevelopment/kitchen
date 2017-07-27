@@ -19,9 +19,14 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.less"
+        "../node_modules/font-awesome/css/font-awesome.min.css",
+        "styles/bootstrap-override.less",
+        "styles/styles.less"
+      ],"scripts": [
+          "../node_modules/jquery/dist/jquery.min.js",
+          "../node_modules/bootstrap/dist/js/bootstrap.min.js",
+          "google.auth.ts"
       ],
-      "scripts": [],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
