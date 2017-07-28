@@ -15,7 +15,7 @@
       <div class="panel panel-default">
         <div class="panel-body">
           <div class="row">
-            <div class="col-xs-9">
+            <div class="col-xs-12">
               <div class="form-group" [class.has-error]="recipe.formErrors.name">
                 <div class="input-group">
                   <input [(ngModel)]="recipe.name" type="text" class="form-control" formControlName="name" required placeholder="Name"
@@ -26,12 +26,9 @@
                 </div>
               </div>
             </div>
-            <div class="col-xs-3 text-center pad-0">
-              <button class="btn btn-xs btn-primary disabled" disabled><i class="fa fa-plus"></i> Planner</button>
-            </div>
           </div>
           <div class="row">
-            <div class="col-xs-9">
+            <div class="col-xs-12">
               <div class="form-group" [class.has-error]="recipe.formErrors.type">
                 <div class="input-group">
                   <select [(ngModel)]="recipe.type" class="form-control" formControlName="type">
