@@ -1,6 +1,6 @@
 <div class="row" *ngIf="days && days.length > 0">
   <div class="col-sm-4" *ngFor="let day of days">
-    <div class="panel panel-default">
+    <div class="panel panel-default pointer" data-toggle="modal" data-target="#itemFormModal">
       <div class="panel-body">
         <div class="row planner-day">
           <div class="col-xs-3">
@@ -12,6 +12,85 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12 text-center">
+    <button type="button" class="btn btn-success"><i class="fa fa-shopping-basket"></i> Create Shopping List</button>
+  </div>
+</div>
+
+<br/>
+<hr/>
+
+<div class="row">
+  <div class="col-sm-12 text-center text-muted">
+    Recent items
+  </div>
+</div>
+<br/>
+<div class="row" *ngIf="days && days.length > 0">
+  <div class="col-sm-4" *ngFor="let day of days">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="row planner-day">
+          <div class="col-xs-3">
+            <span class="text-muted"><strong>{{day.format("dddd")}}</strong></span><br/>
+            <span class="text-muted"><em>{{day.format("MMM Do")}}</em></span>
+          </div>
+          <div class="col-xs-9 text-muted">
+            Penne Pasta with Seafood and Pesto
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12 text-center">
+    <button type="button" class="btn btn-default">Load More</button>
+  </div>
+</div>
+<br/>
+
+<!-- Modal for recipe item -->
+<div class="modal" id="itemFormModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">{{days[0].format("dddd, MMM Do")}}</h4>
+      </div>
+
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <div class="input-group">
+                  <select class="form-control">
+                      <option value="1">Meal 1</option>
+                      <option value="2">Meal 2</option>
+                      <option value="3">Meal 3</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm btn-default pull-left" data-dismiss="modal">Cancel</button>
+          <div class="btn-group btn-group-sm" role="group">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Cooked</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Clear</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal">Save</button>
+          </div>
+
+        </div>
+
+
     </div>
   </div>
 </div>
