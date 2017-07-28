@@ -21,6 +21,7 @@
       "styles": [
         "../node_modules/font-awesome/css/font-awesome.min.css",
         "styles/bootstrap-override.less",
+        "styles/snackbar.less",
         "styles/styles.less"
       ],"scripts": [
           "../node_modules/jquery/dist/jquery.min.js",

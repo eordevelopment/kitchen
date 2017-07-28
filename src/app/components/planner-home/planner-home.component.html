@@ -1,3 +1,17 @@
-<p>
-  planner-home
-</p>
+<div class="row" *ngIf="days && days.length > 0">
+  <div class="col-sm-4" *ngFor="let day of days">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="row planner-day">
+          <div class="col-xs-3">
+            <span class="text-primary"><strong>{{day.format("dddd")}}</strong></span><br/>
+            <span class="text-muted"><em>{{day.format("MMM Do")}}</em></span>
+          </div>
+          <div class="col-xs-9">
+            Penne Pasta with Seafood and Pesto
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
