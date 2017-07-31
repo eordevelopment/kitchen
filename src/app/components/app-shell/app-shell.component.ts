@@ -31,6 +31,11 @@ export class AppShellComponent implements OnInit {
       } else {
         window.scrollTo(0, 0);
       }
+
+      const elements = document.getElementsByClassName('modal-backdrop');
+      while (elements.length > 0) {
+        elements[0].parentNode.removeChild(elements[0]);
+      }
     });
 
     this.isCollapsed = true;
