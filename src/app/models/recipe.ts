@@ -17,7 +17,8 @@ export interface IRecipe {
 export enum RecipeType {
   Meal = 0,
   Baking = 1,
-  Smoothies = 2
+  Lunch = 2,
+  Smoothies = 3
 }
 
 export class Recipe implements IFormEntity, IRecipe {

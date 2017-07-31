@@ -26,7 +26,7 @@
             <div class="col-sm-12">
               <div class="form-group" [class.has-error]="account.formErrors.password">
                 <div class="input-group">
-                  <input [(ngModel)]="account.hashedPassword" type="password" id="password" class="form-control" formControlName="password" required placeholder="Enter a password" autocomplete="off">
+                  <input [(ngModel)]="account.password" type="password" id="password" class="form-control" formControlName="password" required placeholder="Enter a password" autocomplete="off">
                 </div>
                 <div *ngIf="account.formErrors.password">
                   <span class="text-danger field-validation-error">{{ account.formErrors.password }}</span>

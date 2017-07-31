@@ -14,6 +14,11 @@
     <div class="col-sm-6 col-sm-offset-3">
       <div class="panel panel-default">
         <div class="panel-body">
+          <div class="row" *ngIf="recipe && recipe.id && recipe.id > 0">
+            <div class="col-xs-12 text-center">
+                <button type="button" class="btn btn-sm btn-primary disabled"><i class="fa fa-plus"></i> Add to plan</button>
+            </div>
+          </div>
           <div class="row">
             <div class="col-xs-12">
               <div class="form-group" [class.has-error]="recipe.formErrors.name">

@@ -10,9 +10,11 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { RecipeDetailComponent } from './components/recipe-detail/recipe-detail.component';
 import { PlannerHomeComponent } from './components/planner-home/planner-home.component';
+import { HomeComponent } from 'app/components/home/home.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/recipes', pathMatch: 'full' },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: 'home',  component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'categories',  component: CategoriesListComponent, canActivate: [AuthGuard] },
   { path: 'categorydetail/:id', component: CategoryDetailComponent, canActivate: [AuthGuard] },
   { path: 'recipes',  component: RecipeListComponent, canActivate: [AuthGuard] },

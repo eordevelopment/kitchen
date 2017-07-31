@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit {
   }
 
   public onSubmit(): void {
+    this.account.hash();
     this.failure = null;
     this.accountService
       .login(this.account)
