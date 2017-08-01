@@ -52,7 +52,7 @@
             <div class="panel-heading pointer" data-toggle="collapse" data-target="#collapseIngredients" aria-expanded="true" aria-controls="collapseIngredients">Ingredients</div>
             <div class="panel-body list-ingredients collapse in" id="collapseIngredients">
               <ul class="list-group" *ngIf="recipe.hasItems()">
-                <li *ngFor="let item of recipe.recipeItems" class="list-group-item item-name" data-toggle="modal" data-target="#itemFormModal" (click)="selectItem(item)">
+                <li *ngFor="let item of recipe.recipeItems" class="list-group-item pointer" data-toggle="modal" data-target="#itemFormModal" (click)="selectItem(item)">
                   <div class="row">
                     <div class="col-xs-9">
                       {{item.item.name}}
