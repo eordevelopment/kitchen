@@ -1,16 +1,16 @@
 <div class="row" *ngIf="!openPlans">
-    <div class="col-sm-12 text-center">
-      <i *ngIf="!failure" class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
-      <span *ngIf="failure" class="text-danger">{{failure}}</span>
-    </div>
+  <div class="col-sm-12 text-center">
+    <i *ngIf="!failure" class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+    <span *ngIf="failure" class="text-danger">{{failure}}</span>
   </div>
+</div>
 
 <div *ngIf="openPlans && recipes && recipes.length <= 0; then noPlanner else planner">
 
 </div>
 
 <ng-template #planner>
-    <div class="row" *ngIf="openPlans && openPlans.length > 0">
+  <div class="row" *ngIf="openPlans && openPlans.length > 0">
     <div class="col-sm-4" *ngFor="let plan of openPlans">
       <div class="panel panel-default pointer" data-toggle="modal" data-target="#dayPlanModal" (click)="selectPlan(plan)">
         <div class="panel-body">
@@ -92,29 +92,31 @@
           <h4 class="modal-title">{{activePlan.dateTime.format("dddd, MMM Do")}}</h4>
         </div>
         <div class="modal-body">
-          <div class="row plan-item" *ngFor="let item of activePlan.items">
+          <div class="well plan-item" *ngFor="let item of activePlan.items">
             <div *ngIf="item.isDone;then itemReadonly else itemEdit"></div>
             <ng-template #itemEdit>
-              <div class="col-xs-7">
-                <div class="form-group">
+              <div class="row">
+                <div class="col-xs-12">
+                  <div class="form-group">
                   <div class="input-group">
                     <select [(ngModel)]="item.recipeId" class="form-control" (change)="itemChanged(item)">
                       <option *ngFor="let recipe of recipes" [value]="recipe.key">{{recipe.value}}</option>
                   </select>
                   </div>
                 </div>
+                </div>
               </div>
-              <div class="col-xs-5">
+              <div class="row">
+                <div class="col-xs-12 text-center">
                 <div class="btn-group btn-group-xs" *ngIf="item.recipeId && item.recipeId > 0">
                   <button class="btn btn-danger" (click)="removeItem(item)"><i class="fa fa-times"></i> Remove</button>
                   <button class="btn btn-primary" (click)="completeItem(item)"><i class="fa fa-check"></i> Cooked</button>
                 </div>
               </div>
+              </div>
             </ng-template>
             <ng-template #itemReadonly>
-              <div class="col-xs-7">
-                <h4 class="text-muted">{{item.recipeName}}</h4>
-              </div>
+              <h4 class="text-muted">{{item.recipeName}}</h4>
             </ng-template>
           </div>
           <div class="row">
@@ -140,19 +142,19 @@
 
 <ng-template #noPlanner>
   <div class="panel panel-default">
-  <div class="panel-body">
-    <div class="row">
-      <div class="col-sm-12 text-center">
-        <span><strong>You have not created any recipes.</strong></span><br><br>
-        <span class="text-muted">Once you have created some recipes you can use this page to plan out your meals and create your shopping list.</span>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-sm-12 text-center">
+          <span><strong>You have not created any recipes.</strong></span><br><br>
+          <span class="text-muted">Once you have created some recipes you can use this page to plan out your meals and create your shopping list.</span>
+        </div>
       </div>
-    </div>
-    <br>
-    <div class="row">
-      <div class="col-sm-12 text-center">
-        <a class="btn btn-lg btn-primary" routerLink="/recipes" role="button">Go »</a>
+      <br>
+      <div class="row">
+        <div class="col-sm-12 text-center">
+          <a class="btn btn-lg btn-primary" routerLink="/recipes" role="button">Go »</a>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </ng-template>
