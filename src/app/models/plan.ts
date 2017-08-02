@@ -44,7 +44,7 @@ export class Plan implements IPlan {
   }
 
   public isDone(): boolean {
-    if (this.id <= 0) {
+    if (this.id <= 0 || !this.items || this.items.length === 0) {
       return false;
     }
     for (const item of this.items) {

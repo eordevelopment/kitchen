@@ -37,7 +37,7 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
     this.hasPlan = false;
     this.service
       .getOpenPlans()
-      .subscribe(values => this.setOpenPlans(values), error => this.handleError(error));
+      .subscribe(values => { this.openPlans = values; this.openPlans.sort(this.sortAsc); }, error => this.handleError(error));
 
     this.closedPlansPage = 0;
     this.hasLoadedPlans = true;
@@ -81,13 +81,15 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
       if (plan.id === this.activePlan.id) {
         plan.upsertItems(this.activePlan.items);
         if (plan.isDone()) {
-          this.openPlans = this.openPlans.filter(x => !x.isDone());
           this.closedPlans.push(plan);
           this.closedPlans.sort(this.sortDesc);
-          this.openPlans.sort(this.sortAsc);
         }
         this.service.savePlan(plan)
-          .subscribe(response => {},
+          .subscribe(response => {
+            this.service
+              .getOpenPlans()
+              .subscribe(values => { this.openPlans = values; this.openPlans.sort(this.sortAsc); }, error => this.handleError(error));
+          },
           (error: any) => this.handleError(error));
         this.activePlan = undefined;
         break;
@@ -120,44 +122,11 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
     this.closedPlans.sort(this.sortDesc);
   }
 
-  private setOpenPlans(values: IPlan[]): void {
-    this.openPlans = new Array();
-
-    for (let i = 0; i < values.length; i++) {
-      this.openPlans.push(new Plan(values[i]));
-    }
-
-    const now = moment();
-
-    for (let i = 0; i < 7; i++) {
-      const dt = moment(now).add(i, 'd');
-      if (!this.haveDayPlan(dt)) {
-        const plan = new Plan();
-        plan.id = -i;
-        plan.dateTime = dt;
-        plan.items = new Array();
-        this.openPlans.push(plan);
-      }
-    }
-
-    this.openPlans.sort(this.sortAsc);
-  }
-
   private loadRecipes(values: IRecipe[]): void {
     this.recipes = new Array();
     for (let i = 0; i < values.length; i++) {
       this.recipes.push(new SelectItem(values[i].id, values[i].name));
     }
-  }
-
-  // TODO: The following methods should not belong here.
-  private haveDayPlan(date: moment.Moment): boolean {
-    for (let j = 0; j < this.openPlans.length; j++) {
-      if (date.isSame(this.openPlans[j].dateTime, 'day')) {
-        return true;
-      }
-    }
-    return false;
   }
 
   private sortAsc(a: Plan, b: Plan): number {
