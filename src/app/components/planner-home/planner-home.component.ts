@@ -10,6 +10,7 @@ import { RecipesService } from 'app/services/recipes.service';
 import { IPlan, Plan } from 'app/models/plan';
 import { SelectItem } from 'app/models/selectItem';
 import { IRecipe } from 'app/models/recipe';
+import { IPlanItem } from 'app/models/planItem';
 
 @Component({
   selector: 'app-planner-home',
@@ -18,6 +19,8 @@ import { IRecipe } from 'app/models/recipe';
 })
 export class PlannerHomeComponent extends BaseComponent implements OnInit {
   public activePlan: Plan;
+  public hasPlan: boolean;
+  public planChanged: boolean;
 
   public openPlans: Plan[];
   public closedPlans: Plan[];
@@ -31,6 +34,7 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.hasPlan = false;
     this.service
       .getOpenPlans()
       .subscribe(values => this.setOpenPlans(values), error => this.handleError(error));
@@ -42,12 +46,53 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
       .getClosedPlans(this.closedPlansPage)
       .subscribe(values => this.setClosedPlans(values), error => this.handleError(error));
 
-      this.recipesService.getRecipies()
+    this.recipesService.getRecipies()
       .subscribe(values => this.loadRecipes(values), error => this.handleError(error));
   }
 
-  public selectPlan(source?: Plan){
-    this.activePlan = source;
+  public selectPlan(source?: IPlan): void {
+    this.planChanged = false;
+    this.activePlan = new Plan(source);
+  }
+
+  public addItem(): void {
+    this.activePlan.addItem();
+  }
+
+  public removeItem(source: IPlanItem): void {
+    this.planChanged = true;
+    this.activePlan.items = this.activePlan.items.filter(x => x.recipeId !== source.recipeId);
+  }
+
+  public completeItem(source: IPlanItem): void {
+    this.planChanged = true;
+    source.isDone = true;
+  }
+
+  public itemChanged(source: IPlanItem): void {
+    this.planChanged = true;
+    source.recipeId = Number(source.recipeId);
+    const recipe = this.recipes.filter(x => x.key === source.recipeId)[0];
+    source.recipeName = recipe.value;
+  }
+
+  public savePlan(): void {
+    for (const plan of this.openPlans) {
+      if (plan.id === this.activePlan.id) {
+        plan.upsertItems(this.activePlan.items);
+        if (plan.isDone()) {
+          this.openPlans = this.openPlans.filter(x => !x.isDone());
+          this.closedPlans.push(plan);
+          this.closedPlans.sort(this.sortDesc);
+          this.openPlans.sort(this.sortAsc);
+        }
+        this.service.savePlan(plan)
+          .subscribe(response => {},
+          (error: any) => this.handleError(error));
+        this.activePlan = undefined;
+        break;
+      }
+    }
   }
 
   public loadMore(): void {

@@ -11,6 +11,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { RecipeDetailComponent } from './components/recipe-detail/recipe-detail.component';
 import { PlannerHomeComponent } from './components/planner-home/planner-home.component';
 import { HomeComponent } from 'app/components/home/home.component';
+import { HomePublicComponent } from 'app/components/home-public/home-public.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'recipes',  component: RecipeListComponent, canActivate: [AuthGuard] },
   { path: 'recipedetail/:id', component: RecipeDetailComponent, canActivate: [AuthGuard] },
   { path: 'planner',  component: PlannerHomeComponent, canActivate: [AuthGuard] },
+  { path: 'welcome',  component: HomePublicComponent },
   { path: 'login',  component: LoginComponent },
   { path: 'register',  component: RegisterComponent },
 ];

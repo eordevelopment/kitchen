@@ -11,7 +11,7 @@ export abstract class BaseComponent {
 
   protected handleError(error: ServiceError): void {
     if (error.status === 401) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/welcome']);
     }
     this.failure = error.message;
   }

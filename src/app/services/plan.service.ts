@@ -41,6 +41,20 @@ export class PlanService {
       .catch(this.handleError);
   }
 
+  public savePlan(value: IPlan): Observable<void> {
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    headers.append('Authorization', `Basic ${this.storageService.getToken()}`);
+    const options = new RequestOptions({ headers: headers });
+
+    if (value.id && value.id > 0) {
+      return this.http.put(environment.serviceUrl + 'plan/' + value.id, value, options)
+        .catch(this.handleError);
+    } else {
+      return this.http.post(environment.serviceUrl + 'plan', value, options)
+        .catch(this.handleError);
+    }
+  }
+
   private handleError(res: Response | any) {
     const error = new ServiceError();
     error.status = res.status;
