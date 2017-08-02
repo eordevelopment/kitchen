@@ -16,8 +16,8 @@
         <div class="panel-body">
           <div class="row row-eq-height planner-day">
             <div class="col-xs-3">
-              <span class="text-primary"><strong>{{plan.dateTime.format("dddd")}}</strong></span><br/>
-              <span class="text-muted"><em>{{plan.dateTime.format("MMM Do")}}</em></span>
+              <span class="text-primary"><strong>{{plan.dateTimeMt.format("dddd")}}</strong></span><br/>
+              <span class="text-muted"><em>{{plan.dateTimeMt.format("MMM Do")}}</em></span>
             </div>
             <div class="col-xs-9">
               <div *ngIf="plan.items && plan.items.length > 0;then planItems else planEmpty"></div>
@@ -44,9 +44,14 @@
 
   <hr/>
 
-  <div class="row" *ngIf="!closedPlans || closedPlans.length <= 0">
+  <div class="row" *ngIf="!closedPlans && !hasLoadedPlans">
     <div class="col-sm-12 text-center text-muted">
       No previous plans
+    </div>
+  </div>
+    <div class="row" *ngIf="!closedPlans && hasLoadedPlans">
+    <div class="col-sm-12 text-center">
+      <button type="button" class="btn btn-default" (click)="loadMore()">Show previous plans</button>
     </div>
   </div>
 
@@ -62,8 +67,8 @@
         <div class="panel-body">
           <div class="row planner-day">
             <div class="col-xs-3">
-              <span class="text-muted"><strong>{{plan.dateTime.format("dddd")}}</strong></span><br/>
-              <span class="text-muted"><em>{{plan.dateTime.format("MMM Do")}}</em></span>
+              <span class="text-muted"><strong>{{plan.dateTimeMt.format("dddd")}}</strong></span><br/>
+              <span class="text-muted"><em>{{plan.dateTimeMt.format("MMM Do")}}</em></span>
             </div>
             <div class="col-xs-9 text-muted">
               <div *ngFor="let item of plan.items">
@@ -76,7 +81,7 @@
     </div>
   </div>
 
-  <div class="row" *ngIf="hasLoadedPlans">
+  <div class="row" *ngIf="closedPlans && hasLoadedPlans">
     <div class="col-sm-12 text-center">
       <button type="button" class="btn btn-default" (click)="loadMore()">Load More</button>
     </div>
@@ -89,7 +94,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">{{activePlan.dateTime.format("dddd, MMM Do")}}</h4>
+          <h4 class="modal-title">{{activePlan.dateTimeMt.format("dddd, MMM Do")}}</h4>
         </div>
         <div class="modal-body">
           <div class="well plan-item" *ngFor="let item of activePlan.items">

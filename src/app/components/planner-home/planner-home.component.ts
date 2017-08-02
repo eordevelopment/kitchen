@@ -35,16 +35,12 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
 
   ngOnInit() {
     this.hasPlan = false;
-    this.service
-      .getOpenPlans()
-      .subscribe(values => { this.openPlans = values; this.openPlans.sort(this.sortAsc); }, error => this.handleError(error));
-
     this.closedPlansPage = 0;
     this.hasLoadedPlans = true;
 
     this.service
-      .getClosedPlans(this.closedPlansPage)
-      .subscribe(values => this.setClosedPlans(values), error => this.handleError(error));
+      .getUpcomingPlans()
+      .subscribe(values => this.setOpenPlans(values), error => this.handleError(error));
 
     this.recipesService.getRecipies()
       .subscribe(values => this.loadRecipes(values), error => this.handleError(error));
@@ -77,31 +73,41 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
   }
 
   public savePlan(): void {
-    for (const plan of this.openPlans) {
-      if (plan.id === this.activePlan.id) {
-        plan.upsertItems(this.activePlan.items);
-        if (plan.isDone()) {
-          this.closedPlans.push(plan);
-          this.closedPlans.sort(this.sortDesc);
+    const plan = this.getPlan();
+    if (plan) {
+      plan.upsertItems(this.activePlan.items);
+      if (plan.isDone()) {
+        if (!this.closedPlans) {
+          this.closedPlans = new Array();
         }
-        this.service.savePlan(plan)
-          .subscribe(response => {
-            this.service
-              .getOpenPlans()
-              .subscribe(values => { this.openPlans = values; this.openPlans.sort(this.sortAsc); }, error => this.handleError(error));
-          },
-          (error: any) => this.handleError(error));
-        this.activePlan = undefined;
-        break;
+        this.closedPlans.push(plan);
+        this.closedPlans.sort(this.sortDesc);
       }
+      this.service.savePlan(plan)
+        .subscribe(response => {
+          this.service
+            .getUpcomingPlans()
+            .subscribe(values => this.setOpenPlans(values), error => this.handleError(error));
+        },
+        (error: any) => this.handleError(error));
+      this.activePlan = undefined;
     }
   }
 
   public loadMore(): void {
-    this.closedPlansPage += 1;
     this.service
-      .getClosedPlans(this.closedPlansPage)
+      .getPreviousPlans(this.closedPlansPage)
       .subscribe(values => this.setClosedPlans(values), error => this.handleError(error));
+    this.closedPlansPage += 1;
+  }
+
+  private setOpenPlans(source: IPlan[]): void {
+    console.log(source);
+    this.openPlans = new Array();
+    for (const plan of source) {
+      this.openPlans.push(new Plan(plan));
+    }
+    this.openPlans.sort(this.sortAsc);
   }
 
   private setClosedPlans(values: IPlan[]): void {
@@ -127,6 +133,15 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
     for (let i = 0; i < values.length; i++) {
       this.recipes.push(new SelectItem(values[i].id, values[i].name));
     }
+  }
+
+  private getPlan(): Plan {
+    for (const plan of this.openPlans) {
+      if (plan.id === this.activePlan.id) {
+        return plan;
+      }
+    }
+    return undefined;
   }
 
   private sortAsc(a: Plan, b: Plan): number {

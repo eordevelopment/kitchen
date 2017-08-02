@@ -5,13 +5,14 @@ import { IPlanItem, PlanItem } from 'app/models/planItem';
 
 export interface IPlan {
   id: number;
-  dateTime: moment.Moment | string;
+  dateTime: string;
   items: IPlanItem[];
 }
 
 export class Plan implements IPlan {
   id: number;
-  dateTime: moment.Moment | string;
+  dateTime: string;
+  dateTimeMt: moment.Moment;
   items: IPlanItem[];
 
   constructor(source?: IPlan) {
@@ -26,7 +27,8 @@ export class Plan implements IPlan {
       }
 
       if (source.dateTime) {
-        this.dateTime = moment(source.dateTime);
+        this.dateTime = source.dateTime;
+        this.dateTimeMt = moment(source.dateTime);
       }
     }
   }

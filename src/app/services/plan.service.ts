@@ -1,11 +1,10 @@
-import * as moment from 'moment';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 
 import { StorageService } from './storage.service';
 
-import { IPlan, Plan } from '../models/plan';
+import { IPlan } from '../models/plan';
 import { ServiceError } from '../models/error';
 
 import { environment } from '../../environments/environment';
@@ -20,16 +19,16 @@ export class PlanService {
 
   constructor(private http: Http, private storageService: StorageService) { }
 
-  public getOpenPlans(): Observable<Plan[]> {
+  public getUpcomingPlans(): Observable<IPlan[]> {
     const headers = new Headers({ 'Authorization': `Basic ${this.storageService.getToken()}` });
     const options = new RequestOptions({ headers: headers });
 
-    return this.http.get(environment.serviceUrl + 'plan/open', options)
-      .map((response) => this.mapOpenPlans(response))
+    return this.http.get(environment.serviceUrl + 'plan/upcoming/7', options)
+      .map((response) => response.json() as IPlan[])
       .catch(this.handleError);
   }
 
-  public getClosedPlans(page?: number): Observable<IPlan[]> {
+  public getPreviousPlans(page?: number): Observable<IPlan[]> {
     const headers = new Headers({ 'Authorization': `Basic ${this.storageService.getToken()}` });
     const options = new RequestOptions({ headers: headers });
 
@@ -56,46 +55,10 @@ export class PlanService {
     }
   }
 
-  private mapOpenPlans(response: any): Plan[] {
-    const values = response.json() as IPlan[];
-
-    const openPlans: Plan[] = new Array();
-
-    for (let i = 0; i < values.length; i++) {
-      openPlans.push(new Plan(values[i]));
-    }
-
-    const now = moment();
-
-    let index = 0;
-    while (openPlans.length < 7) {
-      const dt = moment(now).add(index, 'd');
-      if (!this.haveDayPlan(dt, openPlans)) {
-        const plan = new Plan();
-        plan.id = -index;
-        plan.dateTime = dt;
-        plan.items = new Array();
-        openPlans.push(plan);
-      }
-      index += 1;
-    }
-
-    return openPlans;
-  }
-
   private handleError(res: Response | any) {
     const error = new ServiceError();
     error.status = res.status;
     error.message = res.json().error;
     return Observable.throw(error);
-  }
-
-  private haveDayPlan(date: moment.Moment, openPlans: Plan[]): boolean {
-    for (let j = 0; j < openPlans.length; j++) {
-      if (date.isSame(openPlans[j].dateTime, 'day')) {
-        return true;
-      }
-    }
-    return false;
   }
 }
