@@ -2,6 +2,7 @@ import * as moment from 'moment';
 import { Validators } from '@angular/forms';
 
 import { IPlanItem, PlanItem } from 'app/models/planItem';
+import { IRecipe } from 'app/models/recipe';
 
 export interface IPlan {
   id: number;
@@ -33,6 +34,17 @@ export class Plan implements IPlan {
     }
   }
 
+  public addRecipe(recipe: IRecipe): void {
+    if (!this.items || this.items == null) {
+      this.items = new Array();
+    }
+    const item = new PlanItem();
+    item.recipeId = recipe.id;
+    item.isDone = false;
+    item.recipeName = recipe.name;
+    this.items.push(item);
+  }
+
   public addItem(): void {
     const item = new PlanItem();
     item.recipeId = -this.items.length;
@@ -55,5 +67,37 @@ export class Plan implements IPlan {
       }
     }
     return true;
+  }
+}
+
+export module kitchen.plan {
+  export function sortAsc(a: Plan, b: Plan): number {
+    if (a.dateTimeMt.valueOf() < b.dateTimeMt.valueOf()) {
+      return -1;
+    }
+    if (a.dateTimeMt.valueOf() > b.dateTimeMt.valueOf()) {
+      return 1;
+    }
+    return 0;
+  }
+
+  export function sortDesc(a: Plan, b: Plan): number {
+    if (a.dateTimeMt.valueOf() < b.dateTimeMt.valueOf()) {
+      return 1;
+    }
+    if (a.dateTimeMt.valueOf() > b.dateTimeMt.valueOf()) {
+      return -1;
+    }
+    return 0;
+  }
+
+  export function getPlan(planId: number, plans: Plan[]): Plan {
+    const id = Number(planId);
+    for (const plan of plans) {
+      if (id === plan.id) {
+        return plan;
+      }
+    }
+    return undefined;
   }
 }

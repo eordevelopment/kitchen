@@ -45,6 +45,10 @@ export class AppShellComponent implements OnInit {
     this.isCollapsed = !this.isCollapsed;
   }
 
+  public collapse(): void {
+    this.isCollapsed = true;
+  }
+
   public logout(): void {
     this.storage.clear();
     this.router.navigate(['/login']);

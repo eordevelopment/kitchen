@@ -7,7 +7,7 @@ import { BaseComponent } from 'app/components/baseComponent';
 import { PlanService } from 'app/services/plan.service';
 import { RecipesService } from 'app/services/recipes.service';
 
-import { IPlan, Plan } from 'app/models/plan';
+import { IPlan, Plan, kitchen } from 'app/models/plan';
 import { SelectItem } from 'app/models/selectItem';
 import { IRecipe } from 'app/models/recipe';
 import { IPlanItem } from 'app/models/planItem';
@@ -21,6 +21,8 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
   public activePlan: Plan;
   public hasPlan: boolean;
   public planChanged: boolean;
+  public showNotification: boolean;
+  private itemClosed: boolean;
 
   public openPlans: Plan[];
   public closedPlans: Plan[];
@@ -38,8 +40,7 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
     this.closedPlansPage = 0;
     this.hasLoadedPlans = true;
 
-    this.service
-      .getUpcomingPlans()
+    this.service.getUpcomingPlans()
       .subscribe(values => this.setOpenPlans(values), error => this.handleError(error));
 
     this.recipesService.getRecipies()
@@ -49,6 +50,7 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
   public selectPlan(source?: IPlan): void {
     this.planChanged = false;
     this.activePlan = new Plan(source);
+    this.itemClosed = false;
   }
 
   public addItem(): void {
@@ -63,6 +65,7 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
   public completeItem(source: IPlanItem): void {
     this.planChanged = true;
     source.isDone = true;
+    this.itemClosed = true;
   }
 
   public itemChanged(source: IPlanItem): void {
@@ -73,7 +76,7 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
   }
 
   public savePlan(): void {
-    const plan = this.getPlan();
+    const plan = kitchen.plan.getPlan(this.activePlan.id, this.openPlans);
     if (plan) {
       plan.upsertItems(this.activePlan.items);
       if (plan.isDone()) {
@@ -81,37 +84,37 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
           this.closedPlans = new Array();
         }
         this.closedPlans.push(plan);
-        this.closedPlans.sort(this.sortDesc);
+        this.closedPlans.sort(kitchen.plan.sortDesc);
       }
-      this.service.savePlan(plan)
-        .subscribe(response => {
-          this.service
-            .getUpcomingPlans()
-            .subscribe(values => this.setOpenPlans(values), error => this.handleError(error));
-        },
-        (error: any) => this.handleError(error));
+
+      if (this.itemClosed) {
+        this.showSnackbar();
+      }
+
+      this.service.savePlan(plan).subscribe(response => {
+        this.service.getUpcomingPlans()
+          .subscribe(values => this.setOpenPlans(values), error => this.handleError(error));
+      },
+      (error: any) => this.handleError(error));
       this.activePlan = undefined;
     }
   }
 
   public loadMore(): void {
-    this.service
-      .getPreviousPlans(this.closedPlansPage)
+    this.service.getPreviousPlans(this.closedPlansPage)
       .subscribe(values => this.setClosedPlans(values), error => this.handleError(error));
     this.closedPlansPage += 1;
   }
 
   private setOpenPlans(source: IPlan[]): void {
-    console.log(source);
     this.openPlans = new Array();
     for (const plan of source) {
       this.openPlans.push(new Plan(plan));
     }
-    this.openPlans.sort(this.sortAsc);
+    this.openPlans.sort(kitchen.plan.sortAsc);
   }
 
   private setClosedPlans(values: IPlan[]): void {
-
     if (!values || values.length <= 0) {
       this.hasLoadedPlans = false;
       return;
@@ -125,7 +128,7 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
       this.closedPlans.push(new Plan(values[i]));
     }
 
-    this.closedPlans.sort(this.sortDesc);
+    this.closedPlans.sort(kitchen.plan.sortDesc);
   }
 
   private loadRecipes(values: IRecipe[]): void {
@@ -135,33 +138,8 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
     }
   }
 
-  private getPlan(): Plan {
-    for (const plan of this.openPlans) {
-      if (plan.id === this.activePlan.id) {
-        return plan;
-      }
-    }
-    return undefined;
+  private showSnackbar(): void {
+    this.showNotification = true;
+    setTimeout(() => { this.showNotification = false; }, 3000);
   }
-
-  private sortAsc(a: Plan, b: Plan): number {
-    if (a.dateTime.valueOf() < b.dateTime.valueOf()) {
-      return -1;
-    }
-    if (a.dateTime.valueOf() > b.dateTime.valueOf()) {
-      return 1;
-    }
-    return 0;
-  }
-
-  private sortDesc(a: Plan, b: Plan): number {
-    if (a.dateTime.valueOf() < b.dateTime.valueOf()) {
-      return 1;
-    }
-    if (a.dateTime.valueOf() > b.dateTime.valueOf()) {
-      return -1;
-    }
-    return 0;
-  }
-
 }

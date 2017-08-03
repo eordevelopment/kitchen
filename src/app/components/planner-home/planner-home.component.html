@@ -88,7 +88,7 @@
   </div>
   <br/>
 
-  <!-- Modal for recipe item -->
+  <!-- Modal for plan details -->
   <div class="modal" id="dayPlanModal" tabindex="-1" role="dialog" *ngIf="activePlan">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -163,3 +163,5 @@
     </div>
   </div>
 </ng-template>
+
+<div class="alert alert-info snackbar" [class.show]="showNotification">Inventory stock has been updated.</div>
