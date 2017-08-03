@@ -18,6 +18,7 @@ import { RecipeDetailComponent } from './components/recipe-detail/recipe-detail.
 import { PlannerHomeComponent } from './components/planner-home/planner-home.component';
 import { HomeComponent } from 'app/components/home/home.component';
 import { HomePublicComponent } from 'app/components/home-public/home-public.component';
+import { RecipeViewComponent } from 'app/components/recipe-view/recipe-view.component';
 
 // Services
 import { StorageService } from './services/storage.service';
@@ -53,6 +54,7 @@ import { RecipeWithTypePipe } from './pipes/has-recipe-type-filter.pipe';
     RecipeDetailComponent,
     PlannerHomeComponent,
     HomeComponent,
+    RecipeViewComponent,
 
     RecipeTypeFilterPipe,
     RecipeWithTypePipe

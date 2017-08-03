@@ -1,0 +1,55 @@
+<div class="panel panel-default" *ngIf="!recipe">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-sm-12 text-center">
+        <i *ngIf="!failure" class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+        <span *ngIf="failure" class="text-danger">{{failure}}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" *ngIf="recipe">
+  <div class="col-sm-6 col-sm-offset-3">
+    <div class="panel panel-default">
+      <div class="panel-body">
+
+        <div class="row">
+          <div class="col-sm-12">
+            <h4>{{recipe.name}}</h4>
+          </div>
+        </div>
+
+        <div class="panel panel-primary">
+          <div class="panel-heading pointer" data-toggle="collapse" data-target="#collapseIngredients" aria-expanded="true" aria-controls="collapseIngredients">Ingredients</div>
+          <ul class="list-group list-ingredients collapse in" id="collapseIngredients" *ngIf="recipe.recipeItems && recipe.recipeItems.length > 0">
+            <li *ngFor="let item of recipe.recipeItems" class="list-group-item">
+              <div class="row">
+                <div class="col-xs-9">
+                  {{item.item.name}}
+                  <span class="text-muted" *ngIf="item.instructions">
+                        <em>({{item.instructions}})</em>
+                      </span>
+                </div>
+                <div class="col-xs-3 text-right">
+                  <span class="text-primary"><strong>{{item.ammount}} {{item.unitType}}</strong></span>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <br/>
+
+        <div class="well" *ngFor="let step of recipe.recipeSteps">
+          <div class="row">
+            <div class="col-xs-2">
+              <h4 class="text-primary">{{step.stepNumber}}</h4>
+            </div>
+            <div class="col-xs-10">{{step.description}}</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
