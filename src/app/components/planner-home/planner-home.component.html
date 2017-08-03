@@ -1,96 +1,167 @@
-<div class="row" *ngIf="days && days.length > 0">
-  <div class="col-sm-4" *ngFor="let day of days">
-    <div class="panel panel-default pointer" data-toggle="modal" data-target="#itemFormModal">
-      <div class="panel-body">
-        <div class="row planner-day">
-          <div class="col-xs-3">
-            <span class="text-primary"><strong>{{day.format("dddd")}}</strong></span><br/>
-            <span class="text-muted"><em>{{day.format("MMM Do")}}</em></span>
-          </div>
-          <div class="col-xs-9">
-            Penne Pasta with Seafood and Pesto
+<div class="row" *ngIf="!openPlans">
+  <div class="col-sm-12 text-center">
+    <i *ngIf="!failure" class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+    <span *ngIf="failure" class="text-danger">{{failure}}</span>
+  </div>
+</div>
+
+<div *ngIf="openPlans && recipes && recipes.length <= 0; then noPlanner else planner">
+
+</div>
+
+<ng-template #planner>
+  <div class="row" *ngIf="openPlans && openPlans.length > 0">
+    <div class="col-sm-4" *ngFor="let plan of openPlans">
+      <div class="panel panel-default pointer" data-toggle="modal" data-target="#dayPlanModal" (click)="selectPlan(plan)">
+        <div class="panel-body">
+          <div class="row row-eq-height planner-day">
+            <div class="col-xs-3">
+              <span class="text-primary"><strong>{{plan.dateTimeMt.format("dddd")}}</strong></span><br/>
+              <span class="text-muted"><em>{{plan.dateTimeMt.format("MMM Do")}}</em></span>
+            </div>
+            <div class="col-xs-9">
+              <div *ngIf="plan.items && plan.items.length > 0;then planItems else planEmpty"></div>
+              <ng-template #planItems>
+                <div *ngFor="let item of plan.items" [class.text-muted]="item.isDone">
+                  {{item.recipeName}}
+                </div>
+              </ng-template>
+              <ng-template #planEmpty>
+                <span class="text-muted">Nothing yet.</span>
+              </ng-template>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="row">
-  <div class="col-sm-12 text-center">
-    <button type="button" class="btn btn-success"><i class="fa fa-shopping-basket"></i> Create Shopping List</button>
+  <div class="row" *ngIf="openPlans && openPlans.length > 0">
+    <div class="col-sm-12 text-center">
+      <button type="button" class="btn btn-success" [disabled]="!hasPlan"><i class="fa fa-shopping-basket"></i> Create Shopping List</button>
+    </div>
   </div>
-</div>
 
-<br/>
-<hr/>
+  <hr/>
 
-<div class="row">
-  <div class="col-sm-12 text-center text-muted">
-    Recent items
+  <div class="row" *ngIf="!closedPlans && !hasLoadedPlans">
+    <div class="col-sm-12 text-center text-muted">
+      No previous plans
+    </div>
   </div>
-</div>
-<br/>
-<div class="row" *ngIf="days && days.length > 0">
-  <div class="col-sm-4" *ngFor="let day of days">
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <div class="row planner-day">
-          <div class="col-xs-3">
-            <span class="text-muted"><strong>{{day.format("dddd")}}</strong></span><br/>
-            <span class="text-muted"><em>{{day.format("MMM Do")}}</em></span>
-          </div>
-          <div class="col-xs-9 text-muted">
-            Penne Pasta with Seafood and Pesto
+    <div class="row" *ngIf="!closedPlans && hasLoadedPlans">
+    <div class="col-sm-12 text-center">
+      <button type="button" class="btn btn-default" (click)="loadMore()">Show previous plans</button>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="closedPlans && closedPlans.length > 0">
+    <div class="col-sm-12 text-center text-muted">
+      Recent items
+    </div>
+  </div>
+  <br/>
+  <div class="row" *ngIf="closedPlans && closedPlans.length > 0">
+    <div class="col-sm-4" *ngFor="let plan of closedPlans">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="row planner-day">
+            <div class="col-xs-3">
+              <span class="text-muted"><strong>{{plan.dateTimeMt.format("dddd")}}</strong></span><br/>
+              <span class="text-muted"><em>{{plan.dateTimeMt.format("MMM Do")}}</em></span>
+            </div>
+            <div class="col-xs-9 text-muted">
+              <div *ngFor="let item of plan.items">
+                {{item.recipeName}}
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="row">
-  <div class="col-sm-12 text-center">
-    <button type="button" class="btn btn-default">Load More</button>
+  <div class="row" *ngIf="closedPlans && hasLoadedPlans">
+    <div class="col-sm-12 text-center">
+      <button type="button" class="btn btn-default" (click)="loadMore()">Load More</button>
+    </div>
   </div>
-</div>
-<br/>
+  <br/>
 
-<!-- Modal for recipe item -->
-<div class="modal" id="itemFormModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">{{days[0].format("dddd, MMM Do")}}</h4>
-      </div>
-
+  <!-- Modal for plan details -->
+  <div class="modal" id="dayPlanModal" tabindex="-1" role="dialog" *ngIf="activePlan">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">{{activePlan.dateTimeMt.format("dddd, MMM Do")}}</h4>
+        </div>
         <div class="modal-body">
-          <div class="row">
-            <div class="col-sm-12">
-              <div class="form-group">
-                <div class="input-group">
-                  <select class="form-control">
-                      <option value="1">Meal 1</option>
-                      <option value="2">Meal 2</option>
-                      <option value="3">Meal 3</option>
+          <div class="well plan-item" *ngFor="let item of activePlan.items">
+            <div *ngIf="item.isDone;then itemReadonly else itemEdit"></div>
+            <ng-template #itemEdit>
+              <div class="row">
+                <div class="col-xs-12">
+                  <div class="form-group">
+                  <div class="input-group">
+                    <select [(ngModel)]="item.recipeId" class="form-control" (change)="itemChanged(item)">
+                      <option *ngFor="let recipe of recipes" [value]="recipe.key">{{recipe.value}}</option>
                   </select>
+                  </div>
+                </div>
                 </div>
               </div>
+              <div class="row">
+                <div class="col-xs-12 text-center">
+                <div class="btn-group btn-group-xs" *ngIf="item.recipeId && item.recipeId > 0">
+                  <button class="btn btn-danger" (click)="removeItem(item)"><i class="fa fa-times"></i> Remove</button>
+                  <button class="btn btn-primary" (click)="completeItem(item)"><i class="fa fa-check"></i> Cooked</button>
+                </div>
+              </div>
+              </div>
+            </ng-template>
+            <ng-template #itemReadonly>
+              <h4 class="text-muted">{{item.recipeName}}</h4>
+            </ng-template>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 text-center">
+              <button class="btn btn-sm btn-success" (click)="addItem()"><i class="fa fa-plus"></i> Add</button>
             </div>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-sm btn-default pull-left" data-dismiss="modal">Cancel</button>
           <div class="btn-group btn-group-sm" role="group">
-            <button type="button" class="btn btn-primary" data-dismiss="modal">Cooked</button>
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Clear</button>
-            <button type="button" class="btn btn-success" data-dismiss="modal">Save</button>
+            <button type="button" class="btn btn-success" [disabled]="!planChanged" data-dismiss="modal" (click)="savePlan()">Save</button>
           </div>
 
         </div>
 
 
+      </div>
     </div>
   </div>
-</div>
+
+</ng-template>
+
+<ng-template #noPlanner>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-sm-12 text-center">
+          <span><strong>You have not created any recipes.</strong></span><br><br>
+          <span class="text-muted">Once you have created some recipes you can use this page to plan out your meals and create your shopping list.</span>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-sm-12 text-center">
+          <a class="btn btn-lg btn-primary" routerLink="/recipes" role="button">Go »</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<div class="alert alert-info snackbar" [class.show]="showNotification">Inventory stock has been updated.</div>

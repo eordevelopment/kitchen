@@ -13,7 +13,7 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" [class.collapse]="isCollapsed">
-      <ul class="nav navbar-nav">
+      <ul class="nav navbar-nav" (click)="collapse()">
         <li><a routerLink="/categories">
           <strong><i class="fa fa-database"></i> Inventory</strong></a>
         </li>

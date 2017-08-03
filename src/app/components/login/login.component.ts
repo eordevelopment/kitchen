@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 
 import { Account } from '../../models/account';
@@ -23,6 +24,7 @@ export class LoginComponent implements OnInit {
     private accountService: AccountService,
     private router: Router,
     private storage: StorageService,
+    private location: Location,
     private formHelper: FormHelperService) { }
 
   ngOnInit() {
@@ -32,11 +34,16 @@ export class LoginComponent implements OnInit {
   }
 
   public onSubmit(): void {
+    this.account.hash();
     this.failure = null;
     this.accountService
       .login(this.account)
       .subscribe(response => this.handleSuccess(response),
       (error: any) => this.handleError(error));
+  }
+
+  public goBack(): void {
+    this.location.back();
   }
 
   private handleSuccess(token: string): void {

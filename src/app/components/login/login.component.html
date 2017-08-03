@@ -5,6 +5,13 @@
         <div class="panel-body">
           <div class="row">
             <div class="col-sm-12">
+              <h4>Login</h4>
+              <span class="text-info">Please enter your login credentials below</span>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-sm-12">
               <div class="form-group" [class.has-error]="account.formErrors.name">
                 <div class="input-group">
                   <input [(ngModel)]="account.userName" type="text" id="name" class="form-control" formControlName="name" required placeholder="User name" autocomplete="off">
@@ -20,7 +27,7 @@
             <div class="col-sm-12">
               <div class="form-group" [class.has-error]="account.formErrors.password">
                 <div class="input-group">
-                  <input [(ngModel)]="account.hashedPassword" type="password" id="password" class="form-control" formControlName="password" required placeholder="Password" autocomplete="off">
+                  <input [(ngModel)]="account.password" type="password" id="password" class="form-control" formControlName="password" required placeholder="Password" autocomplete="off">
                 </div>
                 <div *ngIf="account.formErrors.password">
                   <span class="text-danger field-validation-error">{{ account.formErrors.password }}</span>
@@ -41,6 +48,7 @@
         <div class="panel-footer">
           <div class="row">
             <div class="col-sm-12 text-center">
+              <button type="button" class="btn btn-default" (click)="goBack()">Back</button>
               <button type="submit" class="btn btn-success" [disabled]="!loginForm.valid">Login</button>
             </div>
           </div>
@@ -49,10 +57,3 @@
     </div>
   </div>
 </form>
-
-<br>
-<div class="row">
-  <div class="col-sm-12 text-center">
-      <span>No account? </span> <a routerLink="/register">register here</a>
-  </div>
-</div>

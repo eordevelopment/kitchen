@@ -23,7 +23,7 @@ export class ItemsService {
     const headers = new Headers({ 'Authorization': `Basic ${this.storageService.getToken()}` });
     const options = new RequestOptions({ headers: headers });
 
-    return this.http.get(environment.serviceUrl + 'items/search?value=' + searchText, options)
+    return this.http.get(environment.serviceUrl + 'items/search/' + searchText, options)
       .map(response => response.json() as Item[])
       .catch(this.handleError);
   }

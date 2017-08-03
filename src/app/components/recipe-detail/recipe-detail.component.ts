@@ -1,3 +1,4 @@
+import * as moment from 'moment';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/catch';
@@ -15,6 +16,7 @@ import { Router } from '@angular/router';
 
 import { BaseComponent } from 'app/components/baseComponent';
 import { RecipesService } from 'app/services/recipes.service';
+import { PlanService } from 'app/services/plan.service';
 import { ItemsService } from 'app/services/items.service'
 import { FormHelperService } from 'app/services/form-helper.service';
 
@@ -23,6 +25,7 @@ import { IRecipe, Recipe, RecipeType } from '../../models/recipe';
 import { IRecipeStep, RecipeStep } from '../../models/recipestep';
 import { IRecipeItem, RecipeItem } from '../../models/recipeitem';
 import { IItem, Item } from '../../models/item';
+import { IPlan, Plan, kitchen } from 'app/models/plan';
 import { SelectItem } from '../../models/selectItem';
 
 @Component({
@@ -44,21 +47,27 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
   private searchTerms = new Subject<string>();
   public itemsSearchResult: Observable<Item[]>;
 
+  public plansSelect: Observable<SelectItem[]>;
+  public selectedPlanId: number;
+  private plans: Plan[];
+
   constructor(
     private recipesService: RecipesService,
+    private planService: PlanService,
     private itemsService: ItemsService,
     private route: ActivatedRoute,
     private location: Location,
     private formHelper: FormHelperService,
     router: Router) {
-      super(router);
-     }
+    super(router);
+  }
 
   ngOnInit() {
     this.route.paramMap
       .switchMap((params: ParamMap) => this.recipesService.getRecipe(+params.get('id')))
       .subscribe((source: IRecipe) => {
         this.recipe = new Recipe(source);
+        console.log(this.recipe);
         this.recipeForm = this.formHelper.buildForm(this.recipe);
       });
 
@@ -132,6 +141,31 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
     this.selectedItem.item.name = searchResult.name;
     this.selectedItem.item.id = searchResult.id;
     this.searchTerms.next(null);
+  }
+
+  public getPlans(): void {
+    this.plansSelect = this.planService.getUpcomingPlans().map(values => {
+      const selectItems = new Array();
+      this.plans = new Array();
+      if (values.length > 0) {
+        for (let i = 0; i < values.length; i++) {
+          selectItems.push(new SelectItem(values[i].id, moment(values[i].dateTime).format('dddd, MMM Do')));
+          this.plans.push(new Plan(values[i]));
+        }
+        this.selectedPlanId = values[0].id
+      }
+      return selectItems;
+    });
+  }
+
+  public savePlan(): void {
+    const plan = kitchen.plan.getPlan(this.selectedPlanId, this.plans);
+    plan.addRecipe(this.recipe);
+    this.planService.savePlan(plan).subscribe(response => {
+      this.recipe.assignedPlans = new Array();
+      this.recipe.assignedPlans.push(plan);
+    },
+      (error: any) => this.handleError(error));
   }
 
   private search(): void {

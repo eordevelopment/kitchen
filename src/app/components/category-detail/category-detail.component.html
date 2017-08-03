@@ -29,7 +29,7 @@
           </div>
           <br>
           <ul class="list-group" *ngIf="category.items && category.items !== null && category.items.length > 0">
-            <li *ngFor="let item of category.items" class="list-group-item item-name" data-toggle="modal" data-target="#itemFormModal"
+            <li *ngFor="let item of category.items" class="list-group-item pointer" data-toggle="modal" data-target="#itemFormModal"
               (click)="setItem(item)">
               <div class="row">
                 <div class="col-xs-10" [class.text-warning]="item.quantity === 1" [class.text-danger]="item.quantity < 1">

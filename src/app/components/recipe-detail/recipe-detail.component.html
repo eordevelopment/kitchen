@@ -14,12 +14,30 @@
     <div class="col-sm-6 col-sm-offset-3">
       <div class="panel panel-default">
         <div class="panel-body">
+          <div *ngIf="recipe && recipe.id && recipe.id > 0">
+            <div class="row">
+              <div class="col-xs-12 text-center">
+                <div *ngIf="recipe.assignedPlans && recipe.assignedPlans.length > 0;then onPlan else addToPlan"></div>
+                <ng-template #addToPlan>
+                  <button type="button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#dayPlanModal" (click)="getPlans()"><i class="fa fa-plus"></i> Add to plan</button>
+                </ng-template>
+                <ng-template #onPlan>
+                  <span class="text-info">You next plan on cooking this on</span><br/>
+                  <a routerLink="/planner" class="btn btn-default btn-sm">{{recipe.nextPlan().format("dddd, MMM Do")}}</a>
+                </ng-template>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <br/>
+              </div>
+            </div>
+          </div>
           <div class="row">
             <div class="col-xs-12">
               <div class="form-group" [class.has-error]="recipe.formErrors.name">
                 <div class="input-group">
-                  <input [(ngModel)]="recipe.name" type="text" class="form-control" formControlName="name" required placeholder="Name"
-                    autocomplete="off">
+                  <input [(ngModel)]="recipe.name" type="text" class="form-control" formControlName="name" required placeholder="Name" autocomplete="off">
                 </div>
                 <div *ngIf="recipe.formErrors.name">
                   <span class="text-danger field-validation-error">{{ recipe.formErrors.name }}</span>
@@ -47,7 +65,8 @@
             <div class="panel-heading pointer" data-toggle="collapse" data-target="#collapseIngredients" aria-expanded="true" aria-controls="collapseIngredients">Ingredients</div>
             <div class="panel-body list-ingredients collapse in" id="collapseIngredients">
               <ul class="list-group" *ngIf="recipe.hasItems()">
-                <li *ngFor="let item of recipe.recipeItems" class="list-group-item item-name" data-toggle="modal" data-target="#itemFormModal" (click)="selectItem(item)">
+                <li *ngFor="let item of recipe.recipeItems" class="list-group-item pointer" data-toggle="modal" data-target="#itemFormModal"
+                  (click)="selectItem(item)">
                   <div class="row">
                     <div class="col-xs-9">
                       {{item.item.name}}
@@ -63,7 +82,7 @@
               </ul>
               <div class="row">
                 <div class="col-sm-12 text-center">
-                  <button type="button" class="btn btn-success"data-toggle="modal" data-target="#itemFormModal" (click)="selectItem()"><i class="fa fa-plus"></i> Ingredient</button>
+                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#itemFormModal" (click)="selectItem()"><i class="fa fa-plus"></i> Ingredient</button>
                 </div>
               </div>
             </div>
@@ -131,8 +150,7 @@
             <div class="col-sm-12">
               <div class="form-group" [class.has-error]="selectedStep.formErrors.description">
                 <div class="input-group">
-                  <textarea [(ngModel)]="selectedStep.description" class="form-control" rows="5" formControlName="description"
-                    required placeholder="Enter cooking steps..."></textarea>
+                  <textarea [(ngModel)]="selectedStep.description" class="form-control" rows="5" formControlName="description" required placeholder="Enter cooking steps..."></textarea>
                 </div>
                 <div *ngIf="selectedStep.formErrors.description">
                   <span class="text-danger field-validation-error">{{ selectedStep.formErrors.description }}</span>
@@ -202,8 +220,9 @@
             </div>
             <div class="col-xs-6">
               <div class="form-group">
-                 <div class="input-group">
-                   <input [(ngModel)]="selectedItem.unitType" type="text" placeholder="Unit. (e.g. tsp)" class="form-control" formControlName="unitType" />
+                <div class="input-group">
+                  <input [(ngModel)]="selectedItem.unitType" type="text" placeholder="Unit. (e.g. tsp)" class="form-control" formControlName="unitType"
+                  />
                 </div>
               </div>
             </div>
@@ -213,7 +232,8 @@
             <div class="col-sm-12">
               <div class="form-group">
                 <div class="input-group">
-                  <input [(ngModel)]="selectedItem.instructions" type="text" class="form-control" formControlName="instructions" placeholder="Notes. (e.g. diced)" autocomplete="off">
+                  <input [(ngModel)]="selectedItem.instructions" type="text" class="form-control" formControlName="instructions" placeholder="Notes. (e.g. diced)"
+                    autocomplete="off">
                 </div>
               </div>
             </div>
@@ -230,6 +250,38 @@
       </form>
 
 
+    </div>
+  </div>
+</div>
+
+<!-- Modal for plan -->
+<div class="modal" id="dayPlanModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <span class="modal-title"><strong>When would you like to cook this?</strong></span>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="form-group">
+              <div class="input-group">
+                <select [(ngModel)]="selectedPlanId" class="form-control">
+                      <option *ngFor="let plan of plansSelect | async" [value]="plan.key">{{plan.value}}</option>
+                  </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-default pull-left" data-dismiss="modal">Cancel</button>
+        <div class="btn-group btn-group-sm" role="group">
+          <button type="button" class="btn btn-success" data-dismiss="modal" (click)="savePlan()">Save</button>
+        </div>
+
+      </div>
     </div>
   </div>
 </div>

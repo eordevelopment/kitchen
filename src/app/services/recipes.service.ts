@@ -19,6 +19,16 @@ export class RecipesService {
 
   constructor(private http: Http, private storageService: StorageService) { }
 
+  public viewRecipe(key: string): Observable<IRecipe> {
+    if (!key) {
+      return Observable.of<IRecipe>(null)
+    } else {
+      return this.http.get(environment.serviceUrl + 'recipe/viewrecipe/' + key)
+        .map(response => response.json() as IRecipe)
+        .catch(this.handleError);
+    }
+  }
+
   public getRecipe(id: number): Observable<IRecipe> {
     if (id <= 0) {
       return Observable.of<IRecipe>(null)
@@ -48,10 +58,10 @@ export class RecipesService {
 
     if (value.id && value.id > 0) {
       return this.http.put(environment.serviceUrl + 'recipe/' + value.id, value, options)
-      .catch(this.handleError);
+        .catch(this.handleError);
     } else {
       return this.http.post(environment.serviceUrl + 'recipe', value, options)
-      .catch(this.handleError);
+        .catch(this.handleError);
     }
   }
 

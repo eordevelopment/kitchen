@@ -2,6 +2,8 @@ import { Validators } from '@angular/forms';
 
 import { IFormEntity } from 'app/models/IFormEntity';
 
+import { md5 } from '../classes/md5';
+
 export interface IAccount {
   userName: string;
   hashedPassword: string;
@@ -12,6 +14,7 @@ export class Account implements IFormEntity, IAccount {
   public userName: string;
   public hashedPassword: string;
   public token: string;
+  public password: string;
 
   public formErrors = {
     'name': '',
@@ -32,6 +35,12 @@ export class Account implements IFormEntity, IAccount {
       this.userName = source.userName;
       this.hashedPassword = source.hashedPassword;
       this.token = source.token;
+    }
+  }
+
+  public hash(): void {
+    if (this.password) {
+      this.hashedPassword = md5(this.password);
     }
   }
 

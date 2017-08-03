@@ -19,6 +19,7 @@ export class RegisterComponent implements OnInit {
   public registerForm: FormGroup;
   public account: Account;
   public failure: string;
+  public showPassword: boolean;
 
   constructor(
     private accountService: AccountService,
@@ -30,14 +31,20 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     this.account = new Account();
     this.registerForm = this.formHelper.buildForm(this.account);
+    this.showPassword = true;
   }
 
   public onSubmit(): void {
+    this.account.hash();
     this.failure = null;
     this.accountService
       .register(this.account)
       .subscribe(response => this.handleSuccess(response),
       (error: any) => this.handleError(error));
+  }
+
+  public togglePassword(): void {
+    this.showPassword = !this.showPassword;
   }
 
   public goBack(): void {
