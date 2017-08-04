@@ -22,7 +22,7 @@ import { FormHelperService } from 'app/services/form-helper.service';
 
 import { SelectItem } from 'app/classes/selectItem';
 import { environment } from 'environments/environment';
-import { Recipe, RecipeType } from 'app/modules/recipe/model/recipe';
+import { Recipe } from 'app/modules/recipe/model/recipe';
 import { RecipeStep } from 'app/modules/recipe/model/recipestep';
 import { RecipeItem } from 'app/modules/recipe/model/recipeitem';
 import { IRecipe } from 'app/contract/IRecipe';
@@ -30,6 +30,8 @@ import { IRecipeStep } from 'app/contract/IRecipeStep';
 import { IRecipeItem } from 'app/contract/IRecipeItem';
 import { Item } from 'app/modules/inventory/model/item';
 import { Plan, kitchen } from 'app/modules/plan/model/plan';
+import { IRecipeType } from 'app/contract/IRecipeType';
+import { RecipeType } from 'app/modules/recipe/model/recipeType';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -37,8 +39,7 @@ import { Plan, kitchen } from 'app/modules/plan/model/plan';
   styleUrls: ['./recipe-detail.component.less']
 })
 export class RecipeDetailComponent extends BaseComponent implements OnInit {
-  public types: SelectItem[];
-
+  public selectedType: RecipeType;
   public recipe: Recipe;
   public selectedStep: RecipeStep;
   public selectedItem: RecipeItem;
@@ -69,19 +70,27 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
 
   ngOnInit() {
     this.route.paramMap
-      .switchMap((params: ParamMap) => this.recipesService.getRecipe(+params.get('id')))
+      .switchMap((params: ParamMap) => {
+        const typeId = params.get('rti');
+        const typeName = params.get('rtn');
+        if (typeId && typeName) {
+          this.selectedType = new RecipeType();
+          this.selectedType.id = Number(typeId);
+          this.selectedType.name = typeName;
+        }
+
+        return this.recipesService.getRecipe(+params.get('id'))
+      })
       .subscribe((source: IRecipe) => {
         this.recipe = new Recipe(source);
+        console.log(source);
+        console.log(this.recipe);
+        if (!this.recipe.recipeType) {
+          this.recipe.recipeType = this.selectedType;
+        }
         this.recipeForm = this.formHelper.buildForm(this.recipe);
         this.shareUrl = environment.recipeViewUrl + this.recipe.key;
       });
-
-    this.types = new Array();
-    for (const item in RecipeType) {
-      if (!isNaN(Number(item))) {
-        this.types.push(new SelectItem(Number(item), RecipeType[item].toString()))
-      }
-    }
 
     this.itemsSearchResult = this.searchTerms
       .debounceTime(150)

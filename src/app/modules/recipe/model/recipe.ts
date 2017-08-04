@@ -10,32 +10,22 @@ import { IRecipeItem } from 'app/contract/IRecipeItem';
 import { IPlan } from 'app/contract/IPlan';
 import { RecipeStep } from 'app/modules/recipe/model/recipestep';
 import { RecipeItem } from 'app/modules/recipe/model/recipeitem';
-
-export enum RecipeType {
-  Meal = 0,
-  Baking = 1,
-  Lunch = 2,
-  Smoothies = 3
-}
+import { IRecipeType } from 'app/contract/IRecipeType';
 
 export class Recipe implements IFormEntity, IRecipe {
   public id: number;
   public name: string;
-  public type: RecipeType;
+  public recipeType: IRecipeType;
   public key: string;
   public recipeSteps: IRecipeStep[];
   public recipeItems: IRecipeItem[];
   public assignedPlans: IPlan[];
 
   public formErrors = {
-    'type': '',
     'name': ''
   };
 
   public validationMessages = {
-    'type': {
-      'required': 'Type is required.',
-    },
     'name': {
       'required': 'Name is required.',
     }
@@ -45,7 +35,7 @@ export class Recipe implements IFormEntity, IRecipe {
     if (source) {
       this.id = source.id;
       this.name = source.name;
-      this.type = source.type;
+      this.recipeType = source.recipeType;
       this.recipeSteps = source.recipeSteps;
       this.recipeItems = source.recipeItems;
       this.assignedPlans = source.assignedPlans;
@@ -65,7 +55,6 @@ export class Recipe implements IFormEntity, IRecipe {
 
   public getFormConfig(): any {
     return {
-      'type': [this.type, [Validators.required]],
       'name': [this.name, [Validators.required]]
     }
   }
