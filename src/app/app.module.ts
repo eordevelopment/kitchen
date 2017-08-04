@@ -1,13 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpModule, JsonpModule } from '@angular/http';
 
 import { AppRoutingModule } from './app.routing';
 import { AuthGuard } from './services/auth-guard';
-
-// Components
 
 // Services
 import { StorageService } from './services/storage.service';
@@ -41,8 +38,6 @@ import { WelcomeModule } from 'app/modules/welcome/welcome.module';
   ],
   imports: [
     BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
     AppRoutingModule,
     HttpModule,
     JsonpModule,
