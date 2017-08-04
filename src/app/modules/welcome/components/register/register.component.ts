@@ -29,6 +29,7 @@ export class RegisterComponent implements OnInit {
     private formHelper: FormHelperService) { }
 
   ngOnInit() {
+    this.storage.clear();
     this.account = new Account();
     this.registerForm = this.formHelper.buildForm(this.account);
     this.showPassword = true;
