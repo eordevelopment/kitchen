@@ -14,6 +14,8 @@ import { Location } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
+import { environment } from '../../../environments/environment';
+
 import { BaseComponent } from 'app/components/baseComponent';
 import { RecipesService } from 'app/services/recipes.service';
 import { PlanService } from 'app/services/plan.service';
@@ -51,6 +53,8 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
   public selectedPlanId: number;
   private plans: Plan[];
 
+  public shareUrl: string;
+
   constructor(
     private recipesService: RecipesService,
     private planService: PlanService,
@@ -68,6 +72,7 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
       .subscribe((source: IRecipe) => {
         this.recipe = new Recipe(source);
         this.recipeForm = this.formHelper.buildForm(this.recipe);
+        this.shareUrl = environment.recipeViewUrl + this.recipe.key;
       });
 
     this.types = new Array();
