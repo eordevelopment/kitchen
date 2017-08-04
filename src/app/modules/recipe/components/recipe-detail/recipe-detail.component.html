@@ -47,16 +47,8 @@
           </div>
           <div class="row">
             <div class="col-xs-12">
-              <div class="form-group" [class.has-error]="recipe.formErrors.type">
-                <div class="input-group">
-                  <select [(ngModel)]="recipe.type" class="form-control" formControlName="type">
-                      <option *ngFor="let type of types" [value]="type.key">{{type.value}}</option>
-                  </select>
-                </div>
-                <div *ngIf="recipe.formErrors.type">
-                  <span class="text-danger field-validation-error">{{ recipe.formErrors.type }}</span>
-                </div>
-              </div>
+              <span class="text-muted">Recipe Group: </span>
+              <span class="text-info">{{recipe.recipeType.name}}</span>
             </div>
           </div>
           <br/>

@@ -1,4 +1,4 @@
-<div class="panel panel-default" *ngIf="!allRecipes">
+<div class="panel panel-default" *ngIf="!allRecipes && !types">
   <div class="panel-body">
     <div class="row">
       <div class="col-sm-12 text-center">
@@ -9,30 +9,51 @@
   </div>
 </div>
 
-<div class="panel panel-default" *ngIf="allRecipes && allRecipes.length <= 0">
+<div class="panel panel-default" *ngIf="types && types.length <= 0">
   <div class="panel-body">
     <div class="row">
       <div class="col-sm-12 text-center">
         <span><strong>You have not created any recipes.</strong></span><br><br>
-        <span class="text-muted">Use this page to keep track of all your recipes.</span>
+        <span class="text-info">Use this page to keep track of all your recipes</span><br><br>
+        <span class="text-info">
+          To make keeping track of your recipes easier you can use this page to group similar recipes
+          such as <strong>Lunch</strong>, <strong>Diner</strong>, <strong>Baking</strong> etc
+        </span><hr>
+        <span class="text-info">
+          Once you have your recipes you can add them to your meal planner and your shopping basket.
+        </span>
       </div>
     </div>
   </div>
 </div>
 
-<div *ngIf="allRecipes && allRecipes.length > 0">
+<div *ngIf="types && types.length > 0">
 
   <div class="row">
-    <div class="col-sm-4" *ngFor="let type of types  | hasRecipeWithType:allRecipes; let index = index">
+    <div class="col-sm-4" *ngFor="let type of types">
       <div class="panel panel-primary">
-        <div class="panel-heading pointer" data-toggle="collapse" [attr.data-target]="type.asId('#collapse')">
-          {{type.value | titlecase}}
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-8 text-left pointer" data-toggle="collapse" [attr.data-target]="asTypeId(type)">
+              {{type.name | titlecase}}
+            </div>
+            <div class="col-xs-4 text-right">
+              <button type="button" class="btn btn-xs btn-default pull-right" data-toggle="modal" data-target="#recipeTypeModal" (click)="selectType(type)">Edit</button>
+            </div>
+          </div>
         </div>
-        <ul class="list-group collapse" [class.in]="index == 0" id="collapse{{type.value}}">
-          <li class="list-group-item pointer" *ngFor="let recipe of allRecipes | recipeTypeFilter:type.key" (click)="onSelect(recipe)">
-            {{recipe.name}}
-          </li>
-        </ul>
+        <div class="recipe-list collapse in" id="collapse{{type.id}}">
+          <ul class="list-group">
+            <li class="list-group-item pointer" *ngFor="let recipe of allRecipes | recipeTypeFilter:type" (click)="onSelect(recipe)">
+              {{recipe.name}}
+            </li>
+          </ul>
+          <div class="row">
+            <div class="col-sm-12 text-center">
+              <button type="button" class="btn btn-sm btn-success" (click)="addRecipe(type)"><i class="fa fa-plus"></i> Recipe</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -42,8 +63,48 @@
   <div class="panel-body">
     <div class="row">
       <div class="col-sm-12 text-center">
-        <a routerLink="/recipedetail/0" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> Add Recipe</a>
+        <button class="btn btn-lg btn-success" data-toggle="modal" data-target="#recipeTypeModal" (click)="selectType()"><i class="fa fa-plus"></i> Add Recipe Group</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="recipeTypeModal" tabindex="-1" role="dialog" *ngIf="selectedType">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 *ngIf="selectedType && selectedType.id > 0" class="modal-title">Edit Recipe Group</h4>
+        <h4 *ngIf="!selectedType || !selectedType.id || selectedType.id <= 0" class="modal-title">Add Recipe Group</h4>
+        <span class="text-info" *ngIf="!selectedType || !selectedType.id || selectedType.id <= 0">Recipe groups are useful for grouping similar recipes, such as all your meals, lunches, snacks, etc.</span>
+      </div>
+
+      <form [formGroup]="recipeTypeForm">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group" [class.has-error]="selectedType.formErrors.name">
+                <div class="input-group">
+                  <input [(ngModel)]="selectedType.name" type="text" class="form-control" formControlName="name" required placeholder="Name. (e.g. lunches, baking, etc)"
+                    autocomplete="off">
+                </div>
+                <div *ngIf="selectedType.formErrors.name">
+                  <span class="text-danger field-validation-error">{{ selectedType.formErrors.name }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm btn-default pull-left" data-dismiss="modal">Close</button>
+          <div class="btn-group btn-group-sm" role="group">
+            <button type="button" class="btn btn-success" [disabled]="!recipeTypeForm.valid" data-dismiss="modal" (click)="saveType()">Save</button>
+          </div>
+
+        </div>
+      </form>
+
+
     </div>
   </div>
 </div>
