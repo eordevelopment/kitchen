@@ -1,19 +1,17 @@
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/map';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 
 import { StorageService } from './storage.service';
 
-import { ICategory } from '../models/category';
-import { ServiceError } from '../models/error';
-
+import { ServiceError } from 'app/classes/error';
 import { environment } from '../../environments/environment';
-
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/map';
+import { ICategory } from 'app/contract/ICategory';
 
 @Injectable()
 export class CategoriesService {

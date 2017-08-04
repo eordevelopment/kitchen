@@ -8,17 +8,6 @@ import { AppRoutingModule } from './app.routing';
 import { AuthGuard } from './services/auth-guard';
 
 // Components
-import { AppShellComponent } from './components/app-shell/app-shell.component';
-import { CategoriesListComponent } from './components/categories-list/categories-list.component';
-import { CategoryDetailComponent } from './components/category-detail/category-detail.component';
-import { RecipeListComponent } from './components/recipe-list/recipe-list.component';
-import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
-import { RecipeDetailComponent } from './components/recipe-detail/recipe-detail.component';
-import { PlannerHomeComponent } from './components/planner-home/planner-home.component';
-import { HomeComponent } from 'app/components/home/home.component';
-import { HomePublicComponent } from 'app/components/home-public/home-public.component';
-import { RecipeViewComponent } from 'app/components/recipe-view/recipe-view.component';
 
 // Services
 import { StorageService } from './services/storage.service';
@@ -29,9 +18,13 @@ import { RecipesService } from './services/recipes.service'
 import { FormHelperService } from './services/form-helper.service'
 import { PlanService } from './services/plan.service'
 
-// Pipes
-import { RecipeTypeFilterPipe } from './pipes/recipe-type-filter.pipe';
-import { RecipeWithTypePipe } from './pipes/has-recipe-type-filter.pipe';
+import { AppShellComponent } from 'app/app-shell/app-shell.component';
+
+// Feature modules
+import { RecipeModule } from 'app/modules/recipe/recipe.module';
+import { InventoryModule } from 'app/modules/inventory/inventory.module';
+import { PlanModule } from 'app/modules/plan/plan.module';
+import { WelcomeModule } from 'app/modules/welcome/welcome.module';
 
 @NgModule({
   providers: [
@@ -44,20 +37,7 @@ import { RecipeWithTypePipe } from './pipes/has-recipe-type-filter.pipe';
     PlanService,
     FormHelperService],
   declarations: [
-    AppShellComponent,
-    CategoriesListComponent,
-    CategoryDetailComponent,
-    RecipeListComponent,
-    HomePublicComponent,
-    LoginComponent,
-    RegisterComponent,
-    RecipeDetailComponent,
-    PlannerHomeComponent,
-    HomeComponent,
-    RecipeViewComponent,
-
-    RecipeTypeFilterPipe,
-    RecipeWithTypePipe
+    AppShellComponent
   ],
   imports: [
     BrowserModule,
@@ -65,7 +45,12 @@ import { RecipeWithTypePipe } from './pipes/has-recipe-type-filter.pipe';
     ReactiveFormsModule,
     AppRoutingModule,
     HttpModule,
-    JsonpModule
+    JsonpModule,
+
+    RecipeModule,
+    InventoryModule,
+    PlanModule,
+    WelcomeModule
   ],
   bootstrap: [AppShellComponent]
 })

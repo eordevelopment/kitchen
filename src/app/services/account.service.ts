@@ -1,3 +1,7 @@
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/map';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
@@ -6,13 +10,8 @@ import { StorageService } from './storage.service';
 
 import { environment } from '../../environments/environment';
 
-import { IAccount } from '../models/account';
-import { ServiceError } from '../models/error';
-
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/map';
+import { ServiceError } from 'app/classes/error';
+import { IAccount } from 'app/contract/IAccount';
 
 @Injectable()
 export class AccountService {
