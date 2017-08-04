@@ -97,7 +97,6 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
   }
 
   public save(): void {
-    console.log(this.recipe);
     this.recipesService.saveRecipe(this.recipe)
       .subscribe(response => {
         this.recipeForm.reset();

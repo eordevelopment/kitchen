@@ -14,6 +14,26 @@
     <div class="panel panel-default">
       <div class="panel-body">
 
+        <div *ngIf="token">
+          <div class="row">
+            <div class="col-sm-12 text-center">
+              <button type="button" class="btn btn-sm btn-primary" (click)="saveRecipe()"><i class="fa fa-plus"></i> Add to my collection</button>
+            </div>
+          </div>
+          <div class="row" *ngIf="failure">
+            <div class="col-sm-12 text-center">
+              <div>
+                <span class="text-danger field-validation-error">{{failure}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="token">
+            <div class="col-sm-12 text-center">
+              <br/>
+            </div>
+          </div>
+        </div>
+
         <div class="row">
           <div class="col-sm-12">
             <h4>{{recipe.name}}</h4>
