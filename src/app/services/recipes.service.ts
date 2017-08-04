@@ -61,16 +61,18 @@ export class RecipesService {
       .catch(this.handleError);
   }
 
-  public saveRecipe(value: IRecipe): Observable<void> {
+  public saveRecipe(value: IRecipe): Observable<number> {
     const headers = new Headers({ 'Content-Type': 'application/json' });
     headers.append('Authorization', `Basic ${this.storageService.getToken()}`);
     const options = new RequestOptions({ headers: headers });
 
     if (value.id && value.id > 0) {
       return this.http.put(environment.serviceUrl + 'recipe/' + value.id, value, options)
+        .map(this.extractData)
         .catch(this.handleError);
     } else {
       return this.http.post(environment.serviceUrl + 'recipe', value, options)
+        .map(this.extractData)
         .catch(this.handleError);
     }
   }
@@ -82,6 +84,10 @@ export class RecipesService {
 
     return this.http.delete(environment.serviceUrl + 'recipe/' + id, options)
       .catch(this.handleError);
+  }
+
+  private extractData(res: Response): string {
+    return res.text();
   }
 
   private handleError(res: Response | any) {
