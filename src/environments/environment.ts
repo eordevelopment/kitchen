@@ -5,5 +5,6 @@
 
 export const environment = {
   production: false,
-  serviceUrl: 'http://localhost:57235/api/'
+  serviceUrl: 'http://localhost:57235/api/',
+  recipeViewUrl: 'http://localhost:4200/#/recipeview/'
 };

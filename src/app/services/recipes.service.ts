@@ -29,6 +29,16 @@ export class RecipesService {
     }
   }
 
+  public getRecipeView(key: string): Observable<IRecipe> {
+    if (!key) {
+      return Observable.of<IRecipe>(null)
+    } else {
+      return this.http.get(environment.serviceUrl + 'recipe/viewrecipe/' + key)
+        .map(response => response.json() as IRecipe)
+        .catch(this.handleError);
+    }
+  }
+
   public getRecipe(id: number): Observable<IRecipe> {
     if (id <= 0) {
       return Observable.of<IRecipe>(null)

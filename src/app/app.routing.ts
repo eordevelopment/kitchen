@@ -12,6 +12,7 @@ import { RecipeDetailComponent } from './components/recipe-detail/recipe-detail.
 import { PlannerHomeComponent } from './components/planner-home/planner-home.component';
 import { HomeComponent } from 'app/components/home/home.component';
 import { HomePublicComponent } from 'app/components/home-public/home-public.component';
+import { RecipeViewComponent } from 'app/components/recipe-view/recipe-view.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'categorydetail/:id', component: CategoryDetailComponent, canActivate: [AuthGuard] },
   { path: 'recipes',  component: RecipeListComponent, canActivate: [AuthGuard] },
   { path: 'recipedetail/:id', component: RecipeDetailComponent, canActivate: [AuthGuard] },
+  { path: 'recipeview/:id', component: RecipeViewComponent },
   { path: 'planner',  component: PlannerHomeComponent, canActivate: [AuthGuard] },
   { path: 'welcome',  component: HomePublicComponent },
   { path: 'login',  component: LoginComponent },

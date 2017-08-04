@@ -56,6 +56,7 @@ export class Recipe implements IFormEntity, IRecipe {
       this.recipeSteps = source.recipeSteps;
       this.recipeItems = source.recipeItems;
       this.assignedPlans = source.assignedPlans;
+      this.key = source.key;
     }
 
     if (!this.recipeSteps) {
