@@ -1,18 +1,16 @@
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/map';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 
 import { StorageService } from './storage.service';
 
-import { IPlan } from '../models/plan';
-import { ServiceError } from '../models/error';
-
+import { ServiceError } from 'app/classes/error';
 import { environment } from '../../environments/environment';
-
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/map';
+import { IPlan } from 'app/contract/IPlan';
 
 @Injectable()
 export class PlanService {

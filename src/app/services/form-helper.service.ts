@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
-import {IFormEntity} from 'app/models/IFormEntity';
+import { IFormEntity } from 'app/contract/IFormEntity';
 
 @Injectable()
 export class FormHelperService {

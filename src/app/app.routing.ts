@@ -1,31 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { AuthGuard } from './services/auth-guard';
-
-import { CategoriesListComponent } from './components/categories-list/categories-list.component';
-import { RecipeListComponent } from './components/recipe-list/recipe-list.component';
-import { CategoryDetailComponent } from './components/category-detail/category-detail.component';
-import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
-import { RecipeDetailComponent } from './components/recipe-detail/recipe-detail.component';
-import { PlannerHomeComponent } from './components/planner-home/planner-home.component';
-import { HomeComponent } from 'app/components/home/home.component';
-import { HomePublicComponent } from 'app/components/home-public/home-public.component';
-import { RecipeViewComponent } from 'app/components/recipe-view/recipe-view.component';
-
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home',  component: HomeComponent, canActivate: [AuthGuard] },
-  { path: 'categories',  component: CategoriesListComponent, canActivate: [AuthGuard] },
-  { path: 'categorydetail/:id', component: CategoryDetailComponent, canActivate: [AuthGuard] },
-  { path: 'recipes',  component: RecipeListComponent, canActivate: [AuthGuard] },
-  { path: 'recipedetail/:id', component: RecipeDetailComponent, canActivate: [AuthGuard] },
-  { path: 'recipeview/:id', component: RecipeViewComponent },
-  { path: 'planner',  component: PlannerHomeComponent, canActivate: [AuthGuard] },
-  { path: 'welcome',  component: HomePublicComponent },
-  { path: 'login',  component: LoginComponent },
-  { path: 'register',  component: RegisterComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
 
 @NgModule({
