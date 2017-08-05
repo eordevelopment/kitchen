@@ -1,5 +1,5 @@
 import 'rxjs/add/operator/filter';
-import { Component, OnInit } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { Location, PopStateEvent } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 
@@ -10,15 +10,23 @@ import { StorageService } from 'app/services/storage.service';
   templateUrl: './app-shell.component.html',
   styleUrls: ['./app-shell.component.less']
 })
-export class AppShellComponent implements OnInit {
-  public token: string;
+export class AppShellComponent implements AfterViewInit {
+  public isLoggedIn: boolean;
   public isCollapsed: boolean;
   private lastPoppedUrl: string;
 
   constructor(private storage: StorageService, private router: Router, private location: Location) { }
 
-  ngOnInit() {
-    this.storage.loggedInUserToken.subscribe(value => this.token = value);
+  ngAfterViewInit() {
+    this.storage.loggedInUserToken.subscribe(value => {
+      setTimeout(() => {
+        if (value && value.length > 0) {
+          this.isLoggedIn = true;
+        } else {
+          this.isLoggedIn = false;
+        }
+      });
+    });
 
     this.location.subscribe((ev: PopStateEvent) => {
       this.lastPoppedUrl = ev.url;

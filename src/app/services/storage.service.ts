@@ -41,6 +41,7 @@ export class StorageService {
   }
 
   public clear(): void {
+    console.log("Clearing local storage");
     window.localStorage.clear();
     this.loggedInUserToken.next(null);
   }
