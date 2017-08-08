@@ -73,6 +73,14 @@ export class CategoryDetailComponent extends BaseComponent implements OnInit {
     this.location.back();
   }
 
+  public updateCategory(event: any): void {
+    this.category.name = event;
+  }
+
+  public updateItem(event: any): void {
+    this.activeItem.name = event;
+  }
+
   public deleteCategory(): void {
     this.categoriesService.deleteCategory(this.category.id)
       .subscribe(response => {

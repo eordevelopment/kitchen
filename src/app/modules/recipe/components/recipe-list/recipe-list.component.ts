@@ -32,6 +32,10 @@ export class RecipeListComponent extends BaseComponent implements OnInit {
     this.service.getRecipieTypes().subscribe(values => this.types = values, error => this.handleError(error));
   }
 
+  public updateTypeName(event: string): void {
+    this.selectedType.name = event;
+  }
+
   public asTypeId(source: IRecipeType): string {
     return `#collapse${source.id}`;
   }

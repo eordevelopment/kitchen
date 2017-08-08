@@ -106,6 +106,22 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
     this.location.back();
   }
 
+  public updateRecipeName(event: string): void {
+    this.recipe.name = event;
+  }
+
+  public updateItemName(event: string): void {
+    this.selectedItem.item.name = event;
+  }
+
+  public updateUnit(event: string): void {
+    this.selectedItem.unitType = event;
+  }
+
+  public updateInstructions(event: string): void {
+    this.selectedItem.instructions = event;
+  }
+
   public save(): void {
     this.recipesService.saveRecipe(this.recipe)
       .subscribe(response => {

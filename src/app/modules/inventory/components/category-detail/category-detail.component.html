@@ -18,7 +18,7 @@
             <div class="col-sm-12">
               <div class="form-group" [class.has-error]="category.formErrors.name">
                 <div class="input-group">
-                  <input [(ngModel)]="category.name" type="text" id="name" class="form-control" formControlName="name" required placeholder="Name. (e.g. Fridge, Pantry, etc)"
+                  <input [ngModel]="category.name | titlecase" (ngModelChange)="updateCategory($event)" type="text" id="name" class="form-control" formControlName="name" required placeholder="Name. (e.g. Fridge, Pantry, etc)"
                     autocomplete="off">
                 </div>
                 <div *ngIf="category.formErrors.name">
@@ -33,7 +33,7 @@
               (click)="setItem(item)">
               <div class="row">
                 <div class="col-xs-10" [class.text-warning]="item.quantity === 1" [class.text-danger]="item.quantity < 1">
-                  {{item.name}}
+                  {{item.name | titlecase}}
                 </div>
                 <div class="col-xs-2 text-right">
                   <span [class.text-primary]="item.quantity > 1" [class.text-warning]="item.quantity === 1" [class.text-danger]="item.quantity < 1">
@@ -89,7 +89,7 @@
             <div class="col-sm-12">
               <div class="form-group" [class.has-error]="activeItem.formErrors.itemName">
                 <div class="input-group">
-                  <input [(ngModel)]="activeItem.name" type="text" id="itemName" class="form-control" formControlName="itemName" required placeholder="Item name"
+                  <input [ngModel]="activeItem.name | titlecase" (ngModelChange)="updateItem($event)" type="text" id="itemName" class="form-control" formControlName="itemName" required placeholder="Item name"
                     autocomplete="off" (keyup)="search()">
                 </div>
                 <div *ngIf="activeItem.formErrors.itemName">
@@ -98,7 +98,7 @@
                  <div class="typeahead">
                   <ul class="list-group">
                     <li class="list-group-item" *ngFor="let searchResult of itemsSearchResult | async" (click)="selectSearchItem(searchResult)">
-                      {{searchResult.name}}
+                      {{searchResult.name | titlecase}}
                     </li>
                   </ul>
                 </div>

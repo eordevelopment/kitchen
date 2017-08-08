@@ -45,7 +45,7 @@
         <div class="recipe-list collapse in" id="collapse{{type.id}}">
           <ul class="list-group">
             <li class="list-group-item pointer" *ngFor="let recipe of allRecipes | recipeTypeFilter:type" (click)="onSelect(recipe)">
-              {{recipe.name}}
+              {{recipe.name | titlecase}}
             </li>
           </ul>
           <div class="row">
@@ -85,7 +85,7 @@
             <div class="col-sm-12">
               <div class="form-group" [class.has-error]="selectedType.formErrors.name">
                 <div class="input-group">
-                  <input [(ngModel)]="selectedType.name" type="text" class="form-control" formControlName="name" required placeholder="Name. (e.g. lunches, baking, etc)"
+                  <input [ngModel]="selectedType.name | titlecase" (ngModelChange)="updateTypeName($event)" type="text" class="form-control" formControlName="name" required placeholder="Name. (e.g. lunches, baking, etc)"
                     autocomplete="off">
                 </div>
                 <div *ngIf="selectedType.formErrors.name">
