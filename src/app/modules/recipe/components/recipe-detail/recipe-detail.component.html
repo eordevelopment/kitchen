@@ -67,7 +67,7 @@
                       </span>
                     </div>
                     <div class="col-xs-3 text-right">
-                      <span class="text-primary"><strong>{{item.ammount}} {{item.unitType | lowercase}}</strong></span>
+                      <span class="text-primary"><strong>{{item.amount}} {{item.item.unitType | lowercase}}</strong></span>
                     </div>
                   </div>
                 </li>
@@ -205,20 +205,20 @@
           </div>
           <div class="row">
             <div class="col-xs-6">
-              <div class="form-group" [class.has-error]="selectedItem.formErrors.ammount">
+              <div class="form-group" [class.has-error]="selectedItem.formErrors.amount">
                 <div class="input-group">
-                  <input [(ngModel)]="selectedItem.ammount" type="number" class="form-control" formControlName="ammount" required placeholder="Amount"
+                  <input [(ngModel)]="selectedItem.amount" type="number" class="form-control" formControlName="amount" required placeholder="Amount"
                     autocomplete="off">
                 </div>
-                <div *ngIf="selectedItem.formErrors.ammount">
-                  <span class="text-danger field-validation-error">{{ selectedItem.formErrors.ammount }}</span>
+                <div *ngIf="selectedItem.formErrors.amount">
+                  <span class="text-danger field-validation-error">{{ selectedItem.formErrors.amount }}</span>
                 </div>
               </div>
             </div>
             <div class="col-xs-6">
               <div class="form-group">
                 <div class="input-group">
-                  <input [ngModel]="selectedItem.unitType | lowercase" (ngModelChange)="updateUnit($event)" type="text" placeholder="Unit. (e.g. tsp)" class="form-control" formControlName="unitType"
+                  <input [ngModel]="selectedItem.item.unitType | lowercase" (ngModelChange)="updateUnit($event)" type="text" placeholder="Unit. (e.g. tsp)" class="form-control" formControlName="unitType"
                   />
                 </div>
               </div>

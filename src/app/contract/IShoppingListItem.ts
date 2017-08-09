@@ -1,8 +1,9 @@
 import { IItem } from 'app/contract/IItem';
 
-export interface IRecipeItem {
+export interface IShoppingListItem {
   id: number;
   amount: number;
+  totalAmount: number;
+  isDone: boolean;
   item: IItem;
-  instructions: string;
 }

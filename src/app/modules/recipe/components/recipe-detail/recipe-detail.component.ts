@@ -83,8 +83,6 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
       })
       .subscribe((source: IRecipe) => {
         this.recipe = new Recipe(source);
-        console.log(source);
-        console.log(this.recipe);
         if (!this.recipe.recipeType) {
           this.recipe.recipeType = this.selectedType;
         }
@@ -97,7 +95,6 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
       .distinctUntilChanged()
       .switchMap(term => term ? this.itemsService.getItems(term) : Observable.of<Item[]>([]))
       .catch(error => {
-        console.log(error);
         return Observable.of<Item[]>([]);
       });
   }
@@ -107,19 +104,19 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
   }
 
   public updateRecipeName(event: string): void {
-    this.recipe.name = event;
+    setTimeout(() => { this.recipe.name = event; });
   }
 
   public updateItemName(event: string): void {
-    this.selectedItem.item.name = event;
+    setTimeout(() => { this.selectedItem.item.name = event; });
   }
 
   public updateUnit(event: string): void {
-    this.selectedItem.unitType = event;
+    setTimeout(() => { this.selectedItem.item.unitType = event; });
   }
 
   public updateInstructions(event: string): void {
-    this.selectedItem.instructions = event;
+    setTimeout(() => { this.selectedItem.instructions = event; });
   }
 
   public save(): void {
@@ -147,7 +144,6 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
   public selectItem(source?: IRecipeItem): void {
     this.selectedItem = new RecipeItem(source);
     this.itemForm = this.formHelper.buildForm(this.selectedItem);
-    console.log(this.selectedItem);
   }
 
   public saveItem(): void {
@@ -170,6 +166,7 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
   public selectSearchItem(searchResult: Item): void {
     this.selectedItem.item.name = searchResult.name;
     this.selectedItem.item.id = searchResult.id;
+    this.selectedItem.item.unitType = searchResult.unitType;
     this.searchTerms.next(null);
   }
 

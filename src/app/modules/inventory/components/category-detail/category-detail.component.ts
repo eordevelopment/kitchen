@@ -59,7 +59,6 @@ export class CategoryDetailComponent extends BaseComponent implements OnInit {
       .distinctUntilChanged()
       .switchMap(term => term ? this.itemsService.getItems(term) : Observable.of<Item[]>([]))
       .catch(error => {
-        console.log(error);
         return Observable.of<Item[]>([]);
       });
   }
@@ -73,12 +72,16 @@ export class CategoryDetailComponent extends BaseComponent implements OnInit {
     this.location.back();
   }
 
-  public updateCategory(event: any): void {
-    this.category.name = event;
+  public updateCategory(event: string): void {
+    setTimeout(() => { this.category.name = event; });
   }
 
-  public updateItem(event: any): void {
-    this.activeItem.name = event;
+  public updateItem(event: string): void {
+    setTimeout(() => { this.activeItem.name = event; });
+  }
+
+  public updateUnit(event: string): void {
+    setTimeout(() => { this.activeItem.unitType = event; });
   }
 
   public deleteCategory(): void {
@@ -109,6 +112,8 @@ export class CategoryDetailComponent extends BaseComponent implements OnInit {
 
   public selectSearchItem(searchResult: Item): void {
     this.activeItem.name = searchResult.name;
+    this.activeItem.quantity = searchResult.quantity;
+    this.activeItem.unitType = searchResult.unitType;
     this.searchTerms.next(null);
   }
 

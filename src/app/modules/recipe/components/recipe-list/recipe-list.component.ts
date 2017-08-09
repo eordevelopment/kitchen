@@ -33,7 +33,7 @@ export class RecipeListComponent extends BaseComponent implements OnInit {
   }
 
   public updateTypeName(event: string): void {
-    this.selectedType.name = event;
+    setTimeout(() => { this.selectedType.name = event; });
   }
 
   public asTypeId(source: IRecipeType): string {

@@ -50,12 +50,14 @@ export class Category implements IFormEntity, ICategory {
       item.id = -Math.abs(this.items.length);
       item.name = source.name;
       item.quantity = source.quantity;
+      item.unitType = source.unitType;
       this.items.push(item);
     } else {
       for (const item of this.items) {
         if (item.id === source.id) {
           item.name = source.name;
           item.quantity = source.quantity;
+          item.unitType = source.unitType;
           break;
         }
       }

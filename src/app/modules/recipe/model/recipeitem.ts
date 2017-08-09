@@ -7,19 +7,18 @@ import { Item } from 'app/modules/inventory/model/item';
 
 export class RecipeItem implements IFormEntity, IRecipeItem {
   public id: number;
-  public ammount: number;
+  public amount: number;
   public item: IItem;
-  public unitType: string;
   public instructions: string;
 
   public formErrors = {
-    'ammount': '',
+    'amount': '',
     'name': ''
   };
 
   public validationMessages = {
-    'ammount': {
-      'required': 'Ammount is required.',
+    'amount': {
+      'required': 'Amount is required.',
     },
     'name': {
       'required': 'Name is required.',
@@ -29,10 +28,9 @@ export class RecipeItem implements IFormEntity, IRecipeItem {
   constructor(source?: IRecipeItem) {
     if (source) {
       this.id = source.id;
-      this.ammount = source.ammount;
+      this.amount = source.amount;
       this.item = source.item
       this.instructions = source.instructions;
-      this.unitType = source.unitType;
     }
 
     if (!this.item) {
@@ -42,9 +40,9 @@ export class RecipeItem implements IFormEntity, IRecipeItem {
 
   public getFormConfig(): any {
     return {
-      'ammount': [this.ammount, [Validators.required]],
+      'amount': [this.amount, [Validators.required]],
       'name': [this.item.name, [Validators.required]],
-      'unitType': [this.unitType],
+      'unitType': [this.item.unitType], // new FormControl({value: this.item.unitType, disabled: true}, Validators.required),
       'instructions': [this.instructions]
     }
   }

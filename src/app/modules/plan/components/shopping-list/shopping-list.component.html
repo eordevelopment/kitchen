@@ -1,0 +1,217 @@
+<div *ngIf="currentList && currentList.id > 0; then currentListDisplay"></div>
+
+<div *ngIf="currentList && currentList.id <= 0; then newListDisplay"></div>
+<div *ngIf="!openList; then newListOption"></div>
+<hr>
+<div *ngIf="openList && currentList && openList.id != currentList.id; then openListDisplay"></div>
+<div *ngIf="!pastLists; then noPastList else pastListDisplay">
+
+</div>
+
+<ng-template #currentListDisplay>
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-4">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{this.currentList.name}}</h3>
+        </div>
+        <div class="panel-body shopping-list">
+          <div *ngIf="!currentList.isDone && currentList.items.length > 0;then neddedItems"></div>
+          <div *ngIf="currentList.isDone && currentList.items.length > 0;then neddedItemsReadOnly"></div>
+          <br>
+          <div *ngIf="!currentList.isDone && currentList.optionalItems.length > 0;then optionalItems"></div>
+        </div>
+        <div class="panel-footer" *ngIf="!currentList.isDone">
+          <div class="row">
+            <div class="col-xs-3 text-left">
+              <button type="button" class="btn btn-sm btn-danger pull-left" (click)="deleteList()">delete</button>
+            </div>
+            <div class="col-xs-6 text-center">
+              <button type="button" class="btn btn-sm btn-primary" (click)="closeList()">I'm done with this list</button>
+            </div>
+            <div class="col-xs-3 text-right">
+              <button type="button" class="btn btn-sm btn-success" (click)="saveList()">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #newListDisplay>
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-4">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{this.currentList.name}}</h3>
+        </div>
+        <div class="panel-body shopping-list">
+          <div *ngIf="currentList.items.length > 0;then neddedItems"></div>
+        </div>
+        <div class="panel-footer" *ngIf="!currentList.isDone">
+          <div class="row">
+            <div class="col-xs-6 text-left">
+              <button type="button" class="btn btn-sm btn-danger pull-left">Canel</button>
+            </div>
+            <div class="col-xs-6 text-right">
+              <button type="button" class="btn btn-sm btn-success">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #neddedItemsReadOnly>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let item of currentList.items">
+      <div class="row text-muted">
+        <div class="col-xs-9">
+          <div class="checkbox">
+            <label>
+              <input disabled="disabled" [(ngModel)]="item.isDone" type="checkbox" [checked]="item.isDone" > {{item.item.name}}
+            </label>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <span>{{item.amount}} {{item.item.unitType}}</span>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <p class="list-group-item-text">
+            <em>({{item.item.quantity}} {{item.item.unitType}} in stock, {{item.totalAmount}} {{item.item.unitType}} needed)</em>
+          </p>
+        </div>
+      </div>
+    </li>
+  </ul>
+</ng-template>
+
+<ng-template #neddedItems>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let item of currentList.items">
+      <div class="row" [class.text-muted]="item.isDone">
+        <div class="col-xs-9">
+          <div class="checkbox">
+            <label>
+              <input [(ngModel)]="item.isDone" type="checkbox" [checked]="item.isDone" > {{item.item.name}}
+            </label>
+          </div>
+        </div>
+        <div class="col-xs-3" [class.text-muted]="item.isDone">
+          <div *ngIf="item.isDone; then qtyDisplay else qtyInput"></div>
+          <ng-template #qtyDisplay>
+            <span>{{item.amount}} {{item.item.unitType}}</span>
+          </ng-template>
+          <ng-template #qtyInput>
+            <div class="input-group">
+              <input type="number" class="form-control input-sm" [(ngModel)]="item.amount">
+              <div class="input-group-addon">{{item.item.unitType}}</div>
+            </div>
+          </ng-template>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <p class="list-group-item-text">
+            <br>
+            <a (click)="removeFromList(item)">remove from list</a>
+            <em>({{item.item.quantity}} {{item.item.unitType}} in stock, {{item.totalAmount}} {{item.item.unitType}} needed)</em>
+          </p>
+        </div>
+      </div>
+    </li>
+  </ul>
+</ng-template>
+
+<ng-template #optionalItems>
+  <div class="row">
+    <div class="col-sm-12 text-center text-info">
+      Items you may not need
+    </div>
+  </div>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let item of currentList.optionalItems">
+      <div class="row">
+        <div class="col-xs-10 text-muted">
+          {{item.item.name}} - ({{item.amount}} {{item.item.unitType}})
+          <p class="list-group-item-text">{{item.item.quantity}} left in stock</p>
+        </div>
+        <div class="col-xs-2 text-right">
+          <button type="button" class="btn btn-xs btn-success" (click)="addToList(item)"><i class="fa fa-plus"></i></button>
+        </div>
+      </div>
+    </li>
+  </ul>
+</ng-template>
+
+
+<ng-template #noPastList>
+  <div class="row">
+    <div class="col-sm-12 text-center text-muted">
+      No previous shopping lists
+    </div>
+  </div>
+  <div class="row" *ngIf="hasLoadedLists">
+    <div class="col-sm-12 text-center">
+      <button type="button" class="btn btn-default" (click)="loadMore()">Show previous Lists</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #pastListDisplay>
+  <div class="row">
+    <div class="col-sm-12 text-center text-muted">
+      Past Lists
+    </div>
+  </div>
+
+  <div class="row" *ngIf="pastLists && pastLists.length > 0">
+    <div class="col-sm-4" *ngFor="let pastList of pastLists">
+      <div class="panel panel-default pointer" (click)="showList(pastList)">
+        <div class="panel-body">
+          <div class="row planner-day">
+            <div class="col-xs-12 text-muted">
+              {{pastList.name}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="hasLoadedLists">
+    <div class="col-sm-12 text-center">
+      <button type="button" class="btn btn-default" (click)="loadMore()">Load More</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #openListDisplay>
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="panel panel-default pointer" (click)="showList()">
+        <div class="panel-body">
+          <div class="row planner-day">
+            <div class="col-xs-12 text-info">
+              {{openList.name}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #newListOption>
+  <div class="row">
+    <div class="col-sm-12 text-center">
+      <button disabled="disabled" type="button" class="btn btn-success" (click)="newList()"><i class="fa fa-shopping-basket"></i> Create Shopping List</button>
+    </div>
+  </div>
+</ng-template>

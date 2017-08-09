@@ -32,12 +32,12 @@
             <li *ngFor="let item of category.items" class="list-group-item pointer" data-toggle="modal" data-target="#itemFormModal"
               (click)="setItem(item)">
               <div class="row">
-                <div class="col-xs-10" [class.text-warning]="item.quantity === 1" [class.text-danger]="item.quantity < 1">
+                <div class="col-xs-9" [class.text-warning]="item.quantity === 1" [class.text-danger]="item.quantity < 1">
                   {{item.name | titlecase}}
                 </div>
-                <div class="col-xs-2 text-right">
+                <div class="col-xs-3 text-right">
                   <span [class.text-primary]="item.quantity > 1" [class.text-warning]="item.quantity === 1" [class.text-danger]="item.quantity < 1">
-                    <strong><span *ngIf="item.quantity >= 1">x</span>{{item.quantity}}</strong>
+                    <strong><span *ngIf="item.quantity >= 1">x</span>{{item.quantity}} {{item.unitType}}</strong>
                   </span>
                 </div>
               </div>
@@ -106,7 +106,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-sm-12">
+            <div class="col-xs-6">
               <div class="form-group" [class.has-error]="activeItem.formErrors.quantity">
                 <div class="input-group">
                   <input [(ngModel)]="activeItem.quantity" type="number" id="quantity" class="form-control" formControlName="quantity" required
@@ -114,6 +114,13 @@
                 </div>
                 <div *ngIf="activeItem.formErrors.quantity">
                   <span class="text-danger field-validation-error">{{ activeItem.formErrors.quantity }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <div class="input-group">
+                  <input [ngModel]="activeItem.unitType | lowercase" (ngModelChange)="updateUnit($event)" type="text" placeholder="Unit. (e.g. tsp, Kg)" class="form-control" formControlName="unitType"/>
                 </div>
               </div>
             </div>

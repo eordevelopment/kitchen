@@ -6,12 +6,14 @@ import { BaseComponent } from 'app/classes/baseComponent';
 
 import { PlanService } from 'app/services/plan.service';
 import { RecipesService } from 'app/services/recipes.service';
+import { ShoppingListService } from 'app/services/shopping-list.service';
 
 import { SelectItem } from 'app/classes/selectItem';
 import { Plan, kitchen } from 'app/modules/plan/model/plan';
 import { IPlan } from 'app/contract/IPlan';
 import { IPlanItem } from 'app/contract/IPlanItem';
 import { IRecipe } from 'app/contract/IRecipe';
+import { IShoppingList } from 'app/contract/IShoppingList';
 
 @Component({
   selector: 'app-planner-home',
@@ -25,14 +27,20 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
   public showNotification: boolean;
   private itemClosed: boolean;
 
+  public currentShoppingList: IShoppingList;
+
   public openPlans: Plan[];
   public closedPlans: Plan[];
-  public recipes: SelectItem[];
+  public recipeSelect: SelectItem[];
 
   private closedPlansPage: number;
   public hasLoadedPlans: boolean;
 
-  constructor(private service: PlanService, private recipesService: RecipesService, router: Router) {
+  constructor(
+    private service: PlanService,
+    private recipesService: RecipesService,
+    private shoppingListService: ShoppingListService,
+    router: Router) {
     super(router);
   }
 
@@ -46,6 +54,9 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
 
     this.recipesService.getRecipies()
       .subscribe(values => this.loadRecipes(values), error => this.handleError(error));
+
+    this.shoppingListService.getOpenList()
+      .subscribe(value => this.currentShoppingList = value, error => this.handleError(error));
   }
 
   public selectPlan(source?: IPlan): void {
@@ -72,7 +83,7 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
   public itemChanged(source: IPlanItem): void {
     this.planChanged = true;
     source.recipeId = Number(source.recipeId);
-    const recipe = this.recipes.filter(x => x.key === source.recipeId)[0];
+    const recipe = this.recipeSelect.filter(x => x.key === source.recipeId)[0];
     source.recipeName = recipe.value;
   }
 
@@ -96,7 +107,7 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
         this.service.getUpcomingPlans()
           .subscribe(values => this.setOpenPlans(values), error => this.handleError(error));
       },
-      (error: any) => this.handleError(error));
+        (error: any) => this.handleError(error));
       this.activePlan = undefined;
     }
   }
@@ -107,10 +118,23 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
     this.closedPlansPage += 1;
   }
 
+  public generateList(): void {
+    this.shoppingListService.generateList().subscribe(res => {
+      this.router.navigate(['/shopping', res]);
+    }, error => this.handleError(error))
+  }
+
+  public viewList(): void {
+    this.router.navigate(['/shopping', this.currentShoppingList.id]);
+  }
+
   private setOpenPlans(source: IPlan[]): void {
     this.openPlans = new Array();
     for (const plan of source) {
       this.openPlans.push(new Plan(plan));
+      if (plan.items && plan.items.length > 0) {
+        this.hasPlan = true;
+      }
     }
     this.openPlans.sort(kitchen.plan.sortAsc);
   }
@@ -133,9 +157,9 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
   }
 
   private loadRecipes(values: IRecipe[]): void {
-    this.recipes = new Array();
+    this.recipeSelect = new Array();
     for (let i = 0; i < values.length; i++) {
-      this.recipes.push(new SelectItem(values[i].id, values[i].name));
+      this.recipeSelect.push(new SelectItem(values[i].id, values[i].name));
     }
   }
 

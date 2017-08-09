@@ -5,7 +5,7 @@
   </div>
 </div>
 
-<div *ngIf="openPlans && recipes && recipes.length <= 0; then noPlanner else planner">
+<div *ngIf="openPlans && recipeSelect && recipeSelect.length <= 0; then noPlanner else planner">
 
 </div>
 
@@ -36,9 +36,15 @@
     </div>
   </div>
 
-  <div class="row" *ngIf="openPlans && openPlans.length > 0">
+  <div class="row" *ngIf="!currentShoppingList">
     <div class="col-sm-12 text-center">
-      <button type="button" class="btn btn-success" [disabled]="!hasPlan"><i class="fa fa-shopping-basket"></i> Create Shopping List</button>
+      <button type="button" class="btn btn-success" [disabled]="!hasPlan" (click)="generateList()"><i class="fa fa-shopping-basket"></i> Create Shopping List</button>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="currentShoppingList">
+    <div class="col-sm-12 text-center">
+      <button type="button" class="btn btn-success" (click)="viewList()"><i class="fa fa-shopping-basket"></i> View Shopping List</button>
     </div>
   </div>
 
@@ -105,7 +111,7 @@
                   <div class="form-group">
                   <div class="input-group">
                     <select [(ngModel)]="item.recipeId" class="form-control" (change)="itemChanged(item)">
-                      <option *ngFor="let recipe of recipes" [value]="recipe.key">{{recipe.value}}</option>
+                      <option *ngFor="let recipe of recipeSelect" [value]="recipe.key">{{recipe.value}}</option>
                   </select>
                   </div>
                 </div>
