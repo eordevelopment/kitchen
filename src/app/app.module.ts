@@ -14,6 +14,7 @@ import { ItemsService } from './services/items.service'
 import { RecipesService } from './services/recipes.service'
 import { FormHelperService } from './services/form-helper.service'
 import { PlanService } from './services/plan.service'
+import { ShoppingListService } from 'app/services/shopping-list.service';
 
 import { AppShellComponent } from 'app/app-shell/app-shell.component';
 
@@ -32,7 +33,8 @@ import { WelcomeModule } from 'app/modules/welcome/welcome.module';
     ItemsService,
     RecipesService,
     PlanService,
-    FormHelperService],
+    FormHelperService,
+    ShoppingListService],
   declarations: [
     AppShellComponent
   ],

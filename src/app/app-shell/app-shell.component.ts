@@ -13,6 +13,8 @@ import { StorageService } from 'app/services/storage.service';
 export class AppShellComponent implements AfterViewInit {
   public isLoggedIn: boolean;
   public isCollapsed: boolean;
+  public shoppingQuantity: number;
+
   private lastPoppedUrl: string;
 
   constructor(private storage: StorageService, private router: Router, private location: Location) { }
@@ -47,6 +49,8 @@ export class AppShellComponent implements AfterViewInit {
     });
 
     this.isCollapsed = true;
+
+    this.shoppingQuantity = 30;
   }
 
   public toggleCollapse(): void {

@@ -115,18 +115,18 @@ export class Recipe implements IFormEntity, IRecipe {
     if (source && (!source.id || source.id === 0)) {
       const item = new RecipeItem();
       item.id = -Math.abs(this.recipeItems.length);
-      item.ammount = source.ammount;
+      item.amount = source.amount;
       item.instructions = source.instructions;
       item.item = source.item;
-      item.unitType = source.unitType;
+      item.item.unitType = source.item.unitType;
       this.recipeItems.push(item);
     } else {
       for (const item of this.recipeItems) {
         if (item.id === source.id) {
-          item.ammount = source.ammount;
+          item.amount = source.amount;
           item.instructions = source.instructions;
           item.item = source.item;
-          item.unitType = source.unitType;
+          item.item.unitType = source.item.unitType;
           break;
         }
       }

@@ -7,6 +7,7 @@ export class Item implements IFormEntity, IItem {
   public id: number;
   public name: string;
   public quantity: number;
+  public unitType: string;
 
   public formErrors = {
     'itemName': '',
@@ -26,14 +27,16 @@ export class Item implements IFormEntity, IItem {
     if (source) {
       this.id = source.id;
       this.name = source.name;
-      this.quantity = source.quantity
+      this.quantity = source.quantity;
+      this.unitType = source.unitType;
     }
   }
 
   public getFormConfig(): any {
     return {
       'itemName': [this.name, [Validators.required]],
-      'quantity': [this.quantity, [Validators.required]]
+      'quantity': [this.quantity, [Validators.required]],
+      'unitType': [this.unitType]
     }
   }
 }
