@@ -159,7 +159,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-sm btn-default pull-left" data-dismiss="modal">Close</button>
           <div class="btn-group btn-group-sm" role="group">
-            <button *ngIf="selectedStep && selectedStep.id > 0" type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteStep()">Remove</button>
+            <button *ngIf="selectedStep && selectedStep.id" type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteStep()">Remove</button>
             <button type="button" class="btn btn-success" [disabled]="!stepForm.valid" data-dismiss="modal" (click)="saveStep()">Save</button>
           </div>
 
@@ -239,7 +239,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-sm btn-default pull-left" data-dismiss="modal">Cancel</button>
           <div class="btn-group btn-group-sm" role="group">
-            <button *ngIf="selectedItem && selectedItem.id > 0" type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteItem()">Remove</button>
+            <button *ngIf="selectedItem && selectedItem.id" type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteItem()">Remove</button>
             <button type="button" class="btn btn-success" [disabled]="!itemForm.valid" data-dismiss="modal" (click)="saveItem()">Save</button>
           </div>
 

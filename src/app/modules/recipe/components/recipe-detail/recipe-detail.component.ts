@@ -144,10 +144,12 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
   public selectItem(source?: IRecipeItem): void {
     this.selectedItem = new RecipeItem(source);
     this.itemForm = this.formHelper.buildForm(this.selectedItem);
+    console.log(this.selectedItem);
   }
 
   public saveItem(): void {
     this.recipe.upsertItem(this.selectedItem);
+    console.log(this.recipe);
   }
 
   public deleteItem(): void {

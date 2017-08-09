@@ -12,6 +12,8 @@ export class Plan implements IPlan {
   dateTimeMt: moment.Moment;
   items: IPlanItem[];
 
+  private newItemId: number;
+
   constructor(source?: IPlan) {
     if (source) {
       this.id = source.id;
@@ -28,6 +30,8 @@ export class Plan implements IPlan {
         this.dateTimeMt = moment(source.dateTime);
       }
     }
+
+    this.newItemId = -1;
   }
 
   public addRecipe(recipe: IRecipe): void {
@@ -43,7 +47,7 @@ export class Plan implements IPlan {
 
   public addItem(): void {
     const item = new PlanItem();
-    item.recipeId = -this.items.length;
+    item.recipeId = this.newItemId--;
     item.isDone = false;
     item.recipeName = '';
     this.items.push(item);

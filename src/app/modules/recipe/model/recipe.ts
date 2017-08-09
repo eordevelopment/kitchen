@@ -21,6 +21,9 @@ export class Recipe implements IFormEntity, IRecipe {
   public recipeItems: IRecipeItem[];
   public assignedPlans: IPlan[];
 
+  private newItemId: number;
+  private newStepId: number;
+
   public formErrors = {
     'name': ''
   };
@@ -51,6 +54,9 @@ export class Recipe implements IFormEntity, IRecipe {
     if (!this.recipeItems) {
       this.recipeItems = new Array();
     }
+
+    this.newItemId = -1;
+    this.newStepId = -1;
   }
 
   public getFormConfig(): any {
@@ -90,7 +96,7 @@ export class Recipe implements IFormEntity, IRecipe {
   public upsertStep(source: IRecipeStep) {
     if (source && (!source.id || source.id === 0)) {
       const item = new RecipeStep();
-      item.id = -Math.abs(this.recipeSteps.length);
+      item.id = this.newStepId--;
       item.description = source.description;
       item.stepNumber = this.recipeSteps.length + 1;
       this.recipeSteps.push(item);
@@ -114,7 +120,7 @@ export class Recipe implements IFormEntity, IRecipe {
   public upsertItem(source: IRecipeItem) {
     if (source && (!source.id || source.id === 0)) {
       const item = new RecipeItem();
-      item.id = -Math.abs(this.recipeItems.length);
+      item.id = this.newItemId--;
       item.amount = source.amount;
       item.instructions = source.instructions;
       item.item = source.item;

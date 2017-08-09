@@ -28,7 +28,10 @@ export class RecipeListComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.service.getRecipies().subscribe(values => this.allRecipes = values, error => this.handleError(error));
+    this.service.getRecipies().subscribe(values => {
+      this.allRecipes = values;
+      this.allRecipes.sort(this.sortAsc);
+    }, error => this.handleError(error));
     this.service.getRecipieTypes().subscribe(values => this.types = values, error => this.handleError(error));
   }
 
@@ -60,7 +63,7 @@ export class RecipeListComponent extends BaseComponent implements OnInit {
   }
 
   public addRecipe(type: IRecipeType): void {
-    this.router.navigate(['/recipedetail', 0, {rti: type.id, rtn: type.name}]);
+    this.router.navigate(['/recipedetail', 0, { rti: type.id, rtn: type.name }]);
   }
 
   private updateTypes(): void {
@@ -80,5 +83,15 @@ export class RecipeListComponent extends BaseComponent implements OnInit {
       }
     }
     return undefined;
+  }
+
+  private sortAsc(a: IRecipe, b: IRecipe): number {
+    if (a.name < b.name) {
+      return -1;
+    }
+    if (a.name > b.name) {
+      return 1;
+    }
+    return 0;
   }
 }

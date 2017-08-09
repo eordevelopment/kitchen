@@ -10,6 +10,8 @@ export class Category implements IFormEntity, ICategory {
   public name: string;
   public items: IItem[];
 
+  private newItemId: number;
+
   public formErrors = {
     'name': ''
   };
@@ -30,6 +32,8 @@ export class Category implements IFormEntity, ICategory {
     if (!this.items) {
       this.items = new Array();
     }
+
+    this.newItemId = -1;
   }
 
   public getFormConfig(): any {
@@ -47,7 +51,7 @@ export class Category implements IFormEntity, ICategory {
   public upsertItem(source: IItem): void {
     if (source && (!source.id || source.id === 0)) {
       const item = new Item();
-      item.id = -Math.abs(this.items.length);
+      item.id = this.newItemId--;
       item.name = source.name;
       item.quantity = source.quantity;
       item.unitType = source.unitType;
