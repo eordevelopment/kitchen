@@ -1,11 +1,13 @@
 import { ServiceError } from 'app/classes/error';
 import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 export abstract class BaseComponent {
   public failure: string;
   protected router: Router;
+  protected title: Title
 
-  constructor(router: Router) {
+  constructor(router: Router, title: Title) {
     this.router = router;
   }
 

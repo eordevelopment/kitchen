@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
+import { Title } from '@angular/platform-browser';
 
 import { ShoppingList } from 'app/modules/plan/model/shoppingList';
 import { IShoppingList } from 'app/contract/IShoppingList';
@@ -32,8 +33,9 @@ export class ShoppingListComponent extends BaseComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private shoppingListService: ShoppingListService,
+    title: Title,
     router: Router) {
-    super(router);
+    super(router, title);
   }
 
   ngOnInit() {

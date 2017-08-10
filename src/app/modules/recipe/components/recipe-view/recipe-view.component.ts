@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 import { BaseComponent } from 'app/classes/baseComponent';
 import { RecipesService } from 'app/services/recipes.service';
@@ -22,14 +23,18 @@ export class RecipeViewComponent extends BaseComponent implements OnInit {
     private recipesService: RecipesService,
     private route: ActivatedRoute,
     private storage: StorageService,
+    title: Title,
     router: Router) {
-    super(router);
+    super(router, title);
   }
 
   ngOnInit() {
     this.route.paramMap
       .switchMap((params: ParamMap) => this.recipesService.getRecipeView(params.get('id')))
-      .subscribe((source: IRecipe) => { this.recipe = source; });
+      .subscribe((source: IRecipe) => {
+        this.recipe = source;
+        this.title.setTitle(this.recipe.name);
+      });
     this.storage.loggedInUserToken.subscribe(value => this.token = value);
   }
 

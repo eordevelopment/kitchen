@@ -1,6 +1,7 @@
 import * as moment from 'moment';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 import { BaseComponent } from 'app/classes/baseComponent';
 
@@ -40,8 +41,9 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
     private service: PlanService,
     private recipesService: RecipesService,
     private shoppingListService: ShoppingListService,
+    title: Title,
     router: Router) {
-    super(router);
+    super(router, title);
   }
 
   ngOnInit() {

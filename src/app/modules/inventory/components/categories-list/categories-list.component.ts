@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 import { BaseComponent } from 'app/classes/baseComponent';
 import { CategoriesService } from 'app/services/categories.service';
@@ -15,7 +16,7 @@ export class CategoriesListComponent extends BaseComponent implements OnInit {
   public selectedCategory: ICategory;
   public failure: string;
 
-  constructor(private categoriesService: CategoriesService, router: Router) { super(router); }
+  constructor(private categoriesService: CategoriesService, title: Title, router: Router) { super(router, title); }
 
   ngOnInit() {
     this.categoriesService

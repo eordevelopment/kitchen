@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule, Title } from '@angular/platform-browser';
 
 import { RecipeDetailComponent } from 'app/modules/recipe/components/recipe-detail/recipe-detail.component';
 import { RecipeListComponent } from 'app/modules/recipe/components/recipe-list/recipe-list.component';
@@ -24,6 +25,9 @@ import { RecipeWithTypePipe } from 'app/modules/recipe/pipes/has-recipe-type-fil
     RecipeViewComponent,
     RecipeTypeFilterPipe,
     RecipeWithTypePipe
+  ],
+  providers: [
+    Title
   ]
 })
 export class RecipeModule { }

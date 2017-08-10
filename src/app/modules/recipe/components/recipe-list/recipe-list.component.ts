@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 
 import { BaseComponent } from 'app/classes/baseComponent';
 import { RecipesService } from 'app/services/recipes.service';
@@ -23,8 +24,8 @@ export class RecipeListComponent extends BaseComponent implements OnInit {
   public selectedType: RecipeType;
   public recipeTypeForm: FormGroup;
 
-  constructor(private service: RecipesService, private formHelper: FormHelperService, router: Router) {
-    super(router);
+  constructor(private service: RecipesService, private formHelper: FormHelperService, title: Title, router: Router) {
+    super(router, title);
   }
 
   ngOnInit() {

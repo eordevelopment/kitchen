@@ -13,6 +13,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 import { BaseComponent } from 'app/classes/baseComponent';
 import { RecipesService } from 'app/services/recipes.service';
@@ -64,8 +65,9 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private formHelper: FormHelperService,
+    title: Title,
     router: Router) {
-    super(router);
+    super(router, title);
   }
 
   ngOnInit() {
