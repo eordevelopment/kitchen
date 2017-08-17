@@ -159,6 +159,7 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
   }
 
   private loadRecipes(values: IRecipe[]): void {
+    values.sort(this.sortAsc);
     this.recipeSelect = new Array();
     for (let i = 0; i < values.length; i++) {
       this.recipeSelect.push(new SelectItem(values[i].id, values[i].name));
@@ -168,5 +169,15 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
   private showSnackbar(): void {
     this.showNotification = true;
     setTimeout(() => { this.showNotification = false; }, 3000);
+  }
+
+  private sortAsc(a: IRecipe, b: IRecipe): number {
+    if (a.name < b.name) {
+      return -1;
+    }
+    if (a.name > b.name) {
+      return 1;
+    }
+    return 0;
   }
 }
