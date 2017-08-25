@@ -6,7 +6,7 @@ import { IFormEntity } from 'app/contract/IFormEntity';
 import { Item } from 'app/modules/inventory/model/item';
 
 export class Category implements IFormEntity, ICategory {
-  public id: number;
+  public id: string;
   public name: string;
   public items: IItem[];
 
@@ -49,9 +49,9 @@ export class Category implements IFormEntity, ICategory {
   }
 
   public upsertItem(source: IItem): void {
-    if (source && (!source.id || source.id === 0)) {
+    if (source && (!source.id || source.id.length === 0)) {
       const item = new Item();
-      item.id = this.newItemId--;
+      item.id = String(this.newItemId--);
       item.name = source.name;
       item.quantity = source.quantity;
       item.unitType = source.unitType;

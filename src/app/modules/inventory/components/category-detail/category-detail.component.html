@@ -62,7 +62,7 @@
             <div class="col-sm-12 text-right">
               <button type="button" class="btn btn-sm btn-primary pull-left" (click)="goBack()">Back</button>
               <div class="btn-group btn-group-sm" role="group">
-                <button *ngIf="category && category.id && category.id > 0" type="button" class="btn btn-danger" (click)="deleteCategory()">Remove</button>
+                <button *ngIf="category && category.id && category.id.length > 0" type="button" class="btn btn-danger" (click)="deleteCategory()">Remove</button>
                 <button type="submit" class="btn btn-success" [disabled]="!categoryForm.valid">Save</button>
               </div>
             </div>
@@ -79,8 +79,14 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 *ngIf="activeItem && activeItem.id > 0" class="modal-title">Edit Item</h4>
-        <h4 *ngIf="!activeItem || !activeItem.id || activeItem.id <= 0" class="modal-title">Add Item</h4>
+
+        <div *ngIf="activeItem && activeItem.id && activeItem.id.length > 0; then editItemBtn else addItemBtn"></div>
+        <ng-template #editItemBtn>
+          <h4 class="modal-title">Edit Item</h4>
+        </ng-template>
+        <ng-template #addItemBtn>
+          <h4 class="modal-title">Add Item</h4>
+        </ng-template>
       </div>
 
       <form [formGroup]="itemForm" *ngIf="activeItem">
@@ -129,7 +135,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-sm btn-default pull-left" data-dismiss="modal" id="mdDismis">Cancel</button>
           <div class="btn-group btn-group-sm" role="group">
-            <button *ngIf="activeItem && activeItem.id > 0" type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteItem()">Remove</button>
+            <button *ngIf="activeItem && activeItem.id && activeItem.id.length > 0" type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteItem()">Remove</button>
             <button type="button" class="btn btn-success" [disabled]="!itemForm.valid" data-dismiss="modal" (click)="saveItem()">Save</button>
           </div>
 

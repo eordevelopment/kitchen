@@ -18,14 +18,14 @@ export class CategoriesService {
 
   constructor(private http: Http, private storageService: StorageService) { }
 
-  public getCategory(id: number): Observable<ICategory> {
-    if (id <= 0) {
+  public getCategory(id: string): Observable<ICategory> {
+    if (!id) {
       return Observable.of<ICategory>(null)
     } else {
       const headers = new Headers({ 'Authorization': `Basic ${this.storageService.getToken()}` });
       const options = new RequestOptions({ headers: headers });
 
-      return this.http.get(environment.serviceUrl + 'categories/' + id, options)
+      return this.http.get(environment.serviceUrl + 'category/' + id, options)
         .map(response => response.json() as ICategory)
         .catch(this.handleError);
     }
@@ -35,7 +35,7 @@ export class CategoriesService {
     const headers = new Headers({ 'Authorization': `Basic ${this.storageService.getToken()}` });
     const options = new RequestOptions({ headers: headers });
 
-    return this.http.get(environment.serviceUrl + 'categories', options)
+    return this.http.get(environment.serviceUrl + 'category', options)
       .map(response => response.json() as ICategory[])
       .catch(this.handleError);
   }
@@ -45,21 +45,23 @@ export class CategoriesService {
     headers.append('Authorization', `Basic ${this.storageService.getToken()}`);
     const options = new RequestOptions({ headers: headers });
 
-    if (value.id && value.id > 0) {
-      return this.http.put(environment.serviceUrl + 'categories/' + value.id, value, options)
+    console.log(value);
+
+    if (value.id && value.id.length > 0) {
+      return this.http.put(environment.serviceUrl + 'category/' + value.id, value, options)
       .catch(this.handleError);
     } else {
-      return this.http.post(environment.serviceUrl + 'categories', value, options)
+      return this.http.post(environment.serviceUrl + 'category', value, options)
       .catch(this.handleError);
     }
   }
 
-  public deleteCategory(id: number): Observable<void> {
+  public deleteCategory(id: string): Observable<void> {
     const headers = new Headers({ 'Content-Type': 'application/json' });
     headers.append('Authorization', `Basic ${this.storageService.getToken()}`);
     const options = new RequestOptions({ headers: headers });
 
-    return this.http.delete(environment.serviceUrl + 'categories/' + id, options)
+    return this.http.delete(environment.serviceUrl + 'category/' + id, options)
       .catch(this.handleError);
   }
 

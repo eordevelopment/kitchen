@@ -50,7 +50,7 @@ export class CategoryDetailComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap
-      .switchMap((params: ParamMap) => this.categoriesService.getCategory(+params.get('id')))
+      .switchMap((params: ParamMap) => this.categoriesService.getCategory(params.get('id')))
       .subscribe((category: ICategory) => {
         this.category = new Category(category);
         this.categoryForm = this.formHelper.buildForm(this.category);
@@ -116,6 +116,7 @@ export class CategoryDetailComponent extends BaseComponent implements OnInit {
     this.activeItem.name = searchResult.name;
     this.activeItem.quantity = searchResult.quantity;
     this.activeItem.unitType = searchResult.unitType;
+    this.activeItem.id = searchResult.id;
     this.searchTerms.next(null);
   }
 
