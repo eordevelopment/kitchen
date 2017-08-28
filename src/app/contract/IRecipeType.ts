@@ -1,4 +1,4 @@
 export interface IRecipeType {
-  id: number;
+  id: string;
   name: string;
 }

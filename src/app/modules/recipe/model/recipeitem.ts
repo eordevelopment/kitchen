@@ -6,7 +6,6 @@ import { IItem } from 'app/contract/IItem';
 import { Item } from 'app/modules/inventory/model/item';
 
 export class RecipeItem implements IFormEntity, IRecipeItem {
-  public id: number;
   public amount: number;
   public item: IItem;
   public instructions: string;
@@ -27,7 +26,6 @@ export class RecipeItem implements IFormEntity, IRecipeItem {
 
   constructor(source?: IRecipeItem) {
     if (source) {
-      this.id = source.id;
       this.amount = source.amount;
       this.item = source.item
       this.instructions = source.instructions;

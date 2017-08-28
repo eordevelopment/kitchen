@@ -45,6 +45,9 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
   public selectedStep: RecipeStep;
   public selectedItem: RecipeItem;
 
+  public selectedItemIdx: number;
+  public selectedStepIdx: number;
+
   public recipeForm: FormGroup;
   public stepForm: FormGroup;
   public itemForm: FormGroup;
@@ -77,11 +80,11 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
         const typeName = params.get('rtn');
         if (typeId && typeName) {
           this.selectedType = new RecipeType();
-          this.selectedType.id = Number(typeId);
+          this.selectedType.id = typeId;
           this.selectedType.name = typeName;
         }
 
-        return this.recipesService.getRecipe(+params.get('id'))
+        return this.recipesService.getRecipe(params.get('id'))
       })
       .subscribe((source: IRecipe) => {
         this.recipe = new Recipe(source);
@@ -130,32 +133,42 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
       (error: any) => this.handleError(error));
   }
 
-  public selectStep(source?: IRecipeStep): void {
+  public selectStep(idx: number, source?: IRecipeStep): void {
+    this.selectedStepIdx = idx;
+
     this.selectedStep = new RecipeStep(source);
     this.stepForm = this.formHelper.buildForm(this.selectedStep);
   }
 
   public saveStep(): void {
-    this.recipe.upsertStep(this.selectedStep);
+    if (this.selectedStepIdx >= 0) {
+      this.recipe.updateStep(this.selectedStepIdx, this.selectedStep);
+    } else {
+      this.recipe.insertStep(this.selectedStep);
+    }
   }
 
   public deleteStep(): void {
     this.recipe.removeStep(this.selectedStep);
   }
 
-  public selectItem(source?: IRecipeItem): void {
+  public selectItem(idx: number, source?: IRecipeItem): void {
+    this.selectedItemIdx = idx;
+
     this.selectedItem = new RecipeItem(source);
     this.itemForm = this.formHelper.buildForm(this.selectedItem);
-    console.log(this.selectedItem);
   }
 
   public saveItem(): void {
-    this.recipe.upsertItem(this.selectedItem);
-    console.log(this.recipe);
+    if (this.selectedItemIdx >= 0) {
+      this.recipe.updateItem(this.selectedItemIdx, this.selectedItem);
+    } else {
+      this.recipe.insertItem(this.selectedItem);
+    }
   }
 
   public deleteItem(): void {
-    this.recipe.removeItem(this.selectedItem);
+    this.recipe.removeItem(this.selectedItemIdx);
   }
 
   public delete(): void {

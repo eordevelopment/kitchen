@@ -29,8 +29,8 @@
           </div>
           <br>
           <ul class="list-group" *ngIf="category.items && category.items !== null && category.items.length > 0">
-            <li *ngFor="let item of category.items" class="list-group-item pointer" data-toggle="modal" data-target="#itemFormModal"
-              (click)="setItem(item)">
+            <li *ngFor="let item of category.items; let idx = index" class="list-group-item pointer" data-toggle="modal" data-target="#itemFormModal"
+              (click)="setItem(idx, item)">
               <div class="row">
                 <div class="col-xs-9" [class.text-warning]="item.quantity === 1" [class.text-danger]="item.quantity < 1">
                   {{item.name | titlecase}}
@@ -45,7 +45,7 @@
           </ul>
           <div class="row">
             <div class="col-sm-12 text-center">
-              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#itemFormModal" (click)="setItem()"><i class="fa fa-plus"></i> Add Item</button>
+              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#itemFormModal" (click)="setItem(-1)"><i class="fa fa-plus"></i> Add Item</button>
             </div>
           </div>
           <br>

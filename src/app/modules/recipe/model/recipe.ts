@@ -13,16 +13,13 @@ import { RecipeItem } from 'app/modules/recipe/model/recipeitem';
 import { IRecipeType } from 'app/contract/IRecipeType';
 
 export class Recipe implements IFormEntity, IRecipe {
-  public id: number;
+  public id: string;
   public name: string;
   public recipeType: IRecipeType;
   public key: string;
   public recipeSteps: IRecipeStep[];
   public recipeItems: IRecipeItem[];
   public assignedPlans: IPlan[];
-
-  private newItemId: number;
-  private newStepId: number;
 
   public formErrors = {
     'name': ''
@@ -54,9 +51,6 @@ export class Recipe implements IFormEntity, IRecipe {
     if (!this.recipeItems) {
       this.recipeItems = new Array();
     }
-
-    this.newItemId = -1;
-    this.newStepId = -1;
   }
 
   public getFormConfig(): any {
@@ -81,7 +75,7 @@ export class Recipe implements IFormEntity, IRecipe {
       const steps = new Array();
       for (let i = 0; i < this.recipeSteps.length; i++) {
         const step = this.recipeSteps[i];
-        if (step.id === source.id) {
+        if (step.stepNumber === source.stepNumber) {
           continue;
         }
 
@@ -93,49 +87,47 @@ export class Recipe implements IFormEntity, IRecipe {
     }
   }
 
-  public upsertStep(source: IRecipeStep) {
-    if (source && (!source.id || source.id === 0)) {
-      const item = new RecipeStep();
-      item.id = this.newStepId--;
-      item.description = source.description;
-      item.stepNumber = this.recipeSteps.length + 1;
-      this.recipeSteps.push(item);
-    } else {
-      for (const item of this.recipeSteps) {
-        if (item.id === source.id) {
-          item.description = source.description;
-          item.stepNumber = source.stepNumber;
-          break;
-        }
-      }
+  public updateStep(idx: number, source: IRecipeStep): void {
+    if (idx < this.recipeSteps.length) {
+      this.recipeSteps[idx].stepNumber = source.stepNumber;
+      this.recipeSteps[idx].description = source.description;
     }
   }
 
-  public removeItem(source?: IRecipeItem): void {
-    if (source) {
-      this.recipeItems = this.recipeItems.filter(x => x.id !== source.id);
+  public insertStep(source: IRecipeStep): void {
+    const item = new RecipeStep();
+    item.description = source.description;
+    item.stepNumber = this.recipeSteps.length + 1;
+    this.recipeSteps.push(item);
+  }
+
+  public removeItem(idx: number): void {
+    if (idx >= 0 && idx < this.recipeItems.length) {
+      const items = new Array();
+      for (let i = 0; i < this.recipeItems.length; i++) {
+        if (i !== idx) {
+          items.push(this.recipeItems[i]);
+        }
+      }
+      this.recipeItems = items;
     }
   }
 
-  public upsertItem(source: IRecipeItem) {
-    if (source && (!source.id || source.id === 0)) {
-      const item = new RecipeItem();
-      item.id = this.newItemId--;
-      item.amount = source.amount;
-      item.instructions = source.instructions;
-      item.item = source.item;
-      item.item.unitType = source.item.unitType;
-      this.recipeItems.push(item);
-    } else {
-      for (const item of this.recipeItems) {
-        if (item.id === source.id) {
-          item.amount = source.amount;
-          item.instructions = source.instructions;
-          item.item = source.item;
-          item.item.unitType = source.item.unitType;
-          break;
-        }
-      }
+  public updateItem(idx: number, source: IRecipeItem): void {
+    if (idx < this.recipeItems.length) {
+      this.recipeItems[idx].amount = source.amount;
+      this.recipeItems[idx].instructions = source.instructions;
+      this.recipeItems[idx].item = source.item;
+      this.recipeItems[idx].item.unitType = source.item.unitType;
     }
+  }
+
+  public insertItem(source: IRecipeItem): void {
+    const item = new RecipeItem();
+    item.amount = source.amount;
+    item.instructions = source.instructions;
+    item.item = source.item;
+    item.item.unitType = source.item.unitType;
+    this.recipeItems.push(item);
   }
 }

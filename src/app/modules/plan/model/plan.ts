@@ -39,7 +39,7 @@ export class Plan implements IPlan {
       this.items = new Array();
     }
     const item = new PlanItem();
-    item.recipeId = recipe.id;
+    // item.recipeId = recipe.id;
     item.isDone = false;
     item.recipeName = recipe.name;
     this.items.push(item);

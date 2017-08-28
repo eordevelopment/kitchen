@@ -162,7 +162,7 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
     values.sort(this.sortAsc);
     this.recipeSelect = new Array();
     for (let i = 0; i < values.length; i++) {
-      this.recipeSelect.push(new SelectItem(values[i].id, values[i].name));
+      // this.recipeSelect.push(new SelectItem(values[i].id, values[i].name));
     }
   }
 

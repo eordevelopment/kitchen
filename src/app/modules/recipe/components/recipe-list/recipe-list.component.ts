@@ -76,8 +76,7 @@ export class RecipeListComponent extends BaseComponent implements OnInit {
     }
   }
 
-  private findType(id: number): IRecipeType {
-    id = Number(id);
+  private findType(id: string): IRecipeType {
     for (const type of this.types) {
       if (type.id === id) {
         return type;

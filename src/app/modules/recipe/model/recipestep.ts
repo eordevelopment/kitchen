@@ -3,7 +3,6 @@ import { IFormEntity } from 'app/contract/IFormEntity';
 import { IRecipeStep } from 'app/contract/IRecipeStep';
 
 export class RecipeStep implements IFormEntity, IRecipeStep {
-  public id: number;
   public description: string;
   public stepNumber: number;
 
@@ -19,7 +18,6 @@ export class RecipeStep implements IFormEntity, IRecipeStep {
 
   constructor(source?: IRecipeStep) {
     if (source) {
-      this.id = source.id;
       this.description = source.description;
       this.stepNumber = source.stepNumber
     }

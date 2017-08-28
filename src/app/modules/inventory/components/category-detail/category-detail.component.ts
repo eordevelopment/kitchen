@@ -33,6 +33,7 @@ export class CategoryDetailComponent extends BaseComponent implements OnInit {
   public itemForm: FormGroup;
   public category: Category;
   public activeItem: Item;
+  public activeItemIdx: number;
 
   private searchTerms = new Subject<string>();
   public itemsSearchResult: Observable<Item[]>;
@@ -65,7 +66,8 @@ export class CategoryDetailComponent extends BaseComponent implements OnInit {
       });
   }
 
-  public setItem(item?: IItem): void {
+  public setItem(idx: number, item?: IItem): void {
+    this.activeItemIdx = idx;
     this.activeItem = new Item(item);
     this.itemForm = this.formHelper.buildForm(this.activeItem);
   }
@@ -105,7 +107,11 @@ export class CategoryDetailComponent extends BaseComponent implements OnInit {
   }
 
   public saveItem(): void {
-    this.category.upsertItem(this.activeItem);
+    if (this.activeItemIdx >= 0) {
+      this.category.updateItem(this.activeItemIdx, this.activeItem);
+    } else {
+      this.category.insertItem(this.activeItem);
+    }
   }
 
   public deleteItem(): void {

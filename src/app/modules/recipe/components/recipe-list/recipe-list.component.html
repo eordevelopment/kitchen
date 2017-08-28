@@ -74,9 +74,9 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 *ngIf="selectedType && selectedType.id > 0" class="modal-title">Edit Recipe Group</h4>
-        <h4 *ngIf="!selectedType || !selectedType.id || selectedType.id <= 0" class="modal-title">Add Recipe Group</h4>
-        <span class="text-info" *ngIf="!selectedType || !selectedType.id || selectedType.id <= 0">Recipe groups are useful for grouping similar recipes, such as all your meals, lunches, snacks, etc.</span>
+        <h4 *ngIf="selectedType && selectedType.id && selectedType.id.length > 0" class="modal-title">Edit Recipe Group</h4>
+        <h4 *ngIf="!selectedType || !selectedType.id || selectedType.id.length <= 0" class="modal-title">Add Recipe Group</h4>
+        <span class="text-info" *ngIf="!selectedType || !selectedType.id || selectedType.id.length <= 0">Recipe groups are useful for grouping similar recipes, such as all your meals, lunches, snacks, etc.</span>
       </div>
 
       <form [formGroup]="recipeTypeForm">
