@@ -131,7 +131,6 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
   }
 
   private setOpenPlans(source: IPlan[]): void {
-    console.log(source);
     this.openPlans = new Array();
     for (const plan of source) {
       this.openPlans.push(new Plan(plan));

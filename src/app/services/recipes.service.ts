@@ -87,8 +87,6 @@ export class RecipesService {
     headers.append('Authorization', `Basic ${this.storageService.getToken()}`);
     const options = new RequestOptions({ headers: headers });
 
-    console.log(value);
-
     if (value.id && value.id.length > 0) {
       return this.http.put(environment.serviceUrl + 'recipe/' + value.id, value, options)
         .map(this.extractData)

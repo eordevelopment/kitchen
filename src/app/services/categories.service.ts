@@ -45,8 +45,6 @@ export class CategoriesService {
     headers.append('Authorization', `Basic ${this.storageService.getToken()}`);
     const options = new RequestOptions({ headers: headers });
 
-    console.log(value);
-
     if (value.id && value.id.length > 0) {
       return this.http.put(environment.serviceUrl + 'category/' + value.id, value, options)
       .catch(this.handleError);
