@@ -27,7 +27,7 @@ export class ShoppingListComponent extends BaseComponent implements OnInit {
   private pastListsPage: number;
   public hasLoadedLists: boolean;
 
-  private listGetIds = new Subject<number>();
+  private listGetIds = new Subject<string>();
   public listGetResult: Observable<IShoppingList>;
 
   constructor(
@@ -44,7 +44,7 @@ export class ShoppingListComponent extends BaseComponent implements OnInit {
         const id = params.get('id');
         const typeName = params.get('rtn');
         if (id) {
-          return this.shoppingListService.getList(+id);
+          return this.shoppingListService.getList(id);
         } else {
           return this.shoppingListService.getOpenList();
         }
@@ -118,7 +118,7 @@ export class ShoppingListComponent extends BaseComponent implements OnInit {
     const mt = moment();
 
     this.currentList = new ShoppingList();
-    this.currentList.id = 0;
+    this.currentList.id = '';
     this.currentList.name = mt.format('ddd, MMM-DD YYYY');
 
     this.openList = this.currentList;

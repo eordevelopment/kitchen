@@ -193,7 +193,7 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
       this.plans = new Array();
       if (values.length > 0) {
         for (let i = 0; i < values.length; i++) {
-          selectItems.push(new SelectItem(values[i].id, moment(values[i].dateTime).format('dddd, MMM Do')));
+          selectItems.push(new SelectItem(String(i), moment(values[i].dateTime).format('dddd, MMM Do')));
           this.plans.push(new Plan(values[i]));
         }
         this.selectedPlanId = values[0].id
@@ -203,7 +203,7 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
   }
 
   public savePlan(): void {
-    const plan = kitchen.plan.getPlan(this.selectedPlanId, this.plans);
+    const plan = this.plans[Number(this.selectedPlanId)];
     plan.addRecipe(this.recipe);
     this.planService.savePlan(plan).subscribe(response => {
       this.recipe.assignedPlans = new Array();

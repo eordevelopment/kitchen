@@ -39,7 +39,7 @@ export class Plan implements IPlan {
       this.items = new Array();
     }
     const item = new PlanItem();
-    // item.recipeId = recipe.id;
+    item.recipeId = recipe.id;
     item.isDone = false;
     item.recipeName = recipe.name;
     this.items.push(item);
@@ -88,6 +88,15 @@ export module kitchen.plan {
       return -1;
     }
     return 0;
+  }
+
+  export function getPlanByDate(dateTime: string, plans: Plan[]): Plan {
+    for (const plan of plans) {
+      if (dateTime === plan.dateTime) {
+        return plan;
+      }
+    }
+    return undefined;
   }
 
   export function getPlan(planId: string, plans: Plan[]): Plan {

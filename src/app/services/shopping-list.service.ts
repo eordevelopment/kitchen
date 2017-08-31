@@ -25,16 +25,16 @@ export class ShoppingListService {
       .catch(this.handleError);
   }
 
-  public generateList(): Observable<number> {
+  public generateList(): Observable<string> {
     const headers = new Headers({ 'Authorization': `Basic ${this.storageService.getToken()}` });
     const options = new RequestOptions({ headers: headers });
 
     return this.http.get(environment.serviceUrl + 'list/generate', options)
-      .map(response => Number(response.text()))
+      .map(response => String(response.text()))
       .catch(this.handleError);
   }
 
-  public getList(id: number): Observable<IShoppingList> {
+  public getList(id: string): Observable<IShoppingList> {
     const headers = new Headers({ 'Authorization': `Basic ${this.storageService.getToken()}` });
     const options = new RequestOptions({ headers: headers });
 
@@ -66,7 +66,7 @@ export class ShoppingListService {
       .catch(this.handleError);
   }
 
-  public deleteList(id: number): Observable<void> {
+  public deleteList(id: string): Observable<void> {
     const headers = new Headers({ 'Content-Type': 'application/json' });
     headers.append('Authorization', `Basic ${this.storageService.getToken()}`);
     const options = new RequestOptions({ headers: headers });

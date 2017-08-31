@@ -90,7 +90,7 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
   }
 
   public savePlan(): void {
-    const plan = kitchen.plan.getPlan(this.activePlan.id, this.openPlans);
+    const plan = kitchen.plan.getPlanByDate(this.activePlan.dateTime, this.openPlans);
     if (plan) {
       plan.upsertItems(this.activePlan.items);
       if (plan.isDone()) {
