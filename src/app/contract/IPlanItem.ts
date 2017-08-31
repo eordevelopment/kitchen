@@ -1,5 +1,5 @@
 export interface IPlanItem {
   isDone: boolean;
-  recipeId: number;
+  recipeId: string;
   recipeName: string
 }

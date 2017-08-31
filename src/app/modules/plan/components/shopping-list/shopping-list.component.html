@@ -1,6 +1,6 @@
-<div *ngIf="currentList && currentList.id > 0; then currentListDisplay"></div>
+<div *ngIf="currentList && currentList.id && currentList.id.length > 0; then currentListDisplay"></div>
 
-<div *ngIf="currentList && currentList.id <= 0; then newListDisplay"></div>
+<div *ngIf="currentList && currentList.id && currentList.id.length <= 0; then newListDisplay"></div>
 <div *ngIf="!openList; then newListOption"></div>
 <hr>
 <div *ngIf="openList && currentList && openList.id != currentList.id; then openListDisplay"></div>

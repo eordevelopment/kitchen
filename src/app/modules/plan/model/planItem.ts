@@ -3,7 +3,7 @@ import { IPlanItem } from 'app/contract/IPlanItem';
 
 export class PlanItem implements IPlanItem {
   isDone: boolean;
-  recipeId: number;
+  recipeId: string;
   recipeName: string;
 
   constructor(source?: IPlanItem) {

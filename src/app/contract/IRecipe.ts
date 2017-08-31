@@ -5,7 +5,7 @@ import { IPlan } from 'app/contract/IPlan';
 import { IRecipeType } from 'app/contract/IRecipeType';
 
 export interface IRecipe {
-  id: number;
+  id: string;
   name: string;
   recipeType: IRecipeType;
   key: string;

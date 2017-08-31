@@ -38,8 +38,8 @@ export class RecipesService {
     }
   }
 
-  public getRecipe(id: number): Observable<IRecipe> {
-    if (id <= 0) {
+  public getRecipe(id: string): Observable<IRecipe> {
+    if (!id || Number(id) === 0) {
       return Observable.of<IRecipe>(null)
     } else {
       const headers = new Headers({ 'Authorization': `Basic ${this.storageService.getToken()}` });
@@ -60,8 +60,8 @@ export class RecipesService {
       .catch(this.handleError);
   }
 
-  public getRecipeType(id: number): Observable<IRecipeType> {
-    if (id <= 0) {
+  public getRecipeType(id: string): Observable<IRecipeType> {
+    if (!id) {
       return Observable.of<IRecipeType>(null)
     } else {
       const headers = new Headers({ 'Authorization': `Basic ${this.storageService.getToken()}` });
@@ -87,7 +87,9 @@ export class RecipesService {
     headers.append('Authorization', `Basic ${this.storageService.getToken()}`);
     const options = new RequestOptions({ headers: headers });
 
-    if (value.id && value.id > 0) {
+    console.log(value);
+
+    if (value.id && value.id.length > 0) {
       return this.http.put(environment.serviceUrl + 'recipe/' + value.id, value, options)
         .map(this.extractData)
         .catch(this.handleError);
@@ -98,12 +100,12 @@ export class RecipesService {
     }
   }
 
-  public saveRecipeType(value: IRecipeType): Observable<number> {
+  public saveRecipeType(value: IRecipeType): Observable<string> {
     const headers = new Headers({ 'Content-Type': 'application/json' });
     headers.append('Authorization', `Basic ${this.storageService.getToken()}`);
     const options = new RequestOptions({ headers: headers });
 
-    if (value.id && value.id > 0) {
+    if (value.id && value.id.length > 0) {
       return this.http.put(environment.serviceUrl + 'recipetype/' + value.id, value, options)
         .map(this.extractData)
         .catch(this.handleError);
@@ -114,7 +116,7 @@ export class RecipesService {
     }
   }
 
-  public deleteRecipe(id: number): Observable<void> {
+  public deleteRecipe(id: string): Observable<void> {
     const headers = new Headers({ 'Content-Type': 'application/json' });
     headers.append('Authorization', `Basic ${this.storageService.getToken()}`);
     const options = new RequestOptions({ headers: headers });

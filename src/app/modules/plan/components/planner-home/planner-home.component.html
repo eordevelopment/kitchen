@@ -119,7 +119,7 @@
               </div>
               <div class="row">
                 <div class="col-xs-12 text-center">
-                <div class="btn-group btn-group-xs" *ngIf="item.recipeId && item.recipeId > 0">
+                <div class="btn-group btn-group-xs" *ngIf="item.recipeId && item.recipeId.length > 0">
                   <button class="btn btn-danger" (click)="removeItem(item)"><i class="fa fa-times"></i> Remove</button>
                   <button class="btn btn-primary" (click)="completeItem(item)"><i class="fa fa-check"></i> Cooked</button>
                 </div>

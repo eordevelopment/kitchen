@@ -6,11 +6,9 @@ import { IFormEntity } from 'app/contract/IFormEntity';
 import { Item } from 'app/modules/inventory/model/item';
 
 export class Category implements IFormEntity, ICategory {
-  public id: number;
+  public id: string;
   public name: string;
   public items: IItem[];
-
-  private newItemId: number;
 
   public formErrors = {
     'name': ''
@@ -32,8 +30,6 @@ export class Category implements IFormEntity, ICategory {
     if (!this.items) {
       this.items = new Array();
     }
-
-    this.newItemId = -1;
   }
 
   public getFormConfig(): any {
@@ -48,23 +44,21 @@ export class Category implements IFormEntity, ICategory {
     }
   }
 
-  public upsertItem(source: IItem): void {
-    if (source && (!source.id || source.id === 0)) {
-      const item = new Item();
-      item.id = this.newItemId--;
-      item.name = source.name;
-      item.quantity = source.quantity;
-      item.unitType = source.unitType;
-      this.items.push(item);
-    } else {
-      for (const item of this.items) {
-        if (item.id === source.id) {
-          item.name = source.name;
-          item.quantity = source.quantity;
-          item.unitType = source.unitType;
-          break;
-        }
-      }
+  public updateItem(idx: number, source: IItem): void {
+    if (idx >= 0 && idx < this.items.length) {
+      this.items[idx].name = source.name;
+      this.items[idx].quantity = source.quantity;
+      this.items[idx].unitType = source.unitType;
+      this.items[idx].id = source.id;
     }
+  }
+
+  public insertItem(source: IItem): void {
+    const item = new Item();
+    item.name = source.name;
+    item.quantity = source.quantity;
+    item.unitType = source.unitType;
+    item.id = source.id;
+    this.items.push(item);
   }
 }

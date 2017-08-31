@@ -44,7 +44,7 @@ export class PlanService {
     headers.append('Authorization', `Basic ${this.storageService.getToken()}`);
     const options = new RequestOptions({ headers: headers });
 
-    if (value.id && value.id > 0) {
+    if (value.id && value.id.length > 0) {
       return this.http.put(environment.serviceUrl + 'plan/' + value.id, value, options)
         .catch(this.handleError);
     } else {

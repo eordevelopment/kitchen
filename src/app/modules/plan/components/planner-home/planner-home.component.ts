@@ -84,13 +84,13 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
 
   public itemChanged(source: IPlanItem): void {
     this.planChanged = true;
-    source.recipeId = Number(source.recipeId);
+    source.recipeId = source.recipeId;
     const recipe = this.recipeSelect.filter(x => x.key === source.recipeId)[0];
     source.recipeName = recipe.value;
   }
 
   public savePlan(): void {
-    const plan = kitchen.plan.getPlan(this.activePlan.id, this.openPlans);
+    const plan = kitchen.plan.getPlanByDate(this.activePlan.dateTime, this.openPlans);
     if (plan) {
       plan.upsertItems(this.activePlan.items);
       if (plan.isDone()) {
@@ -131,6 +131,7 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
   }
 
   private setOpenPlans(source: IPlan[]): void {
+    console.log(source);
     this.openPlans = new Array();
     for (const plan of source) {
       this.openPlans.push(new Plan(plan));
@@ -162,7 +163,7 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
     values.sort(this.sortAsc);
     this.recipeSelect = new Array();
     for (let i = 0; i < values.length; i++) {
-      this.recipeSelect.push(new SelectItem(values[i].id, values[i].name));
+       this.recipeSelect.push(new SelectItem(values[i].id, values[i].name));
     }
   }
 

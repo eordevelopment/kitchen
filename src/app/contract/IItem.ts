@@ -1,5 +1,5 @@
 export interface IItem {
-  id: number;
+  id: string;
   name: string;
   quantity: number;
   unitType: string;

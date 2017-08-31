@@ -1,8 +1,8 @@
 export class SelectItem {
-  public key: number;
+  public key: string;
   public value: string;
 
-  constructor(key: number, value: string) {
+  constructor(key: string, value: string) {
     this.key = key;
     this.value = value;
   }

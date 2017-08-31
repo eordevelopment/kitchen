@@ -4,7 +4,7 @@ import { IItem } from 'app/contract/IItem';
 import { IFormEntity } from 'app/contract/IFormEntity';
 
 export class Item implements IFormEntity, IItem {
-  public id: number;
+  public id: string;
   public name: string;
   public quantity: number;
   public unitType: string;

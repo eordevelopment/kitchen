@@ -4,7 +4,7 @@ import { IFormEntity } from 'app/contract/IFormEntity';
 import { IRecipeType } from 'app/contract/IRecipeType';
 
 export class RecipeType implements IFormEntity, IRecipeType {
-  public id: number;
+  public id: string;
   public name: string;
 
   public formErrors = {

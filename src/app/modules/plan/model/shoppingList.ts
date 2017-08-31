@@ -2,7 +2,7 @@ import { ShoppingListItem } from 'app/modules/plan/model/shoppingListItem';
 import { IShoppingList } from 'app/contract/IShoppingList';
 
 export class ShoppingList implements IShoppingList {
-  id: number;
+  id: string;
   name: string;
   isDone: boolean;
   items: ShoppingListItem[];
@@ -31,7 +31,7 @@ export class ShoppingList implements IShoppingList {
   }
 
   public removeFromList(item: ShoppingListItem): void {
-    this.items = this.items.filter(x => x.id !== item.id);
+    this.items = this.items.filter(x => x.item.id !== item.item.id);
     if (!this.containsItem(this.optionalItems, item)) {
       this.optionalItems.push(item);
       this.optionalItems.sort(this.sortAsc);
@@ -39,7 +39,7 @@ export class ShoppingList implements IShoppingList {
   }
 
   public addToList(item: ShoppingListItem): void {
-    this.optionalItems = this.optionalItems.filter(x => x.id !== item.id);
+    this.optionalItems = this.optionalItems.filter(x => x.item.id !== item.item.id);
     if (!this.containsItem(this.items, item)) {
       this.items.push(item);
       this.items.sort(this.sortAsc);
@@ -48,7 +48,7 @@ export class ShoppingList implements IShoppingList {
 
   private containsItem(items: ShoppingListItem[], item: ShoppingListItem): boolean {
     for (const existing of items) {
-      if (existing.id === item.id) {
+      if (existing.item.id === item.item.id) {
         return true;
       }
     }
