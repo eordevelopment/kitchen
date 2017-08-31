@@ -7,7 +7,7 @@ import { PlanItem } from 'app/modules/plan/model/planItem';
 import { IRecipe } from 'app/contract/IRecipe';
 
 export class Plan implements IPlan {
-  id: number;
+  id: string;
   dateTime: string;
   dateTimeMt: moment.Moment;
   items: IPlanItem[];
@@ -47,7 +47,6 @@ export class Plan implements IPlan {
 
   public addItem(): void {
     const item = new PlanItem();
-    item.recipeId = this.newItemId--;
     item.isDone = false;
     item.recipeName = '';
     this.items.push(item);
@@ -58,7 +57,7 @@ export class Plan implements IPlan {
   }
 
   public isDone(): boolean {
-    if (this.id <= 0 || !this.items || this.items.length === 0) {
+    if (!this.id || !this.items || this.items.length === 0) {
       return false;
     }
     for (const item of this.items) {
@@ -91,8 +90,8 @@ export module kitchen.plan {
     return 0;
   }
 
-  export function getPlan(planId: number, plans: Plan[]): Plan {
-    const id = Number(planId);
+  export function getPlan(planId: string, plans: Plan[]): Plan {
+    const id = planId;
     for (const plan of plans) {
       if (id === plan.id) {
         return plan;

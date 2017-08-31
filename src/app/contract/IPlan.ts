@@ -1,7 +1,7 @@
 import { IPlanItem } from 'app/contract/IPlanItem';
 
 export interface IPlan {
-  id: number;
+  id: string;
   dateTime: string;
   items: IPlanItem[];
 }

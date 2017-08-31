@@ -56,7 +56,7 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
   public itemsSearchResult: Observable<Item[]>;
 
   public plansSelect: Observable<SelectItem[]>;
-  public selectedPlanId: number;
+  public selectedPlanId: string;
   private plans: Plan[];
 
   public shareUrl: string;
