@@ -19,7 +19,7 @@ export class CategoriesService {
   constructor(private http: Http, private storageService: StorageService) { }
 
   public getCategory(id: string): Observable<ICategory> {
-    if (!id) {
+    if (!id || id.length <= 1) {
       return Observable.of<ICategory>(null)
     } else {
       const headers = new Headers({ 'Authorization': `Basic ${this.storageService.getToken()}` });
