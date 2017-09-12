@@ -21,7 +21,7 @@ export class PlanService {
     const headers = new Headers({ 'Authorization': `Basic ${this.storageService.getToken()}` });
     const options = new RequestOptions({ headers: headers });
 
-    return this.http.get(environment.serviceUrl + 'plan/upcoming/7', options)
+    return this.http.get(environment.serviceUrl + 'plan/upcoming/14', options)
       .map((response) => response.json() as IPlan[])
       .catch(this.handleError);
   }

@@ -42,7 +42,6 @@ export class ShoppingListComponent extends BaseComponent implements OnInit {
     this.route.paramMap
       .switchMap((params: ParamMap) => {
         const id = params.get('id');
-        const typeName = params.get('rtn');
         if (id) {
           return this.shoppingListService.getList(id);
         } else {
