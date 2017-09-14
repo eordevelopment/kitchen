@@ -18,7 +18,8 @@
         <span class="text-info">
           To make keeping track of your recipes easier you can use this page to group similar recipes
           such as <strong>Lunch</strong>, <strong>Diner</strong>, <strong>Baking</strong> etc
-        </span><hr>
+        </span>
+        <hr>
         <span class="text-info">
           Once you have your recipes you can add them to your meal planner and your shopping basket.
         </span>
@@ -42,7 +43,8 @@
             </div>
           </div>
         </div>
-        <div class="recipe-list collapse in" id="collapse{{type.id}}">
+
+        <div *ngIf="allRecipes && allRecipes != null" class="recipe-list collapse in" id="collapse{{type.id}}">
           <ul class="list-group">
             <li class="list-group-item pointer" *ngFor="let recipe of allRecipes | recipeTypeFilter:type" (click)="onSelect(recipe)">
               {{recipe.name | titlecase}}
@@ -54,10 +56,21 @@
             </div>
           </div>
         </div>
+
+        <div *ngIf="!allRecipes || allRecipes == null">
+          <div class="row">
+            <div class="col-sm-12 text-center recipe-await">
+              <i *ngIf="!failure" class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+              <span *ngIf="failure" class="text-danger">{{failure}}</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
 </div>
+
 
 <div class="panel panel-default">
   <div class="panel-body">
@@ -85,8 +98,8 @@
             <div class="col-sm-12">
               <div class="form-group" [class.has-error]="selectedType.formErrors.name">
                 <div class="input-group">
-                  <input [ngModel]="selectedType.name | titlecase" (ngModelChange)="updateTypeName($event)" type="text" class="form-control" formControlName="name" required placeholder="Name. (e.g. lunches, baking, etc)"
-                    autocomplete="off">
+                  <input [ngModel]="selectedType.name | titlecase" (ngModelChange)="updateTypeName($event)" type="text" class="form-control"
+                    formControlName="name" required placeholder="Name. (e.g. lunches, baking, etc)" autocomplete="off">
                 </div>
                 <div *ngIf="selectedType.formErrors.name">
                   <span class="text-danger field-validation-error">{{ selectedType.formErrors.name }}</span>
