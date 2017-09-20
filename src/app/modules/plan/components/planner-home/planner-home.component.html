@@ -23,7 +23,7 @@
               <div *ngIf="plan.items && plan.items.length > 0;then planItems else planEmpty"></div>
               <ng-template #planItems>
                 <div *ngFor="let item of plan.items" [class.text-muted]="item.isDone">
-                  {{item.recipeName}}
+                  {{item.recipeName | titlecase}}
                 </div>
               </ng-template>
               <ng-template #planEmpty>
@@ -78,7 +78,7 @@
             </div>
             <div class="col-xs-9 text-muted">
               <div *ngFor="let item of plan.items">
-                {{item.recipeName}}
+                {{item.recipeName | titlecase}}
               </div>
             </div>
           </div>
@@ -111,7 +111,7 @@
                   <div class="form-group">
                   <div class="input-group">
                     <select [(ngModel)]="item.recipeId" class="form-control" (change)="itemChanged(item)">
-                      <option *ngFor="let recipe of recipeSelect" [value]="recipe.key">{{recipe.value}}</option>
+                      <option *ngFor="let recipe of recipeSelect" [value]="recipe.key">{{recipe.value | titlecase}}</option>
                   </select>
                   </div>
                 </div>
@@ -127,7 +127,7 @@
               </div>
             </ng-template>
             <ng-template #itemReadonly>
-              <h4 class="text-muted">{{item.recipeName}}</h4>
+              <h4 class="text-muted">{{item.recipeName | titlecase}}</h4>
             </ng-template>
           </div>
           <div class="row">
