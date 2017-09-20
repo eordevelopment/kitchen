@@ -1,4 +1,5 @@
 import * as moment from 'moment';
+import * as _ from 'underscore';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
@@ -159,10 +160,19 @@ export class PlannerHomeComponent extends BaseComponent implements OnInit {
   }
 
   private loadRecipes(values: IRecipe[]): void {
-    values.sort(this.sortAsc);
+    const types = _.uniq(values, function (value) { return value.recipeType.id; });
+
     this.recipeSelect = new Array();
-    for (let i = 0; i < values.length; i++) {
-       this.recipeSelect.push(new SelectItem(values[i].id, values[i].name));
+
+    for (const type of types) {
+      const recipes = values.filter(x => x.recipeType.id === type.recipeType.id);
+      recipes.sort(this.sortAsc);
+      const recipeTypeSelect = new Array();
+
+      for (const recipe of recipes) {
+        recipeTypeSelect.push(new SelectItem(recipe.id, recipe.name));
+      }
+      this.recipeSelect = this.recipeSelect.concat(recipeTypeSelect);
     }
   }
 
