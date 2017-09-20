@@ -9,6 +9,7 @@ export abstract class BaseComponent {
 
   constructor(router: Router, title: Title) {
     this.router = router;
+    this.title = title;
   }
 
   protected handleError(error: ServiceError): void {
