@@ -63,6 +63,6 @@ export class AppShellComponent implements AfterViewInit {
 
   public logout(): void {
     this.storage.clear();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/welcome']);
   }
 }

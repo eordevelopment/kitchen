@@ -1,11 +1,29 @@
 <div class="row">
   <div class="col-sm-4 col-sm-offset-4">
-    <div class="row">
-      <div class="col-xs-6 text-center">
-        <a class="btn btn-lg btn-primary" routerLink="/login"><i class="fa fa-sign-in"></i> Login</a>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <h4>Login</h4>
+            <span class="text-info">Please login using your Google account.</span>
+          </div>
+        </div>
+        <br>
+        <br>
+        <div class="row" *ngIf="failure">
+          <div class="col-sm-12">
+            <div>
+                <span class="text-danger field-validation-error">{{failure}}</span>
+              </div>
+          </div>
+        </div>
       </div>
-      <div class="col-xs-6 text-center">
-        <a class="btn btn-lg btn-info" routerLink="/register">Register</a>
+      <div class="panel-footer">
+        <div class="row">
+          <div class="col-sm-12 text-center">
+            <button type="button" class="btn btn-success" (click)="login()"><i class="fa fa-2x fa-google"></i> Sign in with Google</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

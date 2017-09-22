@@ -4,8 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { WelcomeRoutingModule } from 'app/modules/welcome/welcome.routing';
 import { HomePublicComponent } from 'app/modules/welcome/components/home-public/home-public.component';
-import { LoginComponent } from 'app/modules/welcome/components/login/login.component';
-import { RegisterComponent } from 'app/modules/welcome/components/register/register.component';
 import { HomeComponent } from 'app/modules/welcome/components/home/home.component';
 
 @NgModule({
@@ -17,8 +15,6 @@ import { HomeComponent } from 'app/modules/welcome/components/home/home.componen
   ],
   declarations: [
     HomePublicComponent,
-    LoginComponent,
-    RegisterComponent,
     HomeComponent
   ]
 })
