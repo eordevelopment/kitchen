@@ -15,6 +15,7 @@ import { RecipesService } from './services/recipes.service'
 import { FormHelperService } from './services/form-helper.service'
 import { PlanService } from './services/plan.service'
 import { ShoppingListService } from 'app/services/shopping-list.service';
+import { SessionService } from 'app/services/session.service';
 
 import { AppShellComponent } from 'app/app-shell/app-shell.component';
 
@@ -27,6 +28,7 @@ import { WelcomeModule } from 'app/modules/welcome/welcome.module';
 @NgModule({
   providers: [
     AuthGuard,
+    SessionService,
     StorageService,
     CategoriesService,
     AccountService,

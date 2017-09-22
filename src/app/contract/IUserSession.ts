@@ -1,3 +1,5 @@
+import { ServiceError } from 'app/classes/error';
+
 export interface IUserSession {
   id: number;
   fullName: string;
@@ -7,4 +9,5 @@ export interface IUserSession {
   imageUrl: string;
   userToken: string;
   googleToken: string;
+  loginError: ServiceError;
 }

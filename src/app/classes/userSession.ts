@@ -1,4 +1,5 @@
 import { IUserSession } from 'app/contract/IUserSession';
+import { ServiceError } from 'app/classes/error';
 
 export class UserSession implements IUserSession {
   public id: number;
@@ -9,6 +10,7 @@ export class UserSession implements IUserSession {
   public imageUrl: string;
   public userToken: string;
   public googleToken: string;
+  public loginError: ServiceError;
 
   constructor(source?: any) {
     if (source) {
@@ -19,6 +21,7 @@ export class UserSession implements IUserSession {
       this.email = source.getEmail();
       this.imageUrl = source.getImageUrl();
       this.userToken = null;
+      this.loginError = null;
     }
   }
 }

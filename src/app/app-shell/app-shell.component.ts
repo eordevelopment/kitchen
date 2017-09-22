@@ -4,6 +4,7 @@ import { Location, PopStateEvent } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 
 import { StorageService } from 'app/services/storage.service';
+import { SessionService } from 'app/services/session.service';
 
 @Component({
   selector: 'app-shell',
@@ -17,12 +18,15 @@ export class AppShellComponent implements AfterViewInit {
 
   private lastPoppedUrl: string;
 
-  constructor(private storage: StorageService, private router: Router, private location: Location) { }
+  constructor(
+    private sessionManager: SessionService,
+    private router: Router,
+    private location: Location) { }
 
   ngAfterViewInit() {
-    this.storage.loggedInUserToken.subscribe(value => {
+    this.sessionManager.loggedInUser.subscribe(session => {
       setTimeout(() => {
-        if (value && value.length > 0) {
+        if (session && session.userToken != null && session.userToken.length > 0) {
           this.isLoggedIn = true;
         } else {
           this.isLoggedIn = false;
@@ -62,7 +66,7 @@ export class AppShellComponent implements AfterViewInit {
   }
 
   public logout(): void {
-    this.storage.clear();
+    this.sessionManager.logout();
     this.router.navigate(['/welcome']);
   }
 }

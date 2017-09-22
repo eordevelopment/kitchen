@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { IUserSession } from 'app/contract/IUserSession';
 
 @Injectable()
 export class StorageService {
   private tokenKey = 'kh_token';
-  public loggedInUserToken: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  private sessionKey = 'kh_suser';
 
   constructor() {
-    this.loggedInUserToken = new BehaviorSubject<string>(this.getToken());
   }
 
   public hasAccessToken(): boolean {
@@ -26,7 +25,6 @@ export class StorageService {
       token = null;
       window.localStorage.removeItem(this.tokenKey);
     }
-    this.loggedInUserToken.next(token);
   }
 
   public getToken(): string {
@@ -40,8 +38,28 @@ export class StorageService {
     return token;
   }
 
+  public setUser(user?: IUserSession): void {
+    if (user && user != null) {
+      window.localStorage.setItem(this.sessionKey, JSON.stringify(user));
+    } else {
+      window.localStorage.removeItem(this.sessionKey);
+    }
+
+  }
+
+  public getUser(): IUserSession {
+    let userJson = window.localStorage.getItem(this.sessionKey);
+
+    if (!userJson || userJson == null) {
+      userJson = null;
+      window.localStorage.removeItem(this.sessionKey);
+      return null;
+    }
+
+    return JSON.parse(userJson);
+  }
+
   public clear(): void {
     window.localStorage.clear();
-    this.loggedInUserToken.next(null);
   }
 }

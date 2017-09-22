@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="google-signin-client_id" content="191009087186-0267b8sbfksdou0aeflijcjvo2lrke5b.apps.googleusercontent.com">
+  <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css" rel="stylesheet" integrity="sha384-awusxf8AUojygHf2+joICySzB780jVvQaVCAt1clU3QsyAitLGul28Qxb2r1e5g+" crossorigin="anonymous">
+  <script type="text/javascript">
+    function handleClientLoad(){gapi.load("client:auth2",initClient)}function initClient(){gapi.client.init({discoveryDocs:DISCOVERY_DOCS,clientId:CLIENT_ID,scope:SCOPES}).then(function(){gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus),updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get())})}function updateSigninStatus(t){var n=new CustomEvent("signInState",{detail:t});window.dispatchEvent(n)}var CLIENT_ID="191009087186-0267b8sbfksdou0aeflijcjvo2lrke5b",DISCOVERY_DOCS=[],SCOPES="profile";
+  </script>
+
+  <title>Kitchen Cupboard</title>
+  <base href="/">
+
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+  <app-shell></app-shell>
+  <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()" onreadystatechange="if (this.readyState === 'complete') this.onload()">
+  </script>
+<script type="text/javascript" src="inline.bundle.js"></script><script type="text/javascript" src="polyfills.bundle.js"></script><script type="text/javascript" src="scripts.bundle.js"></script><script type="text/javascript" src="styles.bundle.js"></script><script type="text/javascript" src="vendor.bundle.js"></script><script type="text/javascript" src="main.bundle.js"></script></body>
+</html>
