@@ -5,6 +5,7 @@ import { UserSession } from 'app/classes/userSession';
 import { AccountService } from 'app/services/account.service';
 import { ServiceError } from 'app/classes/error';
 import { SessionService } from 'app/services/session.service';
+import { IUserSession } from 'app/contract/IUserSession';
 
 @Component({
   selector: 'app-home-public',
@@ -12,8 +13,7 @@ import { SessionService } from 'app/services/session.service';
   styleUrls: ['./home-public.component.less']
 })
 export class HomePublicComponent implements OnInit {
-  public failure: string;
-  public logginIn: boolean;
+  public session: IUserSession;
 
   constructor(
     private router: Router,
@@ -21,10 +21,23 @@ export class HomePublicComponent implements OnInit {
 
   ngOnInit() {
     this.sessionManager.logout();
-    this.logginIn = false;
+    this.sessionManager.loggedInUser.subscribe(value => {
+      this.session = value;
+      if (this.session && this.session != null && this.session.userToken != null) {
+        this.router.navigate(['/home']);
+      }
+    });
   }
 
   public login(): void {
     this.sessionManager.login();
   }
+
+  public hasFailure(): boolean {
+    if (this.session && this.session != null && this.session.loginError != null) {
+      return true;
+    }
+    return false;
+  }
+
 }

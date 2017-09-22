@@ -2493,7 +2493,7 @@ RecipeRoutingModule = __decorate([
 /***/ "../../../../../src/app/modules/welcome/components/home-public/home-public.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\r\n  <div class=\"col-sm-4 col-sm-offset-4\">\r\n    <div class=\"panel panel-default\">\r\n      <div class=\"panel-body\">\r\n        <div class=\"row\">\r\n          <div class=\"col-sm-12\">\r\n            <h4>Login</h4>\r\n            <span class=\"text-info\">Please login using your Google account.</span>\r\n          </div>\r\n        </div>\r\n        <br>\r\n        <br>\r\n        <div class=\"row\" *ngIf=\"failure\">\r\n          <div class=\"col-sm-12\">\r\n            <div>\r\n                <span class=\"text-danger field-validation-error\">{{failure}}</span>\r\n              </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"panel-footer\">\r\n        <div class=\"row\">\r\n          <div class=\"col-sm-12 text-center\">\r\n            <button type=\"button\" class=\"btn btn-success\" (click)=\"login()\"><i class=\"fa fa-2x fa-google\"></i> Sign in with Google</button>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-sm-4 col-sm-offset-4\">\r\n    <div class=\"panel panel-default\">\r\n      <div class=\"panel-body\">\r\n        <div class=\"row\">\r\n          <div class=\"col-sm-12\">\r\n            <h4>Login</h4>\r\n            <span class=\"text-info\">Please login using your Google account.</span>\r\n          </div>\r\n        </div>\r\n        <br>\r\n        <br>\r\n        <div class=\"row\" *ngIf=\"hasFailure()\">\r\n          <div class=\"col-sm-12\">\r\n            <div>\r\n                <span class=\"text-danger field-validation-error\">{{session.loginError}}</span>\r\n              </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"panel-footer\">\r\n        <div class=\"row\">\r\n          <div class=\"col-sm-12 text-center\">\r\n            <button type=\"button\" class=\"btn btn-success\" (click)=\"login()\"><i class=\"fa fa-2x fa-google\"></i> Sign in with Google</button>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -2541,11 +2541,23 @@ var HomePublicComponent = (function () {
         this.sessionManager = sessionManager;
     }
     HomePublicComponent.prototype.ngOnInit = function () {
+        var _this = this;
         this.sessionManager.logout();
-        this.logginIn = false;
+        this.sessionManager.loggedInUser.subscribe(function (value) {
+            _this.session = value;
+            if (_this.session && _this.session != null && _this.session.userToken != null) {
+                _this.router.navigate(['/home']);
+            }
+        });
     };
     HomePublicComponent.prototype.login = function () {
         this.sessionManager.login();
+    };
+    HomePublicComponent.prototype.hasFailure = function () {
+        if (this.session && this.session != null && this.session.loginError != null) {
+            return true;
+        }
+        return false;
     };
     return HomePublicComponent;
 }());

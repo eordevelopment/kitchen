@@ -10,10 +10,10 @@
         </div>
         <br>
         <br>
-        <div class="row" *ngIf="failure">
+        <div class="row" *ngIf="hasFailure()">
           <div class="col-sm-12">
             <div>
-                <span class="text-danger field-validation-error">{{failure}}</span>
+                <span class="text-danger field-validation-error">{{session.loginError}}</span>
               </div>
           </div>
         </div>
