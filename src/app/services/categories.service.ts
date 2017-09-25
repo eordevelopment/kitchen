@@ -1,72 +1,43 @@
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/map';
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { Headers, RequestOptions } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { StorageService } from './storage.service';
-
-import { ServiceError } from 'app/classes/error';
-import { environment } from '../../environments/environment';
+import { BaseRestService } from 'app/services/BaseRestService';
 import { ICategory } from 'app/contract/ICategory';
+import { SessionService } from 'app/services/session.service';
 
 @Injectable()
-export class CategoriesService {
+export class CategoriesService extends BaseRestService {
 
-  constructor(private http: Http, private storageService: StorageService) { }
+  constructor(httpClient: HttpClient, sessionService: SessionService) {
+    super(httpClient, sessionService, 'category');
+  }
 
   public getCategory(id: string): Observable<ICategory> {
     if (!id || id.length <= 1) {
       return Observable.of<ICategory>(null)
     } else {
-      const headers = new Headers({ 'Authorization': `Basic ${this.storageService.getToken()}` });
-      const options = new RequestOptions({ headers: headers });
-
-      return this.http.get(environment.serviceUrl + 'category/' + id, options)
-        .map(response => response.json() as ICategory)
-        .catch(this.handleError);
+      return this.httpClient.get<ICategory>(this.endpoint + id, this.getAuthHeader()).catch(this.handleError);
     }
   }
 
   public getCategories(): Observable<ICategory[]> {
-    const headers = new Headers({ 'Authorization': `Basic ${this.storageService.getToken()}` });
-    const options = new RequestOptions({ headers: headers });
-
-    return this.http.get(environment.serviceUrl + 'category', options)
-      .map(response => response.json() as ICategory[])
-      .catch(this.handleError);
+    return this.httpClient.get<ICategory[]>(this.endpoint, this.getAuthHeader()).catch(this.handleError);
   }
 
   public saveCategory(value: ICategory): Observable<void> {
-    const headers = new Headers({ 'Content-Type': 'application/json' });
-    headers.append('Authorization', `Basic ${this.storageService.getToken()}`);
-    const options = new RequestOptions({ headers: headers });
+    const options = this.getAuthHeader();
 
     if (value.id && value.id.length > 0) {
-      return this.http.put(environment.serviceUrl + 'category/' + value.id, value, options)
-      .catch(this.handleError);
+      return this.httpClient.put(this.endpoint + value.id, value, options).catch(this.handleError);
     } else {
-      return this.http.post(environment.serviceUrl + 'category', value, options)
-      .catch(this.handleError);
+      return this.httpClient.post(this.endpoint, value, options).catch(this.handleError);
     }
   }
 
   public deleteCategory(id: string): Observable<void> {
-    const headers = new Headers({ 'Content-Type': 'application/json' });
-    headers.append('Authorization', `Basic ${this.storageService.getToken()}`);
-    const options = new RequestOptions({ headers: headers });
-
-    return this.http.delete(environment.serviceUrl + 'category/' + id, options)
-      .catch(this.handleError);
-  }
-
-  private handleError(res: Response | any) {
-    const error = new ServiceError();
-    error.status = res.status;
-    error.message = res.json().error;
-    return Observable.throw(error);
+    return this.httpClient.delete(this.endpoint + id, this.getAuthHeader()).catch(this.handleError);
   }
 }

@@ -1,20 +1,19 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { HttpModule, JsonpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app.routing';
 import { AuthGuard } from './services/auth-guard';
 
 // Services
-import { StorageService } from './services/storage.service';
-import { AccountService } from './services/account.service';
 import { CategoriesService } from './services/categories.service'
 import { ItemsService } from './services/items.service'
 import { RecipesService } from './services/recipes.service'
 import { FormHelperService } from './services/form-helper.service'
 import { PlanService } from './services/plan.service'
 import { ShoppingListService } from 'app/services/shopping-list.service';
+import { SessionService } from 'app/services/session.service';
 
 import { AppShellComponent } from 'app/app-shell/app-shell.component';
 
@@ -27,9 +26,8 @@ import { WelcomeModule } from 'app/modules/welcome/welcome.module';
 @NgModule({
   providers: [
     AuthGuard,
-    StorageService,
+    SessionService,
     CategoriesService,
-    AccountService,
     ItemsService,
     RecipesService,
     PlanService,
@@ -41,8 +39,7 @@ import { WelcomeModule } from 'app/modules/welcome/welcome.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpModule,
-    JsonpModule,
+    HttpClientModule,
 
     RecipeModule,
     InventoryModule,

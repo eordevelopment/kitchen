@@ -55,7 +55,7 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
   private searchTerms = new Subject<string>();
   public itemsSearchResult: Observable<Item[]>;
 
-  public plansSelect: Observable<SelectItem[]>;
+  public plansSelect: SelectItem[];
   public selectedPlanId: string;
   private plans: Plan[];
 
@@ -102,6 +102,8 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
       .catch(error => {
         return Observable.of<Item[]>([]);
       });
+
+      this.getPlans();
   }
 
   public goBack(): void {
@@ -188,17 +190,16 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
   }
 
   public getPlans(): void {
-    this.plansSelect = this.planService.getUpcomingPlans().map(values => {
-      const selectItems = new Array();
+     this.planService.getUpcomingPlans().subscribe(values => {
+      this.plansSelect = new Array();
       this.plans = new Array();
       if (values.length > 0) {
         for (let i = 0; i < values.length; i++) {
-          selectItems.push(new SelectItem(String(i), moment(values[i].dateTime).format('dddd, MMM Do')));
+          this.plansSelect.push(new SelectItem(String(i), moment(values[i].dateTime).format('dddd, MMM Do')));
           this.plans.push(new Plan(values[i]));
         }
         this.selectedPlanId = values[0].id
       }
-      return selectItems;
     });
   }
 

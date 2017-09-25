@@ -5,10 +5,11 @@ import { Title } from '@angular/platform-browser';
 
 import { BaseComponent } from 'app/classes/baseComponent';
 import { RecipesService } from 'app/services/recipes.service';
-import { StorageService } from 'app/services/storage.service';
+import { SessionService } from 'app/services/session.service';
 
 import { SelectItem } from 'app/classes/selectItem';
 import { IRecipe } from 'app/contract/IRecipe';
+import { IUserSession } from 'app/contract/IUserSession';
 
 @Component({
   selector: 'app-recipe-view',
@@ -17,12 +18,12 @@ import { IRecipe } from 'app/contract/IRecipe';
 })
 export class RecipeViewComponent extends BaseComponent implements OnInit {
   public recipe: IRecipe;
-  public token: string;
+  public token: IUserSession;
 
   constructor(
     private recipesService: RecipesService,
     private route: ActivatedRoute,
-    private storage: StorageService,
+    private sessionManager: SessionService,
     title: Title,
     router: Router) {
     super(router, title);
@@ -35,7 +36,11 @@ export class RecipeViewComponent extends BaseComponent implements OnInit {
         this.recipe = source;
         this.title.setTitle(this.recipe.name);
       });
-    this.storage.loggedInUserToken.subscribe(value => this.token = value);
+    this.sessionManager.loggedInUser.subscribe(value => {
+      if (value && value != null) {
+        this.token = value;
+      }
+    });
   }
 
   public saveRecipe(): void {

@@ -5,9 +5,11 @@
   <meta name="robots" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <!-- <meta name="google-signin-client_id" content="191009087186-07kukkf1idsuon4ijd5lofoeejttltqp.apps.googleusercontent.com"> -->
+  <meta name="google-signin-client_id" content="191009087186-0267b8sbfksdou0aeflijcjvo2lrke5b.apps.googleusercontent.com">
   <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css" rel="stylesheet" integrity="sha384-awusxf8AUojygHf2+joICySzB780jVvQaVCAt1clU3QsyAitLGul28Qxb2r1e5g+" crossorigin="anonymous">
-  <!-- <script src="https://apis.google.com/js/platform.js" async defer></script> -->
+  <script type="text/javascript">
+    function handleClientLoad(){gapi.load("client:auth2",initClient)}function initClient(){gapi.client.init({discoveryDocs:DISCOVERY_DOCS,clientId:CLIENT_ID,scope:SCOPES}).then(function(){gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus),updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get())})}function updateSigninStatus(t){var n=new CustomEvent("signInState",{detail:t});window.dispatchEvent(n)}var CLIENT_ID="191009087186-0267b8sbfksdou0aeflijcjvo2lrke5b",DISCOVERY_DOCS=[],SCOPES="profile";
+  </script>
 
   <title>Kitchen Cupboard</title>
   <base href="/">
@@ -16,6 +18,7 @@
 <link href="styles.465164ce63b2bca1cbdb.bundle.css" rel="stylesheet"/></head>
 <body>
   <app-shell></app-shell>
-  <!-- <div class="g-signin2" data-onsuccess="onGoogleUserSignIn"></div> -->
-<script type="text/javascript" src="inline.27b6625b4ef4bfe01ad2.bundle.js"></script><script type="text/javascript" src="polyfills.5b0d75782f24b3b91d2b.bundle.js"></script><script type="text/javascript" src="scripts.d63501dd9a9682ce4956.bundle.js"></script><script type="text/javascript" src="vendor.beb6f5aebf9ddaf12f8a.bundle.js"></script><script type="text/javascript" src="main.f9510e764b366206b3a4.bundle.js"></script></body>
+  <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()" onreadystatechange="if (this.readyState === 'complete') this.onload()">
+  </script>
+<script type="text/javascript" src="inline.bf117e562b636dafafdc.bundle.js"></script><script type="text/javascript" src="polyfills.5b0d75782f24b3b91d2b.bundle.js"></script><script type="text/javascript" src="scripts.c2cac8ef80226bdc6e27.bundle.js"></script><script type="text/javascript" src="vendor.74aa88a37815b7c921d1.bundle.js"></script><script type="text/javascript" src="main.f19129e7ca6c8c42b2ee.bundle.js"></script></body>
 </html>

@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { StorageService } from 'app/services/storage.service';
+import { Router } from '@angular/router';
+
+import { UserSession } from 'app/classes/userSession';
+import { ServiceError } from 'app/classes/error';
+import { SessionService } from 'app/services/session.service';
+import { IUserSession } from 'app/contract/IUserSession';
 
 @Component({
   selector: 'app-home-public',
@@ -7,11 +12,39 @@ import { StorageService } from 'app/services/storage.service';
   styleUrls: ['./home-public.component.less']
 })
 export class HomePublicComponent implements OnInit {
+  public session: IUserSession;
+  public failure: string;
+  public isLoggingIn: boolean;
 
-  constructor(private storage: StorageService) { }
+  constructor(
+    private router: Router,
+    private sessionManager: SessionService) { }
 
   ngOnInit() {
-    this.storage.clear();
+    this.isLoggingIn = false;
+    this.sessionManager.clear();
+
+    this.sessionManager.loggedInUser.subscribe(value => {
+      this.session = value;
+      if (this.session && this.session != null) {
+        if (this.session.serviceError && this.session.serviceError != null) {
+          this.failure = this.session.serviceError.message;
+        }
+        if (this.session.userAuth && this.session.userAuth != null) {
+          this.router.navigate(['/home']);
+          this.isLoggingIn = false;
+        } else {
+          this.isLoggingIn = true;
+        }
+      } else {
+        this.failure = undefined;
+        this.isLoggingIn = false;
+      }
+    });
+  }
+
+  public login(): void {
+    this.sessionManager.login();
   }
 
 }

@@ -279,7 +279,7 @@
             <div class="form-group">
               <div class="input-group">
                 <select [(ngModel)]="selectedPlanId" class="form-control">
-                      <option *ngFor="let plan of plansSelect | async" [value]="plan.key">{{plan.value}}</option>
+                      <option *ngFor="let plan of plansSelect" [value]="plan.key">{{plan.value}}</option>
                   </select>
               </div>
             </div>
