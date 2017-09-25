@@ -10,4 +10,5 @@ export interface IUserSession {
   imageUrl: string;
   userAuth: IAuthResponse;
   googleToken: string;
+  serviceError: ServiceError;
 }

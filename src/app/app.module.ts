@@ -7,7 +7,6 @@ import { AppRoutingModule } from './app.routing';
 import { AuthGuard } from './services/auth-guard';
 
 // Services
-import { AccountService } from './services/account.service';
 import { CategoriesService } from './services/categories.service'
 import { ItemsService } from './services/items.service'
 import { RecipesService } from './services/recipes.service'
@@ -29,7 +28,6 @@ import { WelcomeModule } from 'app/modules/welcome/welcome.module';
     AuthGuard,
     SessionService,
     CategoriesService,
-    AccountService,
     ItemsService,
     RecipesService,
     PlanService,

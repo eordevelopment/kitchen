@@ -1,18 +1,23 @@
 ///<reference path="../../../node_modules/@types/gapi/index.d.ts"/>
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/catch';
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { IUserSession } from 'app/contract/IUserSession';
 import { UserSession } from 'app/classes/userSession';
 import { IAuthResponse } from 'app/contract/IAuthResponse';
+import { LoginDto } from 'app/classes/LoginDto';
+import { environment } from '../../environments/environment';
+import { BaseRestService } from 'app/services/BaseRestService';
 
 @Injectable()
-export class SessionService {
+export class SessionService extends BaseRestService {
   private sessionKey = 'kh_suser';
   public loggedInUser: BehaviorSubject<IUserSession>;
 
-  constructor() {
-
+  constructor(httpClient: HttpClient) {
+    super(httpClient, null, 'account');
     this.loggedInUser = new BehaviorSubject<IUserSession>(this.getUser());
     window.addEventListener('signInState', (evt) => {
       this.handleLogin(evt);
@@ -44,15 +49,6 @@ export class SessionService {
     return null;
   }
 
-  public setUser(user?: IUserSession): void {
-    if (user && user != null) {
-      window.localStorage.setItem(this.sessionKey, JSON.stringify(user));
-    } else {
-      window.localStorage.removeItem(this.sessionKey);
-    }
-
-  }
-
   private handleLogin(evt: any): void {
     const auth2 = (gapi as any).auth2.getAuthInstance();
     const isSignedIn = auth2.isSignedIn.get() as boolean;
@@ -70,7 +66,18 @@ export class SessionService {
       }
 
       user.googleToken = currentUser.getAuthResponse().id_token;
-      this.loggedInUser.next(user);
+      this.setUser(user);
+
+      if (!user.userAuth || user.userAuth == null) {
+        this.getAuthToken(user).subscribe(token => {
+          user.userAuth = token;
+          this.setUser(user);
+        }, (error) => {
+          user.serviceError = error;
+          this.setUser(user);
+        });
+      }
+
     } else {
       this.clear();
       this.loggedInUser.next(null);
@@ -94,4 +101,19 @@ export class SessionService {
     return JSON.parse(userJson);
   }
 
+  private setUser(user?: IUserSession): void {
+    if (user && user != null) {
+      window.localStorage.setItem(this.sessionKey, JSON.stringify(user));
+      this.loggedInUser.next(user);
+    } else {
+      window.localStorage.removeItem(this.sessionKey);
+      this.loggedInUser.next(null);
+    }
+
+  }
+
+  private getAuthToken(account: IUserSession): Observable<IAuthResponse> {
+    const dto = new LoginDto(account.googleToken);
+    return this.httpClient.post<IAuthResponse>(this.endpoint + `login`, dto).catch(this.handleError);
+  }
 }

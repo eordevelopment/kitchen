@@ -34,12 +34,16 @@
 </ng-template>
 
 <ng-template #loadingSpinner>
-  <div class="panel panel-default" *ngIf="!categories">
-    <div class="panel-body">
-      <div class="row">
-        <div class="col-sm-12 text-center">
-          <i *ngIf="!failure" class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
-          <span *ngIf="failure" class="text-danger">{{failure}}</span>
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <div class="panel panel-default" *ngIf="!categories">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-sm-12 text-center">
+              <i *ngIf="!failure" class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+              <span *ngIf="failure" class="text-danger">{{failure}}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

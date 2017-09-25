@@ -11,6 +11,7 @@ export class UserSession implements IUserSession {
   public imageUrl: string;
   public userAuth: IAuthResponse;
   public googleToken: string;
+  public serviceError: ServiceError;
 
   constructor(source?: any) {
     if (source) {
@@ -21,6 +22,7 @@ export class UserSession implements IUserSession {
       this.email = source.getEmail();
       this.imageUrl = source.getImageUrl();
       this.userAuth = null;
+      this.serviceError = null;
     }
   }
 }

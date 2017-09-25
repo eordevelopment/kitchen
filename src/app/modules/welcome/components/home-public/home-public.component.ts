@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { UserSession } from 'app/classes/userSession';
-import { AccountService } from 'app/services/account.service';
 import { ServiceError } from 'app/classes/error';
 import { SessionService } from 'app/services/session.service';
 import { IUserSession } from 'app/contract/IUserSession';
@@ -19,7 +18,6 @@ export class HomePublicComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private accountService: AccountService,
     private sessionManager: SessionService) { }
 
   ngOnInit() {
@@ -27,24 +25,21 @@ export class HomePublicComponent implements OnInit {
     this.sessionManager.clear();
 
     this.sessionManager.loggedInUser.subscribe(value => {
-      setTimeout(() => {
-        this.session = value;
-        if (this.session && this.session != null) {
-          if (this.session.userAuth) {
-            this.router.navigate(['/home']);
-          } else {
-            this.isLoggingIn = true;
-            this.accountService.login(this.session).subscribe(response => {
-              this.session.userAuth = response;
-              this.sessionManager.setUser(this.session);
-              this.isLoggingIn = false;
-            }, (error: ServiceError) => {
-              this.failure = error.message;
-              this.isLoggingIn = false;
-            });
-          }
+      this.session = value;
+      if (this.session && this.session != null) {
+        if (this.session.serviceError && this.session.serviceError != null) {
+          this.failure = this.session.serviceError.message;
         }
-      });
+        if (this.session.userAuth && this.session.userAuth != null) {
+          this.router.navigate(['/home']);
+          this.isLoggingIn = false;
+        } else {
+          this.isLoggingIn = true;
+        }
+      } else {
+        this.failure = undefined;
+        this.isLoggingIn = false;
+      }
     });
   }
 
