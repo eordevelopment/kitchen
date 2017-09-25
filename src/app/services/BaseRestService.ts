@@ -34,11 +34,9 @@ export abstract class BaseRestService {
   }
 
   protected handleError(res: Response | any) {
-    console.log(res);
     const error = new ServiceError();
     error.status = res.status;
     error.message = res.error;
-    console.log(error);
     return Observable.throw(error);
   }
 }
