@@ -1,3 +1,4 @@
+import * as moment from 'moment';
 import 'rxjs/add/operator/filter';
 import { Component, AfterViewInit } from '@angular/core';
 import { Location, PopStateEvent } from '@angular/common';
@@ -14,13 +15,16 @@ export class AppShellComponent implements AfterViewInit {
   public isLoggedIn: boolean;
   public isCollapsed: boolean;
   public shoppingQuantity: number;
+  public copywrightDate: moment.Moment;
 
   private lastPoppedUrl: string;
 
   constructor(
     private sessionManager: SessionService,
     private router: Router,
-    private location: Location) { }
+    private location: Location) {
+      this.copywrightDate = moment();
+    }
 
   ngAfterViewInit() {
     this.sessionManager.loggedInUser.subscribe(session => {
@@ -52,8 +56,6 @@ export class AppShellComponent implements AfterViewInit {
     });
 
     this.isCollapsed = true;
-
-    this.shoppingQuantity = 30;
   }
 
   public toggleCollapse(): void {
