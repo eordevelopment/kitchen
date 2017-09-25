@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { IUserSession } from 'app/contract/IUserSession';
+import { IAuthResponse } from 'app/contract/IAuthResponse';
 
 @Injectable()
 export class StorageService {
@@ -11,31 +12,32 @@ export class StorageService {
   }
 
   public hasAccessToken(): boolean {
-    const token = this.getToken() as string;
+    const token = this.getToken() as IAuthResponse;
     if (token && token !== null) {
       return true;
     }
     return false;
   }
 
-  public setToken(token: string): void {
-    if (token && token !== 'null') {
-      window.localStorage.setItem(this.tokenKey, token);
+  public setToken(token: IAuthResponse): void {
+    if (token && token !== null) {
+      window.localStorage.setItem(this.tokenKey, JSON.stringify(token));
     } else {
       token = null;
       window.localStorage.removeItem(this.tokenKey);
     }
   }
 
-  public getToken(): string {
-    let token = window.localStorage.getItem(this.tokenKey);
+  public getToken(): IAuthResponse {
+    let tokenJson = window.localStorage.getItem(this.tokenKey);
 
-    if (token === 'null') {
-      token = null;
+    if (!tokenJson || tokenJson == null) {
+      tokenJson = null;
       window.localStorage.removeItem(this.tokenKey);
+      return null;
     }
 
-    return token;
+    return JSON.parse(tokenJson);
   }
 
   public setUser(user?: IUserSession): void {

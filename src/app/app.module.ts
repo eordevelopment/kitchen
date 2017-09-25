@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { HttpModule, JsonpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app.routing';
 import { AuthGuard } from './services/auth-guard';
@@ -43,8 +43,7 @@ import { WelcomeModule } from 'app/modules/welcome/welcome.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpModule,
-    JsonpModule,
+    HttpClientModule,
 
     RecipeModule,
     InventoryModule,

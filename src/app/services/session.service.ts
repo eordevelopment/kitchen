@@ -43,7 +43,7 @@ export class SessionService {
       this.accountService
         .login(user)
         .subscribe(response => {
-          user.userToken = response;
+          user.userToken = response.token;
           user.loginError = null;
 
           this.storage.setToken(response);

@@ -1,35 +1,20 @@
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/map';
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { Headers, RequestOptions } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { StorageService } from './storage.service';
-
-import { ServiceError } from 'app/classes/error';
-import { environment } from '../../environments/environment';
+import { BaseRestService } from 'app/services/BaseRestService';
 import { Item } from 'app/modules/inventory/model/item';
 
 @Injectable()
-export class ItemsService {
+export class ItemsService extends BaseRestService {
 
-  constructor(private http: Http, private storageService: StorageService) { }
-
-  public getItems(searchText: string): Observable<Item[]> {
-    const headers = new Headers({ 'Authorization': `Basic ${this.storageService.getToken()}` });
-    const options = new RequestOptions({ headers: headers });
-
-    return this.http.get(environment.serviceUrl + 'items/search/' + searchText, options)
-      .map(response => response.json() as Item[])
-      .catch(this.handleError);
+  constructor(httpClient: HttpClient, storageService: StorageService) {
+    super(httpClient, storageService, 'items');
   }
 
-  private handleError(res: Response | any) {
-    const error = new ServiceError();
-    error.status = res.status;
-    error.message = res.json().error;
-    return Observable.throw(error);
+  public getItems(searchText: string): Observable<Item[]> {
+    return this.httpClient.get<Item[]>(this.endpoint + 'search/' + searchText, this.getAuthHeader()).catch(this.handleError);
   }
 }
