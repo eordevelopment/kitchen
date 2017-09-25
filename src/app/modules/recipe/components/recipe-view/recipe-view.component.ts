@@ -9,6 +9,7 @@ import { SessionService } from 'app/services/session.service';
 
 import { SelectItem } from 'app/classes/selectItem';
 import { IRecipe } from 'app/contract/IRecipe';
+import { IUserSession } from 'app/contract/IUserSession';
 
 @Component({
   selector: 'app-recipe-view',
@@ -17,7 +18,7 @@ import { IRecipe } from 'app/contract/IRecipe';
 })
 export class RecipeViewComponent extends BaseComponent implements OnInit {
   public recipe: IRecipe;
-  public token: string;
+  public token: IUserSession;
 
   constructor(
     private recipesService: RecipesService,
@@ -37,7 +38,7 @@ export class RecipeViewComponent extends BaseComponent implements OnInit {
       });
     this.sessionManager.loggedInUser.subscribe(value => {
       if (value && value != null) {
-        this.token = value.userToken
+        this.token = value;
       }
     });
   }

@@ -4,16 +4,16 @@ import 'rxjs/add/operator/catch';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { StorageService } from './storage.service';
 import { IRecipe } from 'app/contract/IRecipe';
 import { IRecipeType } from 'app/contract/IRecipeType';
 import { BaseRestService } from 'app/services/BaseRestService';
+import { SessionService } from 'app/services/session.service';
 
 @Injectable()
 export class RecipesService extends BaseRestService {
 
-  constructor(httpClient: HttpClient, storageService: StorageService) {
-    super(httpClient, storageService, 'recipe');
+  constructor(httpClient: HttpClient, sessionService: SessionService) {
+    super(httpClient, sessionService, 'recipe');
   }
 
   public getRecipeView(key: string): Observable<IRecipe> {

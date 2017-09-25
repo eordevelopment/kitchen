@@ -3,7 +3,6 @@ import { Component, AfterViewInit } from '@angular/core';
 import { Location, PopStateEvent } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 
-import { StorageService } from 'app/services/storage.service';
 import { SessionService } from 'app/services/session.service';
 
 @Component({
@@ -26,7 +25,7 @@ export class AppShellComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.sessionManager.loggedInUser.subscribe(session => {
       setTimeout(() => {
-        if (session && session.userToken != null && session.userToken.length > 0) {
+        if (session && session.userAuth != null) {
           this.isLoggedIn = true;
         } else {
           this.isLoggedIn = false;

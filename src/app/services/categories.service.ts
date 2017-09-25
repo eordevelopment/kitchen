@@ -4,15 +4,15 @@ import 'rxjs/add/operator/catch';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { StorageService } from './storage.service';
 import { BaseRestService } from 'app/services/BaseRestService';
 import { ICategory } from 'app/contract/ICategory';
+import { SessionService } from 'app/services/session.service';
 
 @Injectable()
 export class CategoriesService extends BaseRestService {
 
-  constructor(httpClient: HttpClient, storageService: StorageService) {
-    super(httpClient, storageService, 'category');
+  constructor(httpClient: HttpClient, sessionService: SessionService) {
+    super(httpClient, sessionService, 'category');
   }
 
   public getCategory(id: string): Observable<ICategory> {

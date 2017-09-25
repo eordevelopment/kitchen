@@ -1,4 +1,5 @@
 import { ServiceError } from 'app/classes/error';
+import { IAuthResponse } from 'app/contract/IAuthResponse';
 
 export interface IUserSession {
   id: number;
@@ -7,7 +8,6 @@ export interface IUserSession {
   familyName: string;
   email: string;
   imageUrl: string;
-  userToken: string;
+  userAuth: IAuthResponse;
   googleToken: string;
-  loginError: ServiceError;
 }

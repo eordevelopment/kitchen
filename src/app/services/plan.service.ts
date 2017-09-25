@@ -3,15 +3,15 @@ import 'rxjs/add/operator/catch';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { StorageService } from './storage.service';
 import { IPlan } from 'app/contract/IPlan';
 import { BaseRestService } from 'app/services/BaseRestService';
+import { SessionService } from 'app/services/session.service';
 
 @Injectable()
 export class PlanService extends BaseRestService {
 
-  constructor(httpClient: HttpClient, storageService: StorageService) {
-    super(httpClient, storageService, 'plan');
+  constructor(httpClient: HttpClient, sessionService: SessionService) {
+    super(httpClient, sessionService, 'plan');
   }
 
   public getUpcomingPlans(): Observable<IPlan[]> {

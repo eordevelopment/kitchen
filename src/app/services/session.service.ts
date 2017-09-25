@@ -3,18 +3,17 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { IUserSession } from 'app/contract/IUserSession';
-import { AccountService } from 'app/services/account.service';
-import { StorageService } from 'app/services/storage.service';
 import { UserSession } from 'app/classes/userSession';
-import { ServiceError } from 'app/classes/error';
+import { IAuthResponse } from 'app/contract/IAuthResponse';
 
 @Injectable()
 export class SessionService {
+  private sessionKey = 'kh_suser';
   public loggedInUser: BehaviorSubject<IUserSession>;
 
-  constructor(private accountService: AccountService, private storage: StorageService) {
+  constructor() {
 
-    this.loggedInUser = new BehaviorSubject<IUserSession>(this.storage.getUser());
+    this.loggedInUser = new BehaviorSubject<IUserSession>(this.getUser());
     window.addEventListener('signInState', (evt) => {
       this.handleLogin(evt);
     }, false);
@@ -25,8 +24,33 @@ export class SessionService {
   }
 
   public logout(): void {
-    this.storage.clear();
-    this.loggedInUser.next(null);
+    this.clear();
+    (gapi as any).auth2.getAuthInstance().signOut();
+  }
+
+  public hasAccessToken(): boolean {
+    const token = this.getToken() as IAuthResponse;
+    if (token && token !== null) {
+      return true;
+    }
+    return false;
+  }
+
+  public getToken(): IAuthResponse {
+    const user = this.getUser();
+    if (user && user != null) {
+      return user.userAuth;
+    }
+    return null;
+  }
+
+  public setUser(user?: IUserSession): void {
+    if (user && user != null) {
+      window.localStorage.setItem(this.sessionKey, JSON.stringify(user));
+    } else {
+      window.localStorage.removeItem(this.sessionKey);
+    }
+
   }
 
   private handleLogin(evt: any): void {
@@ -36,31 +60,38 @@ export class SessionService {
 
       const currentUser = auth2.currentUser.get();
       const profile = currentUser.getBasicProfile();
-      const user = new UserSession(profile);
+      const existingUser = this.getUser();
+      let user: UserSession;
+
+      if (existingUser && existingUser != null) {
+        user = existingUser;
+      } else {
+        user = new UserSession(profile);
+      }
+
       user.googleToken = currentUser.getAuthResponse().id_token;
       this.loggedInUser.next(user);
-
-      this.accountService
-        .login(user)
-        .subscribe(response => {
-          user.userToken = response.token;
-          user.loginError = null;
-
-          this.storage.setToken(response);
-          this.loggedInUser.next(user);
-        },
-        (error: any) => this.handleError(error));
-
     } else {
-      this.storage.clear();
+      this.clear();
       this.loggedInUser.next(null);
     }
   }
 
-  private handleError(error: ServiceError): void {
-    const user = this.storage.getUser();
-    user.loginError = error;
-    this.loggedInUser.next(user);
+  public clear(): void {
+    window.localStorage.clear();
+    this.loggedInUser.next(null);
+  }
+
+  private getUser(): IUserSession {
+    let userJson = window.localStorage.getItem(this.sessionKey);
+
+    if (!userJson || userJson == null) {
+      userJson = null;
+      window.localStorage.removeItem(this.sessionKey);
+      return null;
+    }
+
+    return JSON.parse(userJson);
   }
 
 }

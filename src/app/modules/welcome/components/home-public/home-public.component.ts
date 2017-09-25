@@ -14,30 +14,42 @@ import { IUserSession } from 'app/contract/IUserSession';
 })
 export class HomePublicComponent implements OnInit {
   public session: IUserSession;
+  public failure: string;
+  public isLoggingIn: boolean;
 
   constructor(
     private router: Router,
+    private accountService: AccountService,
     private sessionManager: SessionService) { }
 
   ngOnInit() {
-    this.sessionManager.logout();
+    this.isLoggingIn = false;
+    this.sessionManager.clear();
+
     this.sessionManager.loggedInUser.subscribe(value => {
-      this.session = value;
-      if (this.session && this.session != null && this.session.userToken != null) {
-        this.router.navigate(['/home']);
-      }
+      setTimeout(() => {
+        this.session = value;
+        if (this.session && this.session != null) {
+          if (this.session.userAuth) {
+            this.router.navigate(['/home']);
+          } else {
+            this.isLoggingIn = true;
+            this.accountService.login(this.session).subscribe(response => {
+              this.session.userAuth = response;
+              this.sessionManager.setUser(this.session);
+              this.isLoggingIn = false;
+            }, (error: ServiceError) => {
+              this.failure = error.message;
+              this.isLoggingIn = false;
+            });
+          }
+        }
+      });
     });
   }
 
   public login(): void {
     this.sessionManager.login();
-  }
-
-  public hasFailure(): boolean {
-    if (this.session && this.session != null && this.session.loginError != null) {
-      return true;
-    }
-    return false;
   }
 
 }
