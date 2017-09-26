@@ -90,13 +90,16 @@
             </div>
         </div>
         <div class="row">
-          <div class="col-xs-6">
-              <span class="text-muted" *ngIf="item.instructions">
-                <em>({{item.instructions | lowercase}})</em>
+          <div class="col-xs-7">
+              <span [class.text-muted]="item.isDone" [class.text-info]="!item.isDone" *ngIf="item.instructions">
+                <em>{{item.instructions | lowercase}}</em>
               </span>
           </div>
-          <div class="col-xs-6 text-right">
-              <a (click)="addToShopping(item)">add to next shop</a>
+          <div class="col-xs-5 text-right">
+              <button *ngIf="!item.flaggedForNextShop" (click)="addToShopping(item)" class="btn btn-xs" [class.btn-default]="item.isDone" [class.btn-primary]="!item.isDone">add to next shop</button>
+              <span [class.text-muted]="item.isDone" [class.text-info]="!item.isDone" *ngIf="item.flaggedForNextShop">
+                <em>added to next shop</em>
+              </span>
           </div>
         </div>
       </li>
