@@ -41,6 +41,6 @@ export class ShoppingListService extends BaseRestService {
   }
 
   public deleteList(id: string): Observable<void> {
-    return this.httpClient.get(this.endpoint + id, this.getAuthHeader()).catch(this.handleError);
+    return this.httpClient.delete(this.endpoint + id, this.getAuthHeader()).catch(this.handleError);
   }
 }
