@@ -64,7 +64,7 @@ export class RecipeListComponent extends BaseComponent implements OnInit {
   }
 
   public addRecipe(type: IRecipeType): void {
-    this.router.navigate(['/recipedetail', 0, { rti: type.id, rtn: type.name }]);
+    this.router.navigate(['/editrecipe', 0, { rti: type.id, rtn: type.name }]);
   }
 
   private updateTypes(): void {

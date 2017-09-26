@@ -17,4 +17,8 @@ export class ItemsService extends BaseRestService {
   public getItems(searchText: string): Observable<Item[]> {
     return this.httpClient.get<Item[]>(this.endpoint + 'search/' + searchText, this.getAuthHeader()).catch(this.handleError);
   }
+
+  public flagItem(id: string): Observable<void> {
+    return this.httpClient.put(this.endpoint + 'flag/' + id, null, this.getAuthHeader()).catch(this.handleError);
+  }
 }

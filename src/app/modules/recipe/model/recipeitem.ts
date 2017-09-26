@@ -9,6 +9,7 @@ export class RecipeItem implements IFormEntity, IRecipeItem {
   public amount: number;
   public item: IItem;
   public instructions: string;
+  public isDone: boolean;
 
   public formErrors = {
     'amount': '',
@@ -25,6 +26,7 @@ export class RecipeItem implements IFormEntity, IRecipeItem {
   };
 
   constructor(source?: IRecipeItem) {
+    this.isDone = false;
     if (source) {
       this.amount = source.amount;
       this.item = source.item

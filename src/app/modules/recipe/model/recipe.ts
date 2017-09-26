@@ -17,8 +17,8 @@ export class Recipe implements IFormEntity, IRecipe {
   public name: string;
   public recipeType: IRecipeType;
   public key: string;
-  public recipeSteps: IRecipeStep[];
-  public recipeItems: IRecipeItem[];
+  public recipeSteps: RecipeStep[];
+  public recipeItems: RecipeItem[];
   public assignedPlans: IPlan[];
 
   public formErrors = {
@@ -32,24 +32,33 @@ export class Recipe implements IFormEntity, IRecipe {
   };
 
   constructor(source?: IRecipe) {
+    this.recipeSteps = new Array();
+    this.recipeItems = new Array();
+
     if (source) {
       this.id = source.id;
       this.name = source.name;
       this.recipeType = source.recipeType;
-      this.recipeSteps = source.recipeSteps;
-      this.recipeItems = source.recipeItems;
       this.assignedPlans = source.assignedPlans;
       this.key = source.key;
+
+      if (source.recipeSteps) {
+        for (const iStep of source.recipeSteps) {
+          const step = new RecipeStep(iStep);
+          this.recipeSteps.push(step);
+        }
+      }
+
+      if (source.recipeItems) {
+        for (const iItem of source.recipeItems) {
+          const item = new RecipeItem(iItem);
+          this.recipeItems.push(item);
+        }
+      }
     }
 
-    if (!this.recipeSteps) {
-      this.recipeSteps = new Array();
-    } else {
+    if (this.recipeSteps.length > 0) {
       this.recipeSteps = _.sortBy(this.recipeSteps, 'stepNumber');
-    }
-
-    if (!this.recipeItems) {
-      this.recipeItems = new Array();
     }
   }
 

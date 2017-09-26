@@ -11,6 +11,7 @@ import { RecipeRoutingModule } from 'app/modules/recipe/recipe.routing';
 // Pipes
 import { RecipeTypeFilterPipe } from 'app/modules/recipe/pipes/recipe-type-filter.pipe';
 import { RecipeWithTypePipe } from 'app/modules/recipe/pipes/has-recipe-type-filter.pipe';
+import { RecipeEditComponent } from 'app/modules/recipe/components/recipe-edit/recipe-edit.component';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { RecipeWithTypePipe } from 'app/modules/recipe/pipes/has-recipe-type-fil
   ],
   declarations: [
     RecipeDetailComponent,
+    RecipeEditComponent,
     RecipeListComponent,
     RecipeViewComponent,
     RecipeTypeFilterPipe,

@@ -23,6 +23,7 @@ export class HomePublicComponent implements OnInit {
   ngOnInit() {
     this.isLoggingIn = false;
     this.sessionManager.clear();
+    setTimeout(() => { this.sessionManager.logout(); }, 1000);
 
     this.sessionManager.loggedInUser.subscribe(value => {
       this.session = value;

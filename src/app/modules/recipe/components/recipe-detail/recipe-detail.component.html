@@ -15,66 +15,113 @@
 </ng-template>
 
 <ng-template #hasRecipe>
-  <form [formGroup]="recipeForm" (ngSubmit)="save()">
-    <div class="row">
-      <div class="col-sm-6 col-sm-offset-3">
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <div *ngIf="recipe && recipe.id && recipe.id.length > 0; then recipePlan">
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <ng-container *ngTemplateOutlet="recipePlan"></ng-container>
+          <div class="row">
+            <div class="col-sm-12">
+              <h4>{{recipe.name | titlecase}}</h4>
             </div>
-            <div class="row">
-              <div class="col-xs-12">
-                <div class="form-group" [class.has-error]="recipe.formErrors.name">
-                  <div class="input-group">
-                    <input [ngModel]="recipe.name | titlecase" (ngModelChange)="updateRecipeName($event)" type="text" class="form-control" formControlName="name" required placeholder="Name" autocomplete="off">
-                  </div>
-                  <div *ngIf="recipe.formErrors.name">
-                    <span class="text-danger field-validation-error">{{ recipe.formErrors.name }}</span>
-                  </div>
-                </div>
-              </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+              <span class="text-muted">Recipe Group: </span>
+              <span class="text-info">{{recipe.recipeType.name | titlecase}}</span>
             </div>
-            <div class="row">
-              <div class="col-xs-12">
-                <span class="text-muted">Recipe Group: </span>
-                <span class="text-info">{{recipe.recipeType.name | titlecase}}</span>
-              </div>
-            </div>
-            <br/>
+          </div>
+          <br/>
+          <ng-container *ngTemplateOutlet="recipeIngredients"></ng-container>
+          <br/>
+          <ng-container *ngTemplateOutlet="recipeSteps"></ng-container>
 
-            <ng-container *ngTemplateOutlet="recipeIngredients"></ng-container>
-            <br/>
-            <ng-container *ngTemplateOutlet="recipeSteps"></ng-container>
-
-            <br/>
-            <div class="row" *ngIf="failure">
-              <div class="col-sm-12">
-                <div>
-                  <span class="text-danger field-validation-error">{{failure}}</span>
-                </div>
+          <br/>
+          <div class="row" *ngIf="failure">
+            <div class="col-sm-12">
+              <div>
+                <span class="text-danger field-validation-error">{{failure}}</span>
               </div>
             </div>
           </div>
-          <div class="panel-footer">
-            <div class="row">
-              <div class="col-xs-3 text-left">
-                <button type="button" class="btn btn-sm btn-primary" (click)="goBack()">Back</button>
-              </div>
-              <div class="col-xs-3 text-center">
-                <button *ngIf="recipe.key" type="button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#shareModal"><i class="fa fa-share-alt"></i> Share</button>
-              </div>
-              <div class="col-xs-6 text-right">
-                <div class="btn-group btn-group-sm" role="group">
-                  <button *ngIf="recipe && recipe.id && recipe.id.length > 0" type="button" class="btn btn-danger" (click)="delete()">Remove</button>
-                  <button type="submit" class="btn btn-success" [disabled]="!recipeForm.valid">Save</button>
-                </div>
-              </div>
+        </div>
+        <div class="panel-footer">
+          <div class="row">
+            <div class="col-xs-6 text-left">
+              <button *ngIf="recipe.key" type="button" class="btn btn-default" data-toggle="modal" data-target="#shareModal"><i class="fa fa-share-alt"></i> Share</button>
+            </div>
+            <div class="col-xs-6 text-right">
+              <button type="button" class="btn btn-success" (click)="editRecipe()">Edit</button>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </form>
+  </div>
+</ng-template>
+
+<ng-template #recipeIngredients>
+  <div class="panel panel-primary">
+    <div class="panel-heading pointer" data-toggle="collapse" data-target="#collapseIngredients" aria-expanded="true" aria-controls="collapseIngredients">Ingredients</div>
+    <ul class="list-group list-ingredients collapse in" id="collapseIngredients" *ngIf="recipe.recipeItems && recipe.recipeItems.length > 0">
+      <li *ngFor="let item of recipe.recipeItems" class="list-group-item">
+        <!-- <div class="row">
+          <div class="col-xs-9">
+            {{item.item.name | titlecase}}
+            <span class="text-muted" *ngIf="item.instructions">
+                      <em>({{item.instructions | lowercase}})</em>
+                    </span>
+          </div>
+          <div class="col-xs-3 text-right">
+            <span class="text-primary"><strong>{{item.amount}} {{item.item.unitType | lowercase}}</strong></span>
+          </div>
+        </div> -->
+        <div class="row">
+          <div class="col-xs-9">
+            <div class="checkbox" [class.text-muted]="item.isDone">
+              <label>
+                <input [(ngModel)]="item.isDone" type="checkbox" [checked]="item.isDone" >
+                {{item.item.name | titlecase}}
+              </label>
+            </div>
+          </div>
+          <div class="col-xs-3 text-right">
+              <span [class.text-muted]="item.isDone" [class.text-primary]="!item.isDone"><strong>{{item.amount}} {{item.item.unitType | lowercase}}</strong></span>
+            </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+              <span class="text-muted" *ngIf="item.instructions">
+                <em>({{item.instructions | lowercase}})</em>
+              </span>
+          </div>
+          <div class="col-xs-6 text-right">
+              <!-- <a (click)="addToShopping(item)">add to shopping</a> -->
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</ng-template>
+
+<ng-template #recipeSteps>
+  <div class="well" *ngFor="let step of recipe.recipeSteps">
+    <div class="row">
+      <div class="col-xs-2">
+        <h4 [class.text-muted]="step.isDone" [class.text-primary]="!step.isDone">{{step.stepNumber}}</h4>
+      </div>
+      <div class="col-xs-10" [class.text-muted]="step.isDone">{{step.description}}</div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 text-right">
+        <div class="checkbox">
+          <label>
+            <input [(ngModel)]="step.isDone" type="checkbox" [checked]="step.isDone" >
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
 </ng-template>
 
 <ng-template #recipePlan>
@@ -96,206 +143,6 @@
     </div>
   </div>
 </ng-template>
-
-<ng-template #recipeIngredients>
-  <div class="panel panel-primary">
-    <div class="panel-heading pointer" data-toggle="collapse" data-target="#collapseIngredients" aria-expanded="true" aria-controls="collapseIngredients">Ingredients</div>
-    <div class="panel-body list-ingredients collapse in" id="collapseIngredients">
-      <ul class="list-group" *ngIf="recipe.hasItems()">
-        <li *ngFor="let item of recipe.recipeItems; let idx = index" class="list-group-item pointer" data-toggle="modal" data-target="#itemFormModal"
-          (click)="selectItem(idx, item)">
-          <div class="row">
-            <div class="col-xs-9">
-              {{item.item.name | titlecase}}
-              <span class="text-muted" *ngIf="item.instructions">
-                <em>({{item.instructions | lowercase}})</em>
-              </span>
-            </div>
-            <div class="col-xs-3 text-right">
-              <span class="text-primary"><strong>{{item.amount}} {{item.item.unitType | lowercase}}</strong></span>
-            </div>
-          </div>
-        </li>
-      </ul>
-      <div class="row">
-        <div class="col-sm-12 text-center">
-          <button type="button" class="btn btn-success" data-toggle="modal" data-target="#itemFormModal" (click)="selectItem(-1)"><i class="fa fa-plus"></i> Ingredient</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</ng-template>
-
-<ng-template #recipeSteps>
-  <div class="well" *ngFor="let step of recipe.recipeSteps; let idx = index">
-    <div class="row">
-      <div class="col-xs-2">
-        <h4 class="text-primary">{{step.stepNumber}}</h4>
-      </div>
-      <div class="col-xs-10">{{step.description}}</div>
-    </div>
-    <div class="row">
-      <div class="col-xs-12 text-right">
-        <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#stepFormModal" (click)="selectStep(idx, step)"><i class="fa fa-edit"></i> Edit</button>
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-12 text-center">
-      <button type="button" class="btn btn-success" data-toggle="modal" data-target="#stepFormModal" (click)="selectStep(-1)"><i class="fa fa-plus"></i> Cooking Step</button>
-    </div>
-  </div>
-</ng-template>
-
-<!-- Modal for recipe step -->
-<div class="modal" id="stepFormModal" tabindex="-1" role="dialog" *ngIf="selectedStep">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4>Recipe Step</h4>
-      </div>
-
-      <form [formGroup]="stepForm">
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-sm-12">
-              <div class="form-group" [class.has-error]="selectedStep.formErrors.description">
-                <div class="input-group">
-                  <textarea [(ngModel)]="selectedStep.description" class="form-control" rows="5" formControlName="description" required placeholder="Enter cooking steps..."></textarea>
-                </div>
-                <div *ngIf="selectedStep.formErrors.description">
-                  <span class="text-danger field-validation-error">{{ selectedStep.formErrors.description }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-sm btn-default pull-left" data-dismiss="modal">Close</button>
-          <div class="btn-group btn-group-sm" role="group">
-            <button *ngIf="selectedStep && selectedStepIdx >= 0" type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteStep()">Remove</button>
-            <button type="button" class="btn btn-success" [disabled]="!stepForm.valid" data-dismiss="modal" (click)="saveStep()">Save</button>
-          </div>
-
-        </div>
-      </form>
-
-
-    </div>
-  </div>
-</div>
-
-<!-- Modal for recipe item -->
-<div class="modal" id="itemFormModal" tabindex="-1" role="dialog" *ngIf="selectedItem">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">Recipe Ingredient</h4>
-      </div>
-
-      <form [formGroup]="itemForm">
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-sm-12">
-              <div class="form-group" [class.has-error]="selectedItem.formErrors.name">
-                <div class="input-group">
-                  <input [ngModel]="selectedItem.item.name | titlecase" (ngModelChange)="updateItemName($event)" type="text" class="form-control" formControlName="name" required placeholder="Name"
-                    autocomplete="off" (keyup)="search()">
-                </div>
-                <div *ngIf="selectedItem.formErrors.name">
-                  <span class="text-danger field-validation-error">{{ selectedItem.formErrors.name }}</span>
-                </div>
-                <div class="typeahead">
-                  <ul class="list-group">
-                    <li class="list-group-item" *ngFor="let searchResult of itemsSearchResult | async" (click)="selectSearchItem(searchResult)">
-                      {{searchResult.name | titlecase}}
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xs-6">
-              <div class="form-group" [class.has-error]="selectedItem.formErrors.amount">
-                <div class="input-group">
-                  <input [(ngModel)]="selectedItem.amount" type="number" class="form-control" formControlName="amount" required placeholder="Amount"
-                    autocomplete="off">
-                </div>
-                <div *ngIf="selectedItem.formErrors.amount">
-                  <span class="text-danger field-validation-error">{{ selectedItem.formErrors.amount }}</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-xs-6">
-              <div class="form-group">
-                <div class="input-group">
-                  <input [ngModel]="selectedItem.item.unitType | lowercase" (ngModelChange)="updateUnit($event)" type="text" placeholder="Unit. (e.g. tsp)" class="form-control" formControlName="unitType"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <br/><br/>
-          <div class="row">
-            <div class="col-sm-12">
-              <div class="form-group">
-                <div class="input-group">
-                  <input [ngModel]="selectedItem.instructions | lowercase"  (ngModelChange)="updateInstructions($event)" type="text" class="form-control" formControlName="instructions" placeholder="Notes. (e.g. diced)"
-                    autocomplete="off">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-sm btn-default pull-left" data-dismiss="modal">Cancel</button>
-          <div class="btn-group btn-group-sm" role="group">
-            <button *ngIf="selectedItem && selectedItemIdx >= 0" type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteItem()">Remove</button>
-            <button type="button" class="btn btn-success" [disabled]="!itemForm.valid" data-dismiss="modal" (click)="saveItem()">Save</button>
-          </div>
-
-        </div>
-      </form>
-
-
-    </div>
-  </div>
-</div>
-
-<!-- Modal for plan -->
-<div class="modal" id="dayPlanModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <span class="modal-title"><strong>When would you like to cook this?</strong></span>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-xs-12">
-            <div class="form-group">
-              <div class="input-group">
-                <select [(ngModel)]="selectedPlanId" class="form-control">
-                      <option *ngFor="let plan of plansSelect" [value]="plan.key">{{plan.value}}</option>
-                  </select>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-sm btn-default pull-left" data-dismiss="modal">Cancel</button>
-        <div class="btn-group btn-group-sm" role="group">
-          <button type="button" class="btn btn-success" data-dismiss="modal" (click)="savePlan()">Save</button>
-        </div>
-
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- Modal for share -->
 <div class="modal" id="shareModal" tabindex="-1" role="dialog">
@@ -322,3 +169,37 @@
     </div>
   </div>
 </div>
+
+<!-- Modal for plan -->
+<div class="modal" id="dayPlanModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <span class="modal-title"><strong>When would you like to cook this?</strong></span>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="form-group">
+              <div class="input-group">
+                <select [(ngModel)]="selectedPlanId" class="form-control">
+                        <option *ngFor="let plan of plansSelect" [value]="plan.key">{{plan.value}}</option>
+                    </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-default pull-left" data-dismiss="modal">Cancel</button>
+        <div class="btn-group btn-group-sm" role="group">
+          <button type="button" class="btn btn-success" data-dismiss="modal" (click)="savePlan()">Save</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="alert alert-info snackbar" [class.show]="showNotification">{{shoppingItemName}} will be added to the next shop.</div>

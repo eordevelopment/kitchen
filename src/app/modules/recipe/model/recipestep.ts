@@ -5,6 +5,7 @@ import { IRecipeStep } from 'app/contract/IRecipeStep';
 export class RecipeStep implements IFormEntity, IRecipeStep {
   public description: string;
   public stepNumber: number;
+  public isDone: boolean;
 
   public formErrors = {
     'description': ''
@@ -17,6 +18,7 @@ export class RecipeStep implements IFormEntity, IRecipeStep {
   };
 
   constructor(source?: IRecipeStep) {
+    this.isDone = false;
     if (source) {
       this.description = source.description;
       this.stepNumber = source.stepNumber
