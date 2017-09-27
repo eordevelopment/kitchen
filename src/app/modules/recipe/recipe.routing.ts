@@ -6,12 +6,14 @@ import { RecipeListComponent } from 'app/modules/recipe/components/recipe-list/r
 import { RecipeViewComponent } from 'app/modules/recipe/components/recipe-view/recipe-view.component';
 import { AuthGuard } from 'app/services/auth-guard';
 import { RecipeEditComponent } from 'app/modules/recipe/components/recipe-edit/recipe-edit.component';
+import { RecipePrintComponent } from 'app/modules/recipe/components/recipe-print/recipe-print.component';
 
 const routes: Routes = [
   { path: 'recipes',  component: RecipeListComponent, canActivate: [AuthGuard] },
   { path: 'recipedetail/:id', component: RecipeDetailComponent, canActivate: [AuthGuard] },
   { path: 'editrecipe/:id', component: RecipeEditComponent, canActivate: [AuthGuard] },
-  { path: 'recipeview/:id', component: RecipeViewComponent }
+  { path: 'recipeview/:id', component: RecipeViewComponent },
+  { path: 'recipeprint', component: RecipePrintComponent }
 ];
 
 @NgModule({

@@ -58,6 +58,7 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
     this.route.paramMap
       .switchMap((params: ParamMap) => this.recipesService.getRecipe(params.get('id')))
       .subscribe((source: IRecipe) => {
+        window.sessionStorage.setItem('kh_recipe', JSON.stringify(source));
         this.recipe = new Recipe(source);
         this.shareUrl = environment.recipeViewUrl + this.recipe.key;
       });

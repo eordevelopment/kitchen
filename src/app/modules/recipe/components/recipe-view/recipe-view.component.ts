@@ -10,6 +10,7 @@ import { SessionService } from 'app/services/session.service';
 import { SelectItem } from 'app/classes/selectItem';
 import { IRecipe } from 'app/contract/IRecipe';
 import { IUserSession } from 'app/contract/IUserSession';
+import { Recipe } from 'app/modules/recipe/model/recipe';
 
 @Component({
   selector: 'app-recipe-view',
@@ -17,7 +18,7 @@ import { IUserSession } from 'app/contract/IUserSession';
   styleUrls: ['./recipe-view.component.less']
 })
 export class RecipeViewComponent extends BaseComponent implements OnInit {
-  public recipe: IRecipe;
+  public recipe: Recipe;
   public token: IUserSession;
 
   constructor(
@@ -33,7 +34,8 @@ export class RecipeViewComponent extends BaseComponent implements OnInit {
     this.route.paramMap
       .switchMap((params: ParamMap) => this.recipesService.getRecipeView(params.get('id')))
       .subscribe((source: IRecipe) => {
-        this.recipe = source;
+        window.sessionStorage.setItem('kh_recipe', JSON.stringify(source));
+        this.recipe = new Recipe(source);
         this.title.setTitle(this.recipe.name);
       });
     this.sessionManager.loggedInUser.subscribe(value => {
