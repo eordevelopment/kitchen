@@ -103,12 +103,10 @@
   <div class="well" *ngFor="let step of recipe.recipeSteps; let idx = index">
     <div class="row">
       <div class="col-xs-2">
-        <button type="button" class="btn btn-primary btn-dirrection" *ngIf="!isFirstStep(idx)" (click)="moveUp(idx)">
+        <button type="button" class="btn btn-sm btn-primary" *ngIf="!isFirstStep(idx)" (click)="moveUp(idx)">
           <i class="fa fa-arrow-up"></i>
         </button>
-        <button type="button" class="btn btn-primary btn-dirrection" *ngIf="!isLastStep(idx)" (click)="moveDown(idx)">
-          <i class="fa fa-arrow-down"></i>
-        </button>
+
       </div>
       <div class="col-xs-2">
         <h4 class="text-primary">{{step.stepNumber}}</h4>
@@ -116,7 +114,12 @@
       <div class="col-xs-8">{{step.description}}</div>
     </div>
     <div class="row">
-      <div class="col-xs-12 text-right">
+      <div class="col-xs-6 text-left">
+        <button type="button" class="btn btn-sm btn-primary" *ngIf="!isLastStep(idx)" (click)="moveDown(idx)">
+          <i class="fa fa-arrow-down"></i>
+        </button>
+      </div>
+      <div class="col-xs-6 text-right">
         <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#stepFormModal" (click)="selectStep(idx, step)"><i class="fa fa-edit"></i> Edit</button>
       </div>
     </div>
