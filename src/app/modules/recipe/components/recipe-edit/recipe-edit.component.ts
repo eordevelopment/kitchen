@@ -112,7 +112,7 @@ export class RecipeEditComponent extends BaseComponent implements OnInit {
     this.recipesService.saveRecipe(this.recipe)
       .subscribe(response => {
         this.recipeForm.reset();
-        this.location.back();
+        this.goBack();
       },
       (error: any) => this.handleError(error));
   }
@@ -153,6 +153,10 @@ export class RecipeEditComponent extends BaseComponent implements OnInit {
 
   public deleteItem(): void {
     this.recipe.removeItem(this.selectedItemIdx);
+  }
+
+  public goBack(): void {
+    this.location.back();
   }
 
   public delete(): void {

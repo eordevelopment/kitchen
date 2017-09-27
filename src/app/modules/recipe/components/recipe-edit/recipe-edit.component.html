@@ -56,7 +56,10 @@
           </div>
           <div class="panel-footer">
             <div class="row">
-              <div class="col-xs-12 text-right">
+              <div class="col-xs-6 text-left">
+                <button type="button" class="btn btn-sm btn-primary" (click)="goBack()">Cancel</button>
+              </div>
+              <div class="col-xs-6 text-right">
                 <div class="btn-group btn-group-sm" role="group">
                   <button *ngIf="recipe && recipe.id && recipe.id.length > 0" type="button" class="btn btn-danger" (click)="delete()">Remove</button>
                   <button type="submit" class="btn btn-success" [disabled]="!recipeForm.valid">Save</button>
