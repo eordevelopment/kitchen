@@ -139,4 +139,18 @@ export class Recipe implements IFormEntity, IRecipe {
     item.item.unitType = source.item.unitType;
     this.recipeItems.push(item);
   }
+
+  public sortSteps(): void {
+    this.recipeSteps.sort(this.sortAsc);
+  }
+
+  private sortAsc(a: RecipeStep, b: RecipeStep): number {
+    if (a.stepNumber < b.stepNumber) {
+      return -1;
+    }
+    if (a.stepNumber > b.stepNumber) {
+      return 1;
+    }
+    return 0;
+  }
 }

@@ -92,10 +92,6 @@ export class RecipeEditComponent extends BaseComponent implements OnInit {
       });
   }
 
-  public goBack(): void {
-    this.location.back();
-  }
-
   public updateRecipeName(event: string): void {
     setTimeout(() => { this.recipe.name = event; });
   }
@@ -116,7 +112,7 @@ export class RecipeEditComponent extends BaseComponent implements OnInit {
     this.recipesService.saveRecipe(this.recipe)
       .subscribe(response => {
         this.recipeForm.reset();
-        this.goBack();
+        this.location.back();
       },
       (error: any) => this.handleError(error));
   }
@@ -173,6 +169,32 @@ export class RecipeEditComponent extends BaseComponent implements OnInit {
     this.selectedItem.item.id = searchResult.id;
     this.selectedItem.item.unitType = searchResult.unitType;
     this.searchTerms.next(null);
+  }
+
+  public isFirstStep(idx: number): boolean {
+    if (idx === 0) {
+      return true;
+    }
+    return false;
+  }
+
+  public isLastStep(idx: number): boolean {
+    if (idx === this.recipe.recipeSteps.length - 1) {
+      return true;
+    }
+    return false;
+  }
+
+  public moveUp(idx: number): void {
+    this.recipe.recipeSteps[idx].stepNumber -= 1;
+    this.recipe.recipeSteps[idx - 1].stepNumber += 1;
+    this.recipe.sortSteps();
+  }
+
+  public moveDown(idx: number): void {
+    this.recipe.recipeSteps[idx].stepNumber += 1;
+    this.recipe.recipeSteps[idx + 1].stepNumber -= 1;
+    this.recipe.sortSteps();
   }
 
   private search(): void {
