@@ -1,75 +1,114 @@
-<div class="panel panel-default" *ngIf="!recipe">
-  <div class="panel-body">
-    <div class="row">
-      <div class="col-sm-12 text-center">
-        <i *ngIf="!failure" class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
-        <span *ngIf="failure" class="text-danger">{{failure}}</span>
+<div *ngIf="!recipe; then noRecipe else hasRecipe">
+</div>
+
+<ng-template #noRecipe>
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-sm-12 text-center">
+              <i *ngIf="!failure" class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+              <span *ngIf="failure" class="text-danger">{{failure}}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</ng-template>
 
-<div class="row" *ngIf="recipe">
-  <div class="col-sm-6 col-sm-offset-3">
-    <div class="panel panel-default">
-      <div class="panel-body">
-
-        <div *ngIf="token">
+<ng-template #hasRecipe>
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <ng-container *ngTemplateOutlet="recipeHeader"></ng-container>
           <div class="row">
-            <div class="col-sm-12 text-center">
-              <button type="button" class="btn btn-sm btn-primary" (click)="saveRecipe()"><i class="fa fa-plus"></i> Add to my collection</button>
+            <div class="col-sm-12">
+              <h4>{{recipe.name | titlecase}}</h4>
             </div>
           </div>
+          <br/>
+          <ng-container *ngTemplateOutlet="recipeIngredients"></ng-container>
+          <br/>
+          <ng-container *ngTemplateOutlet="recipeSteps"></ng-container>
+          <br/>
           <div class="row" *ngIf="failure">
-            <div class="col-sm-12 text-center">
+            <div class="col-sm-12">
               <div>
                 <span class="text-danger field-validation-error">{{failure}}</span>
               </div>
             </div>
           </div>
-          <div class="row" *ngIf="token">
-            <div class="col-sm-12 text-center">
-              <br/>
-            </div>
-          </div>
         </div>
-
-        <div class="row">
-          <div class="col-sm-12">
-            <h4>{{recipe.name | titlecase}}</h4>
-          </div>
-        </div>
-
-        <div class="panel panel-primary">
-          <div class="panel-heading pointer" data-toggle="collapse" data-target="#collapseIngredients" aria-expanded="true" aria-controls="collapseIngredients">Ingredients</div>
-          <ul class="list-group list-ingredients collapse in" id="collapseIngredients" *ngIf="recipe.recipeItems && recipe.recipeItems.length > 0">
-            <li *ngFor="let item of recipe.recipeItems" class="list-group-item">
-              <div class="row">
-                <div class="col-xs-9">
-                  {{item.item.name | titlecase}}
-                  <span class="text-muted" *ngIf="item.instructions">
-                        <em>({{item.instructions | lowercase}})</em>
-                      </span>
-                </div>
-                <div class="col-xs-3 text-right">
-                  <span class="text-primary"><strong>{{item.amount}} {{item.item.unitType | lowercase}}</strong></span>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <br/>
-
-        <div class="well" *ngFor="let step of recipe.recipeSteps">
-          <div class="row">
-            <div class="col-xs-2">
-              <h4 class="text-primary">{{step.stepNumber}}</h4>
-            </div>
-            <div class="col-xs-10">{{step.description}}</div>
-          </div>
-        </div>
-
       </div>
     </div>
   </div>
-</div>
+</ng-template>
+
+<ng-template #recipeIngredients>
+  <div class="panel panel-primary">
+    <div class="panel-heading pointer" data-toggle="collapse" data-target="#collapseIngredients" aria-expanded="true" aria-controls="collapseIngredients">Ingredients</div>
+    <ul class="list-group list-ingredients collapse in" id="collapseIngredients" *ngIf="recipe.recipeItems && recipe.recipeItems.length > 0">
+      <li *ngFor="let item of recipe.recipeItems" class="list-group-item">
+        <div class="row">
+          <div class="col-xs-9">
+            <div class="checkbox" [class.text-muted]="item.isDone">
+              <label>
+                <input [(ngModel)]="item.isDone" type="checkbox" [checked]="item.isDone" >
+                {{item.item.name | titlecase}}
+              </label>
+            </div>
+          </div>
+          <div class="col-xs-3 text-right">
+            <span [class.text-muted]="item.isDone" [class.text-primary]="!item.isDone"><strong>{{item.amount}} {{item.item.unitType | lowercase}}</strong></span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <span [class.text-muted]="item.isDone" [class.text-info]="!item.isDone" *ngIf="item.instructions">
+              <em>{{item.instructions | lowercase}}</em>
+            </span>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</ng-template>
+
+<ng-template #recipeSteps>
+  <div class="well" *ngFor="let step of recipe.recipeSteps">
+    <div class="row">
+      <div class="col-xs-2">
+        <h4 [class.text-muted]="step.isDone" [class.text-primary]="!step.isDone">{{step.stepNumber}}</h4>
+      </div>
+      <div class="col-xs-10" [class.text-muted]="step.isDone">{{step.description}}</div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 text-right">
+        <div class="checkbox">
+          <label>
+            <input [(ngModel)]="step.isDone" type="checkbox" [checked]="step.isDone" >
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #recipeHeader>
+  <div class="row">
+    <div class="col-xs-6 text-left">
+      <button type="button" class="btn btn-sm btn-default" routerLink="/recipeprint"><i class="fa fa-print"></i> Print View</button>
+    </div>
+    <div class="col-xs-6 text-right" *ngIf="token">
+      <button type="button" class="btn btn-sm btn-success" (click)="saveRecipe()"><i class="fa fa-plus"></i> my recipes</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <br/>
+    </div>
+  </div>
+</ng-template>
