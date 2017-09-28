@@ -1,5 +1,6 @@
 import * as moment from 'moment';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/debounceTime';
@@ -86,7 +87,13 @@ export class RecipeEditComponent extends BaseComponent implements OnInit {
     this.itemsSearchResult = this.searchTerms
       .debounceTime(150)
       .distinctUntilChanged()
-      .switchMap(term => term ? this.itemsService.getItems(term) : Observable.of<Item[]>([]))
+      .switchMap(term => term ? this.itemsService.searchItems(term).map(res => {
+        const items = new Array();
+        for (const item of res.items) {
+          items.push(new Item(item));
+        }
+        return items;
+      }) : Observable.of<Item[]>([]))
       .catch(error => {
         return Observable.of<Item[]>([]);
       });

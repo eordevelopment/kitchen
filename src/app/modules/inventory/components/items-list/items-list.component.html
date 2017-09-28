@@ -1,0 +1,76 @@
+<div *ngIf="!items; then noItems else hasItems">
+</div>
+
+<ng-template #noItems>
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-sm-12 text-center">
+              <i *ngIf="!failure" class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+              <span *ngIf="failure" class="text-danger">{{failure}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #hasItems>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="panel panel-default">
+        <div class="panel-body header-container">
+          <div class="row">
+            <div class="col-sm-2 text-center">
+              <button class="btn btn-success" (click)="onSelect()"><i class="fa fa-plus"></i> Add Item</button>
+            </div>
+            <div *ngIf="items.length > 0; then itemSearch else itemsInfo">
+              </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 text-center">
+              <span *ngIf="failure" class="text-danger">{{failure}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-4" *ngFor="let item of items">
+      <div class="panel panel-default pointer" (click)="onSelect(item)">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-xs-9">{{item.name}}</div>
+            <div class="col-xs-3 text-primary text-right">
+              <strong>{{item.quantity}} {{item.unitType | lowercase}}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #itemSearch>
+  <div class="col-sm-8">
+    <div class="form-group">
+      <div class="input-group">
+        <input type="text" [(ngModel)]="searchText" class="form-control" placeholder="Search items..." autocomplete="off" (keyup)="searchItems()"
+        />
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #itemsInfo>
+  <div class="col-sm-8 text-center">
+    <span><strong>You have not created any items.</strong></span><br><br>
+    <span class="text-info">Use this page to keep track of all your kitchen inventory.</span><br>
+    <span class="text-info">As you cook recipes or complete shopping lists, the quantity of items in your inventory will automatically be adjusted.</span>
+  </div>
+</ng-template>

@@ -16,6 +16,7 @@ export class AppShellComponent implements AfterViewInit {
   public isCollapsed: boolean;
   public shoppingQuantity: number;
   public copywrightDate: moment.Moment;
+  public isPrintView: boolean;
 
   private lastPoppedUrl: string;
 
@@ -23,8 +24,8 @@ export class AppShellComponent implements AfterViewInit {
     private sessionManager: SessionService,
     private router: Router,
     private location: Location) {
-      this.copywrightDate = moment();
-    }
+    this.copywrightDate = moment();
+  }
 
   ngAfterViewInit() {
     this.sessionManager.loggedInUser.subscribe(session => {
@@ -43,6 +44,12 @@ export class AppShellComponent implements AfterViewInit {
 
     this.router.events.filter(event => event instanceof NavigationEnd).subscribe((evt: NavigationEnd) => {
       this.isCollapsed = true;
+
+      if (evt.url === '/recipeprint') {
+        this.isPrintView = true;
+      } else {
+        this.isPrintView = false;
+      }
       if (evt.url === this.lastPoppedUrl) {
         this.lastPoppedUrl = undefined;
       } else {
@@ -56,6 +63,7 @@ export class AppShellComponent implements AfterViewInit {
     });
 
     this.isCollapsed = true;
+    this.isPrintView = false;
   }
 
   public toggleCollapse(): void {

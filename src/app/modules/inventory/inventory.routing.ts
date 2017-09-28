@@ -3,12 +3,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 
 import { AuthGuard } from 'app/services/auth-guard';
-import { CategoriesListComponent } from 'app/modules/inventory/components/categories-list/categories-list.component';
-import { CategoryDetailComponent } from 'app/modules/inventory/components/category-detail/category-detail.component';
+import { ItemsListComponent } from 'app/modules/inventory/components/items-list/items-list.component';
+import { ItemDetailComponent } from 'app/modules/inventory/components/item-detail/item-detail.component';
 
 const routes: Routes = [
-  { path: 'categories',  component: CategoriesListComponent, canActivate: [AuthGuard] },
-  { path: 'categorydetail/:id', component: CategoryDetailComponent, canActivate: [AuthGuard] }
+  { path: 'items',  component: ItemsListComponent, canActivate: [AuthGuard] },
+  { path: 'itemdetail/:id', component: ItemDetailComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({

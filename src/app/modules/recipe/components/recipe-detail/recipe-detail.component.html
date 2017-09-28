@@ -53,8 +53,8 @@
           <div class="row">
             <div class="col-xs-9 text-left">
               <div class="btn-group" role="group">
-                  <button *ngIf="recipe.key" type="button" class="btn btn-default" data-toggle="modal" data-target="#shareModal"><i class="fa fa-share-alt"></i> Share</button>
-                  <button type="button" class="btn btn-default" routerLink="/recipeprint"><i class="fa fa-print"></i> Print View</button>
+                <button *ngIf="recipe.key" type="button" class="btn btn-default" data-toggle="modal" data-target="#shareModal"><i class="fa fa-share-alt"></i> Share</button>
+                <button type="button" class="btn btn-default" routerLink="/recipeprint"><i class="fa fa-print"></i> Print View</button>
               </div>
             </div>
             <div class="col-xs-3 text-right">
@@ -92,11 +92,11 @@
             </span>
           </div>
           <div class="col-xs-3 text-right">
-            <button *ngIf="!item.flaggedForNextShop" (click)="addToShopping(item)" class="btn btn-xs" [class.btn-default]="item.isDone"
+            <button *ngIf="!item.item.flaggedForNextShop" (click)="addToShopping(item)" class="btn btn-xs" [class.btn-default]="item.isDone"
               [class.btn-primary]="!item.isDone">
               <i class="fa fa-plus"></i> <i class="fa fa-shopping-cart"></i>
             </button>
-            <span [class.text-muted]="item.isDone" [class.text-info]="!item.isDone" *ngIf="item.flaggedForNextShop">
+            <span [class.text-muted]="item.isDone" [class.text-info]="!item.isDone" *ngIf="item.item.flaggedForNextShop">
                 <i class="fa fa-plus"></i> <i class="fa fa-shopping-cart"></i>
             </span>
           </div>
@@ -186,8 +186,8 @@
             <div class="form-group">
               <div class="input-group">
                 <select [(ngModel)]="selectedPlanId" class="form-control">
-                        <option *ngFor="let plan of plansSelect" [value]="plan.key">{{plan.value}}</option>
-                    </select>
+                    <option *ngFor="let plan of plansSelect" [value]="plan.key">{{plan.value}}</option>
+                </select>
               </div>
             </div>
           </div>

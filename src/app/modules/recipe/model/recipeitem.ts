@@ -9,7 +9,6 @@ export class RecipeItem implements IFormEntity, IRecipeItem {
   public amount: number;
   public item: IItem;
   public instructions: string;
-  public flaggedForNextShop: boolean;
 
   public isDone: boolean;
 
@@ -33,7 +32,6 @@ export class RecipeItem implements IFormEntity, IRecipeItem {
       this.amount = source.amount;
       this.item = source.item
       this.instructions = source.instructions;
-      this.flaggedForNextShop = source.flaggedForNextShop;
     }
 
     if (!this.item) {

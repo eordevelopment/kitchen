@@ -96,9 +96,9 @@ export class RecipeDetailComponent extends BaseComponent implements OnInit {
   }
 
   public addToShopping(item: RecipeItem): void {
-    item.flaggedForNextShop = true;
+    item.item.flaggedForNextShop = true;
 
-    this.itemService.flagItem(item.item.id).subscribe(res => {
+    this.itemService.flagItem(item.item.id, item.item.flaggedForNextShop).subscribe(res => {
       this.shoppingItemName = item.item.name;
       this.showNotification = true;
       setTimeout(() => { this.showNotification = false; }, 3000);

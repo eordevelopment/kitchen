@@ -1,6 +1,7 @@
 import { Validators } from '@angular/forms';
 
 import { IItem } from 'app/contract/IItem';
+import { IRecipe } from 'app/contract/IRecipe';
 import { IFormEntity } from 'app/contract/IFormEntity';
 
 export class Item implements IFormEntity, IItem {
@@ -8,6 +9,8 @@ export class Item implements IFormEntity, IItem {
   public name: string;
   public quantity: number;
   public unitType: string;
+  public flaggedForNextShop: boolean;
+  public recipes: IRecipe[];
 
   public formErrors = {
     'itemName': '',
@@ -29,6 +32,8 @@ export class Item implements IFormEntity, IItem {
       this.name = source.name;
       this.quantity = source.quantity;
       this.unitType = source.unitType;
+      this.flaggedForNextShop = source.flaggedForNextShop;
+      this.recipes = source.recipes;
     }
   }
 
@@ -38,5 +43,12 @@ export class Item implements IFormEntity, IItem {
       'quantity': [this.quantity, [Validators.required]],
       'unitType': [this.unitType]
     }
+  }
+
+  public hasRecipes(): boolean {
+    if (this.recipes && this.recipes != null && this.recipes.length > 0) {
+      return true;
+    }
+    return false;
   }
 }
