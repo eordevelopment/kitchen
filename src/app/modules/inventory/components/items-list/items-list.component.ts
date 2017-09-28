@@ -49,4 +49,10 @@ export class ItemsListComponent extends BaseComponent implements OnInit {
     this.router.navigate(['/itemdetail', item ? item.id : 0]);
   }
 
+  public hasSearchText(): boolean {
+    if(this.searchText && this.searchText.length > 0) {
+      return true;
+    }
+    return false;
+  }
 }

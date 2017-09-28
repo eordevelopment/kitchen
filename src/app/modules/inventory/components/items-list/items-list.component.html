@@ -28,7 +28,7 @@
               <button class="btn btn-success" (click)="onSelect()"><i class="fa fa-plus"></i> Add Item</button>
             </div>
             <div *ngIf="items.length > 0; then itemSearch else itemsInfo">
-              </div>
+            </div>
           </div>
           <div class="row">
             <div class="col-sm-12 text-center">
@@ -62,6 +62,12 @@
       <div class="input-group">
         <input type="text" [(ngModel)]="searchText" class="form-control" placeholder="Search items..." autocomplete="off" (keyup)="searchItems()"
         />
+      </div>
+      <div class="text-info">
+        <span *ngIf="!hasSearchText() && (items.length == 0 || items.length > 1)">{{ items.length }} items in total</span>
+        <span *ngIf="!hasSearchText() && items.length == 1">{{ items.length }} item in total</span>
+        <span *ngIf="hasSearchText() && (items.length == 0 || items.length > 1)">{{ items.length }} items found</span>
+        <span *ngIf="hasSearchText() && items.length == 1">{{ items.length }} item found</span>
       </div>
     </div>
   </div>
