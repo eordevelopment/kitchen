@@ -1,0 +1,126 @@
+<div *ngIf="!item; then noItem else hasItem">
+</div>
+
+<ng-template #noItem>
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-sm-12 text-center">
+              <i *ngIf="!failure" class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+              <span *ngIf="failure" class="text-danger">{{failure}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #hasItem>
+  <form [formGroup]="itemForm" (ngSubmit)="saveItem()" *ngIf="item">
+    <div class="row">
+      <div class="col-sm-6 col-sm-offset-3">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group" [class.has-error]="item.formErrors.itemName">
+                  <div class="input-group">
+                    <input [ngModel]="item.name | titlecase" (ngModelChange)="updateItem($event)" type="text" id="itemName" class="form-control"
+                      formControlName="itemName" required placeholder="Item name" autocomplete="off">
+                  </div>
+                  <div *ngIf="item.formErrors.itemName">
+                    <span class="text-danger field-validation-error">{{ item.formErrors.itemName }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-6">
+                <div class="form-group" [class.has-error]="item.formErrors.quantity">
+                  <div class="input-group">
+                    <input [(ngModel)]="item.quantity" type="number" id="quantity" class="form-control" formControlName="quantity" required placeholder="Quantity"
+                      autocomplete="off">
+                  </div>
+                  <div *ngIf="item.formErrors.quantity">
+                    <span class="text-danger field-validation-error">{{ item.formErrors.quantity }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input [ngModel]="item.unitType | lowercase" (ngModelChange)="updateUnit($event)" type="text" placeholder="Unit. (e.g. tsp, Kg)"
+                      class="form-control" formControlName="unitType" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row" *ngIf="failure">
+              <div class="col-sm-12">
+                <div>
+                  <span class="text-danger field-validation-error">{{failure}}</span>
+                </div>
+              </div>
+            </div>
+            <br/>
+            <div *ngIf="item.flaggedForNextShop; then inShop else notInShop"></div>
+            <br/>
+            <div *ngIf="item.hasRecipes(); then hasRecipes"></div>
+          </div>
+          <div class="panel-footer">
+            <div class="row">
+              <div class="col-sm-12 text-right">
+                <button type="button" class="btn btn-sm btn-primary pull-left" (click)="goBack()">Cancel</button>
+                <div class="btn-group btn-group-sm" role="group">
+                  <button type="submit" class="btn btn-success" [disabled]="!itemForm.valid">Save</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+</ng-template>
+
+<ng-template #notInShop>
+  <div class="row">
+    <div class="col-xs-6 text-muted">
+
+    </div>
+    <div class="col-xs-6 text-right">
+      <button class="btn btn-sm btn-primary" (click)="toggleShoppingFlag()">
+        <i class="fa fa-plus"></i><i class="fa fa-shopping-cart"></i> Add
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #inShop>
+  <div class="row">
+    <div class="col-xs-6 text-info">
+      Added to next shop
+    </div>
+    <div class="col-xs-6 text-right">
+      <button class="btn btn-sm btn-default" (click)="toggleShoppingFlag()">
+        <i class="fa fa-minus"></i><i class="fa fa-shopping-cart"></i> Remove
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #hasRecipes>
+  <hr/>
+  <div class="panel panel-primary">
+    <div class="panel-heading pointer" data-toggle="collapse" data-target="#collapseRecipes" aria-expanded="true" aria-controls="collapseRecipes">Recipes</div>
+    <ul class="list-group collapse in" id="collapseRecipes">
+      <li *ngFor="let recipe of item.recipes" class="list-group-item pointer" (click)="viewRecipe(recipe)">
+        {{recipe.name}}
+      </li>
+    </ul>
+  </div>
+</ng-template>

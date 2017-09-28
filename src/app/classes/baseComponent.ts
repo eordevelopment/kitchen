@@ -13,6 +13,7 @@ export abstract class BaseComponent {
   }
 
   protected handleError(error: ServiceError): void {
+    console.log(error);
     if (error.status === 401) {
       this.router.navigate(['/welcome']);
     }

@@ -4,5 +4,4 @@ export interface IRecipeItem {
   amount: number;
   item: IItem;
   instructions: string;
-  flaggedForNextShop: boolean;
 }
