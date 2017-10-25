@@ -19,7 +19,7 @@
 </ng-template>
 
 <ng-template #hasRecipe>
-  <div class="row">
+  <div class="row recipe-container">
     <div class="col-sm-6 col-sm-offset-3">
       <div class="panel panel-default">
         <div class="panel-body">
@@ -54,7 +54,6 @@
             <div class="col-xs-9 text-left">
               <div class="btn-group" role="group">
                 <button *ngIf="recipe.key" type="button" class="btn btn-default" data-toggle="modal" data-target="#shareModal"><i class="fa fa-share-alt"></i> Share</button>
-                <button type="button" class="btn btn-default" routerLink="/recipeprint"><i class="fa fa-print"></i> Print View</button>
               </div>
             </div>
             <div class="col-xs-3 text-right">
@@ -86,12 +85,12 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-xs-9">
+          <div class="col-xs-9 recipe-instruction">
             <span [class.text-muted]="item.isDone" [class.text-info]="!item.isDone" *ngIf="item.instructions">
               <em>{{item.instructions | lowercase}}</em>
             </span>
           </div>
-          <div class="col-xs-3 text-right">
+          <div class="col-xs-3 text-right next-shop">
             <button *ngIf="!item.item.flaggedForNextShop" (click)="addToShopping(item)" class="btn btn-xs" [class.btn-default]="item.isDone"
               [class.btn-primary]="!item.isDone">
               <i class="fa fa-plus"></i> <i class="fa fa-shopping-cart"></i>
@@ -127,7 +126,7 @@
 </ng-template>
 
 <ng-template #recipePlan>
-  <div class="row">
+  <div class="row recipe-plan">
     <div class="col-xs-12 text-center">
       <div *ngIf="recipe.assignedPlans && recipe.assignedPlans.length > 0;then onPlan else addToPlan"></div>
       <ng-template #addToPlan>

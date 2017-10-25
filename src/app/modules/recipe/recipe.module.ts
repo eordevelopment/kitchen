@@ -7,7 +7,6 @@ import { RecipeDetailComponent } from 'app/modules/recipe/components/recipe-deta
 import { RecipeListComponent } from 'app/modules/recipe/components/recipe-list/recipe-list.component';
 import { RecipeViewComponent } from 'app/modules/recipe/components/recipe-view/recipe-view.component';
 import { RecipeRoutingModule } from 'app/modules/recipe/recipe.routing';
-import { RecipePrintComponent } from 'app/modules/recipe/components/recipe-print/recipe-print.component';
 
 // Pipes
 import { RecipeTypeFilterPipe } from 'app/modules/recipe/pipes/recipe-type-filter.pipe';
@@ -26,7 +25,6 @@ import { RecipeEditComponent } from 'app/modules/recipe/components/recipe-edit/r
     RecipeEditComponent,
     RecipeListComponent,
     RecipeViewComponent,
-    RecipePrintComponent,
     RecipeTypeFilterPipe,
     RecipeWithTypePipe
   ],

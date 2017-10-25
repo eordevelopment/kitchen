@@ -25,3 +25,17 @@
 .well {
   background: #f7f7f7;
 }
+
+@media print {
+  input, .recipe-plan, .next-shop, .panel-footer {
+    display: none;
+  }
+
+  .recipe-container {
+    margin-top: -80px;
+  }
+
+  .recipe-instruction{
+    margin-left: 25px;
+  }
+}

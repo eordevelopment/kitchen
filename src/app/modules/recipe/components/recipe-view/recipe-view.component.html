@@ -19,7 +19,7 @@
 </ng-template>
 
 <ng-template #hasRecipe>
-  <div class="row">
+  <div class="row recipe-container">
     <div class="col-sm-6 col-sm-offset-3">
       <div class="panel panel-default">
         <div class="panel-body">
@@ -65,7 +65,7 @@
             <span [class.text-muted]="item.isDone" [class.text-primary]="!item.isDone"><strong>{{item.amount}} {{item.item.unitType | lowercase}}</strong></span>
           </div>
         </div>
-        <div class="row">
+        <div class="row recipe-instruction">
           <div class="col-xs-12">
             <span [class.text-muted]="item.isDone" [class.text-info]="!item.isDone" *ngIf="item.instructions">
               <em>{{item.instructions | lowercase}}</em>
@@ -100,7 +100,7 @@
 <ng-template #recipeHeader>
   <div class="row">
     <div class="col-xs-6 text-left">
-      <button type="button" class="btn btn-sm btn-default" routerLink="/recipeprint"><i class="fa fa-print"></i> Print View</button>
+
     </div>
     <div class="col-xs-6 text-right" *ngIf="token">
       <button type="button" class="btn btn-sm btn-success" (click)="saveRecipe()"><i class="fa fa-plus"></i> my recipes</button>
