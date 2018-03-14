@@ -16,8 +16,8 @@
           <h3 class="panel-title">{{this.currentList.name}}</h3>
         </div>
         <div class="panel-body shopping-list">
-          <div *ngIf="!currentList.isDone && currentList.items.length > 0;then neddedItems"></div>
-          <div *ngIf="currentList.isDone && currentList.items.length > 0;then neddedItemsReadOnly"></div>
+          <div *ngIf="!currentList.isDone && currentList.items.length > 0;then neededItems"></div>
+          <div *ngIf="currentList.isDone && currentList.items.length > 0;then neededItemsReadOnly"></div>
           <br>
           <div *ngIf="!currentList.isDone && currentList.optionalItems.length > 0;then optionalItems"></div>
         </div>
@@ -47,7 +47,7 @@
           <h3 class="panel-title">{{this.currentList.name}}</h3>
         </div>
         <div class="panel-body shopping-list">
-          <div *ngIf="currentList.items.length > 0;then neddedItems"></div>
+          <div *ngIf="currentList.items.length > 0;then neededItems"></div>
         </div>
         <div class="panel-footer" *ngIf="!currentList.isDone">
           <div class="row">
@@ -64,7 +64,7 @@
   </div>
 </ng-template>
 
-<ng-template #neddedItemsReadOnly>
+<ng-template #neededItemsReadOnly>
   <ul class="list-group">
     <li class="list-group-item" *ngFor="let item of currentList.items">
       <div class="row text-muted">
@@ -78,7 +78,6 @@
         <div class="col-xs-3">
           <span>{{item.amount}} {{item.item.unitType}}</span>
         </div>
-
       </div>
       <div class="row">
         <div class="col-xs-12">
@@ -87,11 +86,21 @@
           </p>
         </div>
       </div>
+      <div class="row recipeList" *ngIf="item.recipes && item.recipes != null && item.recipes.length > 0">
+        <div class="col-xs-12">
+          <p class="list-group-item-text">
+            <em>
+              Used for: 
+                <span *ngFor="let recipe of item.recipes; last as isLast">{{recipe.name}}<span *ngIf="!isLast">, </span></span>
+            </em>
+          </p>
+        </div>
+      </div>
     </li>
   </ul>
 </ng-template>
 
-<ng-template #neddedItems>
+<ng-template #neededItems>
   <ul class="list-group">
     <li class="list-group-item" *ngFor="let item of currentList.items">
       <div class="row" [class.text-muted]="item.isDone">
@@ -125,6 +134,16 @@
           </p>
         </div>
       </div>
+      <div class="row recipeList" *ngIf="item.recipes && item.recipes != null && item.recipes.length > 0">
+        <div class="col-xs-12">
+          <p class="list-group-item-text">
+            <em>
+              Used for: 
+                <span *ngFor="let recipe of item.recipes; last as isLast">{{recipe.name}}<span *ngIf="!isLast">, </span></span>
+            </em>
+          </p>
+        </div>
+      </div>
     </li>
   </ul>
 </ng-template>
@@ -144,6 +163,16 @@
         </div>
         <div class="col-xs-2 text-right">
           <button type="button" class="btn btn-xs btn-success" (click)="addToList(item)"><i class="fa fa-plus"></i></button>
+        </div>
+      </div>
+      <div class="row recipeList" *ngIf="item.recipes && item.recipes != null && item.recipes.length > 0">
+        <div class="col-xs-12">
+          <p class="list-group-item-text">
+            <em>
+              Used for: 
+                <span *ngFor="let recipe of item.recipes; last as isLast">{{recipe.name}}<span *ngIf="!isLast">, </span></span>
+            </em>
+          </p>
         </div>
       </div>
     </li>
