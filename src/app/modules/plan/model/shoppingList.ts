@@ -20,12 +20,14 @@ export class ShoppingList implements IShoppingList {
         for (const item of source.items) {
           this.items.push(new ShoppingListItem(item));
         }
+        this.items.sort(this.sortAsc);
       }
 
       if (source.optionalItems) {
         for (const item of source.optionalItems) {
           this.optionalItems.push(new ShoppingListItem(item));
         }
+        this.optionalItems.sort(this.sortAsc);
       }
     }
   }
